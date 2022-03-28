@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore;
+using Korepetynder.Data.DbModels;
 namespace Korepetynder.Data
 {
     public class KorepetynderDbContext : DbContext
@@ -14,7 +14,14 @@ namespace Korepetynder.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Use EF Core Fluent API here.
+           
         }
+
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Teacher> Teachers => Set<Teacher>();
+        public DbSet<Student> Students => Set<Student>();
+        public DbSet<Subject> Subjects => Set<Subject>();
+        public DbSet<MultimediaFile> Files => Set<MultimediaFile>();
+
     }
 }
