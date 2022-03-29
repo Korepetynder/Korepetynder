@@ -1,14 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Korepetynder.Data.DbModels
 {
     public class Subject
     {
         public int Id { get; set; }
-        public string Name { get; set; } = "None";
+        public string Name { get; set; }
+
+        public ICollection<Student> Students { get; set; } = new List<Student>();
+        public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
+
+        public Subject(string name)
+        {
+            Name = name;
+        }
     }
 }

@@ -18,13 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Controllers\" />
-    <None Remove="StartupExtensions\" />
-    <None Remove="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="StartupExtensions\" />
   </ItemGroup>
 
   <ItemGroup>
