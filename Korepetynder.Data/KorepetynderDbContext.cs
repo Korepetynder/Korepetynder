@@ -22,6 +22,7 @@ namespace Korepetynder.Data
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Subject> Subjects => Set<Subject>();
         public DbSet<MultimediaFile> Files => Set<MultimediaFile>();
+        public DbSet<Location> Locations => Set<Location>();
 
     }
 }

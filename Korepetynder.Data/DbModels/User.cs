@@ -6,11 +6,10 @@ namespace Korepetynder.Data.DbModels
     {
         public Guid Id { get; set; }
         public int Age { get; set; }
-        public double? Longitude { get; set; }
-        public double? Latitude { get; set; }
         public int? TeacherId { get; set; }
         public int? StudentId { get; set; }
-
+        
+        public Location UserLocation { get; set; }
         [ForeignKey("TeacherId")]
         public Teacher? Teacher { get; set; }
 
