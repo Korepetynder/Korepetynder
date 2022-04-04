@@ -13,6 +13,9 @@ namespace Korepetynder.Data.DbModels
         public int Id { get; set; }
         public string Url { get; set; }
         public MultimediaFileType Type { get; set; }
+
+        public int? SubjectId { get; set; }
+        [ForeignKey(nameof(SubjectId))]
         public Subject? Subject { get; set; } //Some files are connected to particular subject
 
         public int TeacherId { get; set; }

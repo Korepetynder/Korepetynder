@@ -4,10 +4,10 @@ namespace Korepetynder.Data.DbModels
     {
         public int Id { get; set; }
 
-        public int PreferedCost { get; set; }
+        public int PreferredCost { get; set; }
 
-        public ICollection<Location> PreferedLocation { get; set; } = new List<Location>();
-        public ICollection<LessonData> PreferedLesson { get; set; } = new List<LessonData>();
+        public ICollection<Location> PreferredLocations { get; set; } = new List<Location>();
+        public ICollection<Lesson> PreferredLessons { get; set; } = new List<Lesson>();
         public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
     }
 }
