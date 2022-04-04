@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Korepetynder.Data.DbModels
 {
     public class Teacher
@@ -8,6 +10,8 @@ namespace Korepetynder.Data.DbModels
         public ICollection<Student> Students { get; set; } = new List<Student>();
         public ICollection<Subject> TaughtSubjects { get; set; } = new List<Subject>();
 
+        public int? PictureId { get; set; }
+        [ForeignKey("PictureId")]
         public MultimediaFile? ProfilePicture { get; set; }
         public ICollection<MultimediaFile> Pictures { get; set; } = new List<MultimediaFile>();
         public ICollection<MultimediaFile> Videos { get; set; } = new List<MultimediaFile>();
