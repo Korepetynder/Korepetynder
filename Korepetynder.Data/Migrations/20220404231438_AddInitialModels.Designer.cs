@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Korepetynder.Data.Migrations
 {
     [DbContext(typeof(KorepetynderDbContext))]
-    [Migration("20220404230933_AddInitialModels")]
+    [Migration("20220404231438_AddInitialModels")]
     partial class AddInitialModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -272,7 +272,8 @@ namespace Korepetynder.Data.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
 
                     b.Property<string>("LastName")

@@ -270,7 +270,8 @@ namespace Korepetynder.Data.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
 
                     b.Property<string>("LastName")
