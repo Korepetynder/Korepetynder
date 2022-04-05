@@ -106,7 +106,7 @@ Add-Migration [nazwa]
 i czytamy migrację, upewniając się, że ma sens.
 
 4. Niezależnie od tego, kto zmodyfikował strukturę, wpisujemy komendę:
-```
+```powershell
 Update-Database
 ```
 
@@ -117,6 +117,7 @@ Update-Database
 dotnet ef migrations add <nazwa> --startup-project ../Korepetynder.Api/Korepetynder.Api.csproj
 ```
 i czytamy migrację, upewniając się, że ma sens.
+
 3. Niezależnie od tego, kto zmodyfikował strukturę, wpisujemy komendę:
 ```
 dotnet ef database update --startup-project ../Korepetynder.Api/Korepetynder.Api.csproj
