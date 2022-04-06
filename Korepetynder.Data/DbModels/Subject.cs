@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Sieve.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Korepetynder.Data.DbModels
@@ -9,6 +10,7 @@ namespace Korepetynder.Data.DbModels
         public int Id { get; set; }
 
         [MaxLength(100)]
+        [Sieve(CanFilter = true)]
         public string Name { get; set; }
 
         public ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();

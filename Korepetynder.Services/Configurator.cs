@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Korepetynder.Services.Subjects;
+using Microsoft.Extensions.DependencyInjection;
+using Sieve.Services;
 
 namespace Korepetynder.Services
 {
@@ -6,7 +8,9 @@ namespace Korepetynder.Services
 	{
 		public static void ConfigureServices(this IServiceCollection services)
         {
+            services.AddScoped<ISieveProcessor, SieveProcessor>();
 
+            services.AddScoped<ISubjectsService, SubjectsService>();
         }
 	}
 }

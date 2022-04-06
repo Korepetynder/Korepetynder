@@ -12,7 +12,7 @@ namespace Korepetynder.Data.DbModels
         public int? ParentLocationId { get; set; }
         [ForeignKey(nameof(ParentLocationId))]
         public Location? ParentLocation { get; set; }
-        public ICollection<Location> SubLocations { get; set; } = new List<Location>();
+        public ICollection<Location> Sublocations { get; set; } = new List<Location>();
 
         public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
         public ICollection<Student> Students { get; set; } = new List<Student>();
