@@ -10,8 +10,4 @@
     <None Remove="Requests\" />
     <None Remove="Responses\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Requests\" />
-    <Folder Include="Responses\" />
-  </ItemGroup>
 </Project>

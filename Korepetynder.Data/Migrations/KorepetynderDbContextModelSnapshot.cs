@@ -40,7 +40,7 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Languages");
+                    b.ToTable("Languages", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Length", b =>
@@ -61,7 +61,7 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Lengths");
+                    b.ToTable("Lengths", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Lesson", b =>
@@ -94,7 +94,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lessons", (string)null);
 
                     b.HasCheckConstraint("CK_Lesson_StudentId_TeacherId", "[StudentId] IS NULL OR [TeacherId] IS NULL");
                 });
@@ -117,7 +117,7 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Levels");
+                    b.ToTable("Levels", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
@@ -140,7 +140,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasIndex("ParentLocationId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.MultimediaFile", b =>
@@ -170,7 +170,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("MultimediaFiles");
+                    b.ToTable("MultimediaFiles", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.ProfilePicture", b =>
@@ -187,7 +187,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProfilePictures");
+                    b.ToTable("ProfilePictures", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Student", b =>
@@ -203,7 +203,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Subject", b =>
@@ -224,7 +224,7 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Teacher", b =>
@@ -250,7 +250,7 @@ namespace Korepetynder.Data.Migrations
                         .IsUnique()
                         .HasFilter("[ProfilePictureId] IS NOT NULL");
 
-                    b.ToTable("Teachers");
+                    b.ToTable("Teachers", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.User", b =>
@@ -291,7 +291,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("LanguageLesson", b =>
