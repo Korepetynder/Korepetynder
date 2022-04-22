@@ -1,0 +1,13 @@
+<div class="main-div">
+  <p>Uzupełnij opisy oczekiwań względem korepetycji.</p>
+  <mat-accordion multi>
+    <app-lesson-description *ngFor="let lesson of lessons; index as i" [lesson]="lesson" [index]="i + 1">
+    </app-lesson-description>
+  </mat-accordion>
+
+  <div id="add-button">
+    <button mat-fab color="accent" (click)="addLesson()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

@@ -1,146 +1,14 @@
 <mat-tab-group mat-align-tabs="center">
   <mat-tab label="Podstawowe">
-    <section class="settings-section">
-      <p>
-        <mat-checkbox class="status-checkbox">Chcę być uczniem.</mat-checkbox>
-        <mat-checkbox class="status-checkbox">Chcę być korepetytorem.</mat-checkbox>
-      </p>
-
-      <p>
-        <mat-form-field appearance="outline">
-          <mat-label>Imię</mat-label>
-          <input matInput #input placeholder="Np. Jan">
-        </mat-form-field>
-      </p>
-
-      <p>
-        <mat-form-field appearance="outline">
-          <mat-label>Nazwisko</mat-label>
-          <input matInput #input placeholder="Np. Kowalski">
-        </mat-form-field>
-      </p>
-
-      <p>
-        <mat-form-field appearance="outline">
-          <mat-label>Data urodzenia</mat-label>
-          <input matInput [matDatepicker]="picker">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </p>
-
-      <p>
-        <mat-form-field appearance="outline">
-          <mat-label>Miasto</mat-label>
-          <input matInput #input placeholder="Np. Warszawa">
-        </mat-form-field>
-      </p>
-
-      <p>
-        <mat-form-field appearance="outline">
-          <mat-label>Ulica</mat-label>
-          <input matInput #input placeholder="Np. Jana Pawła II">
-        </mat-form-field>
-      </p>
-
-      <div class="small-mat-forms">
-        <mat-form-field appearance="outline" class="small-mat-form-field">
-          <mat-label>Numer domu</mat-label>
-          <input matInput #input placeholder="Np. 21">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="small-mat-form-field">
-          <mat-label>Numer mieszkania (opcjonalne)</mat-label>
-          <input matInput #input placeholder="Np. 37">
-        </mat-form-field>
-      </div>
-
-    </section>
+    <app-settings-general></app-settings-general>
   </mat-tab>
 
-
   <mat-tab label="Uczeń">
-    <section class="settings-student-section">
-      <p>Uzupełnij opisy oczekiwań względem korepetycji.</p>
-        <mat-accordion multi>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Korepetycje 1
-            </mat-panel-title>
-            <!-- <mat-panel-description>
-              Uzupełnij opis oczekiwań względem korepetycji.
-            </mat-panel-description> -->
-          </mat-expansion-panel-header>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Przedmiot</mat-label>
-            <input matInput [formControl]="controlCourse" [matAutocomplete]="autoCourse">
-            <mat-autocomplete autoActiveFirstOption #autoCourse="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsCourse | async" [value]="option">
-                {{option}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Poziom</mat-label>
-            <input matInput [formControl]="controlLevel" [matAutocomplete]="autoLevel">
-            <mat-autocomplete autoActiveFirstOption #autoLevel="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptionsLevel | async" [value]="option">
-                {{option}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Minimalny koszt lekcji</mat-label>
-            <input matInput #input type="number" placeholder="0" class="number-input">
-            <span matSuffix>zł/h</span>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Maksymalny koszt lekcji</mat-label>
-            <input matInput #input type="number" placeholder="100" class="number-input">
-            <span matSuffix>zł/h</span>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Minimalna długość zajęć</mat-label>
-            <input matInput #input type="number" placeholder="0" class="number-input">
-            <span matSuffix>min</span>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Maksymalna długość zajęć</mat-label>
-            <input matInput #input type="number" placeholder="120" class="number-input">
-            <span matSuffix>min</span>
-          </mat-form-field>
-
-          <button mat-mini-fab color="accent">
-            <mat-icon>delete</mat-icon>
-          </button>
-
-        </mat-expansion-panel>
-      </mat-accordion>
-
-      <div id="add-button">
-        <button mat-mini-fab color="accent">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </section>
+    <app-settings-student></app-settings-student>
   </mat-tab>
 
 
   <mat-tab label="Korepetytor">
-    <section class="settings-section">
-      <mat-form-field appearance="outline">
-        <mat-label>Koszt lekcji</mat-label>
-        <input matInput #input type="number" placeholder="0" class="money-input">
-        <span matSuffix>zł/h</span>
-      </mat-form-field>
-    </section>
+    <app-settings-tutor></app-settings-tutor>
   </mat-tab>
 </mat-tab-group>

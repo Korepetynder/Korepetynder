@@ -1,0 +1,50 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Korepetycje {{index}}
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Przedmiot</mat-label>
+    <input matInput [formControl]="controlCourse" [matAutocomplete]="autoCourse">
+    <mat-autocomplete autoActiveFirstOption #autoCourse="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptionsCourse | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Poziom</mat-label>
+    <input matInput [formControl]="controlLevel" [matAutocomplete]="autoLevel">
+    <mat-autocomplete autoActiveFirstOption #autoLevel="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptionsLevel | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Minimalny koszt lekcji</mat-label>
+    <input matInput #input type="number" placeholder="0" class="number-input">
+    <span matSuffix>zł/h</span>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Maksymalny koszt lekcji</mat-label>
+    <input matInput #input type="number" placeholder="100" class="number-input">
+    <span matSuffix>zł/h</span>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Liczba godzin zajęć tygodniowo</mat-label>
+    <input matInput #input type="number" placeholder="2" class="number-input">
+    <span matSuffix>h</span>
+  </mat-form-field>
+
+  <button mat-fab color="accent" (click)="settingsStudent.removeLesson(1)">
+    <mat-icon>delete</mat-icon>
+  </button>
+
+</mat-expansion-panel>

@@ -29,6 +29,10 @@ import {
   NgxMatNativeDateModule,
   NgxMatTimepickerModule
 } from '@angular-material-components/datetime-picker';
+import { SettingsGeneralComponent } from './settings-general/settings-general.component';
+import { SettingsStudentComponent } from './settings-student/settings-student.component';
+import { SettingsTutorComponent } from './settings-tutor/settings-tutor.component';
+import { LessonDescriptionComponent } from './settings-student/lesson-description/lesson-description.component';
 
 
 @NgModule({
@@ -36,6 +40,10 @@ import {
     AppComponent,
     SignInComponent,
     SettingsComponent,
+    SettingsGeneralComponent,
+    SettingsStudentComponent,
+    SettingsTutorComponent,
+    LessonDescriptionComponent,
   ],
   imports: [
     BrowserModule,

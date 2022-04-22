@@ -1,0 +1,56 @@
+<div class="main-div">
+  <div>
+    <mat-checkbox class="status-checkbox">Chcę być uczniem.</mat-checkbox>
+    <mat-checkbox class="status-checkbox">Chcę być korepetytorem.</mat-checkbox>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Imię</mat-label>
+      <input matInput #input placeholder="Np. Jan">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Nazwisko</mat-label>
+      <input matInput #input placeholder="Np. Kowalski">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Data urodzenia</mat-label>
+      <input matInput [matDatepicker]="picker" placeholder="Np. 4/20/2001">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Miasto</mat-label>
+      <input matInput #input placeholder="Np. Warszawa">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Ulica</mat-label>
+      <input matInput #input placeholder="Np. Jana Pawła II">
+    </mat-form-field>
+  </div>
+
+  <div class="small-mat-forms">
+    <mat-form-field appearance="outline" class="small-mat-form-field">
+      <mat-label>Numer domu</mat-label>
+      <input matInput #input placeholder="Np. 21">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="small-mat-form-field">
+      <mat-label>Numer mieszkania (opcjonalne)</mat-label>
+      <input matInput #input placeholder="Np. 37">
+    </mat-form-field>
+  </div>
+</div>
