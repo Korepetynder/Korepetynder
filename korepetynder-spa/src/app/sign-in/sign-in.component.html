@@ -1,0 +1,33 @@
+<div class="main-div">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <!--<div mat-card-avatar class="example-header-image"></div>-->
+      <mat-card-title>Logowanie</mat-card-title>
+      <mat-card-subtitle>Wprowadź dane</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        <mat-form-field hintLabel="Do 20 znaków" appearance="outline">
+          <mat-label>Wprowadź login</mat-label>
+          <input matInput #input maxlength="10" placeholder="Np. jankowalski123">
+          <mat-hint align="end">{{input.value?.length || 0}}/20</mat-hint>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="outline" hintLabel="Od 8 do 20 znaków">
+          <mat-label>Wprowadź hasło</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button class="signup-button">Utwórz konto</button>
+      <button mat-flat-button class="login-button" color="primary">Zaloguj się</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
