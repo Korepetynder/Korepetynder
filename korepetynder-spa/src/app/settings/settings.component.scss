@@ -9,6 +9,13 @@
     margin-right: auto;
 }
 
+.settings-student-section {
+  max-width: 40em;
+  margin: 2em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 mat-form-field {
     width: 100%;
 }
@@ -23,6 +30,10 @@ input.money-input::-webkit-inner-spin-button {
   display: none;
 }
 
-input.money-input {
+input.number-input {
   -moz-appearance: textfield;
+}
+
+#add-button {
+  margin: 10px;
 }
