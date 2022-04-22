@@ -11,8 +11,8 @@ namespace Korepetynder.Contracts.Requests.Students
     {
         public int MinimalCost { get; set; }
         public int MaximalCost { get; set; }
-        public List<int> Locations { get; set; }
-        public StudentCreationRequest(int minimal, int maximal, List<int> locationIds)
+        public IEnumerable<int> Locations { get; set; }
+        public StudentCreationRequest(int minimal, int maximal, IEnumerable<int> locationIds)
         {
             MinimalCost = minimal;
             MaximalCost = maximal;

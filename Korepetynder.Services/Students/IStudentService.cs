@@ -1,5 +1,7 @@
 using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
+using Korepetynder.Services.Models;
+using Sieve.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +13,8 @@ namespace Korepetynder.Services.Students
     public interface IStudentService
     {
         Task<StudentResponse> AddStudent(StudentCreationRequest request);
+
+        Task<PagedData<StudentLessonResponse>> GetLessons(SieveModel model);
+        Task<StudentLessonResponse> AddLesson(LessonCreationRequest request);
     }
 }
