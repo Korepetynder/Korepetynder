@@ -2,23 +2,21 @@
   <mat-tab label="Podstawowe">
     <section class="settings-section">
       <p>
-        <mat-checkbox class="example-margin">Chcę być uczniem.</mat-checkbox>
-        <mat-checkbox class="example-margin">Chcę być korepetytorem.</mat-checkbox>
+        <mat-checkbox class="status-checkbox">Chcę być uczniem.</mat-checkbox>
+        <mat-checkbox class="status-checkbox">Chcę być korepetytorem.</mat-checkbox>
       </p>
 
       <p>
         <mat-form-field appearance="outline">
           <mat-label>Imię</mat-label>
-          <input matInput #input maxlength="20" placeholder="Np. Jan">
+          <input matInput #input placeholder="Np. Jan">
         </mat-form-field>
       </p>
 
       <p>
         <mat-form-field appearance="outline">
-
-          <!--<mat-hint align="end">{{input.value?.length || 0}}/20</mat-hint>-->
           <mat-label>Nazwisko</mat-label>
-          <input matInput #input maxlength="20" placeholder="Np. Kowalski">
+          <input matInput #input placeholder="Np. Kowalski">
         </mat-form-field>
       </p>
 
@@ -35,26 +33,26 @@
       <p>
         <mat-form-field appearance="outline">
           <mat-label>Miasto</mat-label>
-          <input matInput #input maxlength="20" placeholder="Np. Warszawa">
+          <input matInput #input placeholder="Np. Warszawa">
         </mat-form-field>
       </p>
 
       <p>
         <mat-form-field appearance="outline">
           <mat-label>Ulica</mat-label>
-          <input matInput #input maxlength="20" placeholder="Np. Jana Pawła II">
+          <input matInput #input placeholder="Np. Jana Pawła II">
         </mat-form-field>
       </p>
 
       <div class="small-mat-forms">
         <mat-form-field appearance="outline" class="small-mat-form-field">
           <mat-label>Numer domu</mat-label>
-          <input matInput #input maxlength="20" placeholder="Np. 21">
+          <input matInput #input placeholder="Np. 21">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="small-mat-form-field">
           <mat-label>Numer mieszkania (opcjonalne)</mat-label>
-          <input matInput #input maxlength="20" placeholder="Np. 37">
+          <input matInput #input placeholder="Np. 37">
         </mat-form-field>
       </div>
 
@@ -63,11 +61,29 @@
 
 
   <mat-tab label="Uczeń">
-    
+    <section class="settings-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Minimalny koszt lekcji</mat-label>
+        <input matInput #input type="number" placeholder="0" class="money-input">
+        <span matSuffix>zł/h</span>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Maksymalny koszt lekcji</mat-label>
+        <input matInput #input type="number" placeholder="100" class="money-input">
+        <span matSuffix>zł/h</span>
+      </mat-form-field>
+    </section>
   </mat-tab>
 
 
   <mat-tab label="Korepetytor">
-    Korepetytor
+    <section class="settings-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Koszt lekcji</mat-label>
+        <input matInput #input type="number" placeholder="0" class="money-input">
+        <span matSuffix>zł/h</span>
+      </mat-form-field>
+    </section>
   </mat-tab>
 </mat-tab-group>

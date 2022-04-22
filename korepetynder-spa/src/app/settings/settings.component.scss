@@ -1,23 +1,9 @@
-.example-h2 {
-  margin: 10px;
-}
-
-.example-section {
-  display: flex;
-  align-content: center;
-  align-items: center;
-  height: 60px;
-}
-
-.example-margin {
+.status-checkbox {
   margin: 0 10px;
 }
 
 .settings-section {
     max-width: 32em;
-    //display: flex;
-    //align-content: center;
-    //align-items: center;
     margin: 2em;
     margin-left: auto;
     margin-right: auto;
@@ -25,15 +11,18 @@
 
 mat-form-field {
     width: 100%;
-    //border-left: 1em;
-    //border-right: 1em;
-    padding-left: 1em;
-    padding-right: 1em;
-    //margin-left: 1em;
-    //margin-right: 1em;
 }
 
 .small-mat-forms {
     display: grid;
     grid-template-columns: auto auto;
+}
+
+input.money-input::-webkit-outer-spin-button,
+input.money-input::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.money-input {
+  -moz-appearance: textfield;
 }
