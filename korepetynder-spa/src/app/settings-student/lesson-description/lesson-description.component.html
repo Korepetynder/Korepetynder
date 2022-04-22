@@ -7,7 +7,7 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Przedmiot</mat-label>
-    <input matInput [formControl]="controlCourse" [matAutocomplete]="autoCourse">
+    <input matInput [formControl]="controlCourse" [matAutocomplete]="autoCourse" [(ngModel)]="lesson.course">
     <mat-autocomplete autoActiveFirstOption #autoCourse="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptionsCourse | async" [value]="option">
         {{option}}
@@ -17,7 +17,7 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Poziom</mat-label>
-    <input matInput [formControl]="controlLevel" [matAutocomplete]="autoLevel">
+    <input matInput [formControl]="controlLevel" [matAutocomplete]="autoLevel" [(ngModel)]="lesson.level">
     <mat-autocomplete autoActiveFirstOption #autoLevel="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptionsLevel | async" [value]="option">
         {{option}}
@@ -27,23 +27,23 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Minimalny koszt lekcji</mat-label>
-    <input matInput #input type="number" placeholder="0" class="number-input">
+    <input matInput #input type="number" placeholder="0" class="number-input" [(ngModel)]="lesson.minCost">
     <span matSuffix>zł/h</span>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Maksymalny koszt lekcji</mat-label>
-    <input matInput #input type="number" placeholder="100" class="number-input">
+    <input matInput #input type="number" placeholder="100" class="number-input" [(ngModel)]="lesson.maxCost">
     <span matSuffix>zł/h</span>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Liczba godzin zajęć tygodniowo</mat-label>
-    <input matInput #input type="number" placeholder="2" class="number-input">
+    <input matInput #input type="number" placeholder="2" class="number-input" [(ngModel)]="lesson.hoursWeekly">
     <span matSuffix>h</span>
   </mat-form-field>
 
-  <button mat-fab color="accent" (click)="settingsStudent.removeLesson(1)">
+  <button mat-fab color="accent" (click)="settingsStudent.removeLesson(index)">
     <mat-icon>delete</mat-icon>
   </button>
 

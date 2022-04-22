@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Lesson } from './lesson-description/lesson-model';
 
 @Component({
   selector: 'app-settings-student',
@@ -6,10 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings-student.component.scss']
 })
 export class SettingsStudentComponent {
-  lessons: number[] = [0, 0];
+  lessons: Lesson[] = [];
 
   addLesson(): void {
-    this.lessons.push(0);
+    this.lessons.push({} as Lesson);
   }
 
   removeLesson(id: number): void {

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
 import { SettingsStudentComponent } from '../settings-student.component';
+import { Lesson } from './lesson-model';
 
 @Component({
   selector: 'app-lesson-description',
@@ -10,7 +11,7 @@ import { SettingsStudentComponent } from '../settings-student.component';
 })
 export class LessonDescriptionComponent implements OnInit {
   @Input() index: number = 0;
-  @Input() lesson: any;
+  @Input() lesson: Lesson = {} as Lesson;
 
   controlCourse = new FormControl();
   controlLevel = new FormControl();
