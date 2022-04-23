@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "nameSuffix": {
+      "value": "prod"
+    },
+    "appServicePlanSku": {
+      "value": "B1"
+    },
+    "dbSkuName": {
+      "value": "S0"
+    },
+    "dbSkuTierName": {
+      "value": "Standard"
+    },
+    "branchName": {
+      "value": "main"
+    },
+    "staticWebAppSkuTier": {
+      "value": "Free"
+    },
+    "staticWebAppSkuName": {
+      "value": "Free"
+    },
+    "staticWebAppApiLocation": {
+      "value": "westeurope"
+    }
+  }
+}
