@@ -11,6 +11,7 @@ export class AppComponent implements OnDestroy {
   title = 'korepetynder-spa';
   mobileQuery: MediaQueryList;
   @Input() settingsTab: number = 0;
+  maxSettingsTab: number = 2;
 
   private _mobileQueryListener: () => void;
 

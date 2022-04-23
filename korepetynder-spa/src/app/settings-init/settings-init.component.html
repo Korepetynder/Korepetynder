@@ -1,0 +1,30 @@
+<div>
+  <mat-stepper linear #stepper>
+    <mat-step editable="true">
+      <ng-template matStepLabel>Uzupełnij podstawowe informacje</ng-template>
+      <app-settings-general></app-settings-general>
+    </mat-step>
+    <mat-step editable="true">
+      <ng-template matStepLabel>Uzupełnij informacje jako uczeń</ng-template>
+      <app-settings-student></app-settings-student>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Uzupełnij informacje jako korepetytor</ng-template>
+      <app-settings-tutor></app-settings-tutor>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <div class="card-div">
+        <mat-card class="small-card">
+          <div>
+            <h3>To już wszystko!</h3>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Wróć</button>
+            <button mat-button routerLink="/settings">OK</button>
+          </div>
+        </mat-card>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>

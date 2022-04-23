@@ -36,11 +36,12 @@ input.number-input {
 
 #add-button {
   margin: 10px;
-  float: right;
+  float: left;
 }
 
-#save-settings-button {
+.save-settings-button {
   margin: 5px;
+  float: right;
 }
 
 p {

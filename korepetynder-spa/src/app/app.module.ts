@@ -23,6 +23,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -31,6 +32,7 @@ import { SettingsStudentComponent } from './settings-student/settings-student.co
 import { SettingsTutorComponent } from './settings-tutor/settings-tutor.component';
 import { LessonDescriptionComponent } from './settings-student/lesson-description/lesson-description.component';
 import { LessonTutorDescriptionComponent } from './settings-tutor/lesson-tutor-description/lesson-tutor-description.component';
+import { SettingsInitComponent } from './settings-init/settings-init.component';
 
 
 @NgModule({
@@ -43,6 +45,7 @@ import { LessonTutorDescriptionComponent } from './settings-tutor/lesson-tutor-d
     SettingsTutorComponent,
     LessonDescriptionComponent,
     LessonTutorDescriptionComponent,
+    SettingsInitComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,7 +69,8 @@ import { LessonTutorDescriptionComponent } from './settings-tutor/lesson-tutor-d
     MatListModule,
     MatAutocompleteModule,
     MatSlideToggleModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]

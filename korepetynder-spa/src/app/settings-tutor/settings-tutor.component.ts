@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Lesson } from './lesson-tutor-description/lesson-model';
 
 @Component({
@@ -7,6 +8,9 @@ import { Lesson } from './lesson-tutor-description/lesson-model';
   styleUrls: ['./settings-tutor.component.scss']
 })
 export class SettingsTutorComponent {
+
+  constructor(public router: Router) { }
+
   lessons: Lesson[] = [];
 
   addLesson(): void {

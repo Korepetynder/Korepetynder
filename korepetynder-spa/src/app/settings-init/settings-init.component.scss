@@ -1,12 +1,9 @@
-.main-div {
-  max-width: 40em;
-  margin: 2em;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 mat-form-field {
   width: 100%;
+}
+
+.status-checkbox {
+  margin: 0 10px;
 }
 
 .small-mat-forms {
@@ -30,10 +27,19 @@ input.number-input {
 
 .save-settings-button {
   margin: 10px;
-  margin-top: 30px;
+  // margin-top: 30px;
   float: right;
 }
 
-p {
-  margin: 10px;
+.card-div {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.small-card {
+  height: 120px;
+  width: 250px;
 }

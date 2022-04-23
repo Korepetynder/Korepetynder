@@ -11,8 +11,15 @@
     </button>
   </div>
 
-  <div id="save-settings-button">
+  <div *ngIf="router.url === '/settings'" class="save-settings-button">
     <button mat-raised-button color="accent">Zapisz zmiany</button>
+  </div>
+
+  <div *ngIf="router.url === '/account-init'" class="save-settings-button">
+    <button mat-raised-button color="accent" matStepperNext>Dalej</button>
+  </div>
+  <div *ngIf="router.url === '/account-init'" class="save-settings-button">
+    <button mat-raised-button color="accent" matStepperPrevious>Wróć</button>
   </div>
 
 </div>
