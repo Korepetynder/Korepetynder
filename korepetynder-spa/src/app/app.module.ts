@@ -73,7 +73,7 @@ import { SettingsInitComponent } from './settings-init/settings-init.component';
     MatAutocompleteModule,
     MatSlideToggleModule,
     MatSidenavModule,
-    MatStepperModule
+    MatStepperModule,
     HttpClientModule,
     MsalModule
   ],
