@@ -1,7 +1,7 @@
 <div class="main-div">
   <div>
-    <mat-checkbox class="status-checkbox">Chcę być uczniem.</mat-checkbox>
-    <mat-checkbox class="status-checkbox">Chcę być korepetytorem.</mat-checkbox>
+    <mat-slide-toggle class="status-slider">Chcę być uczniem.</mat-slide-toggle>
+    <mat-slide-toggle class="status-slider">Chcę być korepetytorem.</mat-slide-toggle>
   </div>
 
   <div>
@@ -53,4 +53,9 @@
       <input matInput #input placeholder="Np. 37">
     </mat-form-field>
   </div>
+
+  <div id="save-settings-button">
+    <button mat-raised-button color="accent">Zapisz zmiany</button>
+  </div>
+
 </div>

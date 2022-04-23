@@ -26,14 +26,8 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Minimalny koszt lekcji</mat-label>
-    <input matInput #input type="number" placeholder="0" class="number-input" [(ngModel)]="lesson.minCost">
-    <span matSuffix>zł/h</span>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Maksymalny koszt lekcji</mat-label>
-    <input matInput #input type="number" placeholder="100" class="number-input" [(ngModel)]="lesson.maxCost">
+    <mat-label>Koszt lekcji</mat-label>
+    <input matInput #input type="number" placeholder="0" class="number-input" [(ngModel)]="lesson.cost">
     <span matSuffix>zł/h</span>
   </mat-form-field>
 
@@ -43,7 +37,7 @@
     <span matSuffix>h</span>
   </mat-form-field>
 
-  <button mat-fab color="accent" (click)="settingsStudent.removeLesson(index)">
+  <button mat-fab color="accent" (click)="settingsTutor.removeLesson(index)">
     <mat-icon>delete</mat-icon>
   </button>
 

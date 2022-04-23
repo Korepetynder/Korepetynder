@@ -21,18 +21,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SettingsComponent } from './settings/settings.component';
-
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-  NgxMatTimepickerModule
-} from '@angular-material-components/datetime-picker';
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
 import { SettingsStudentComponent } from './settings-student/settings-student.component';
 import { SettingsTutorComponent } from './settings-tutor/settings-tutor.component';
 import { LessonDescriptionComponent } from './settings-student/lesson-description/lesson-description.component';
+import { LessonTutorDescriptionComponent } from './settings-tutor/lesson-tutor-description/lesson-tutor-description.component';
 
 
 @NgModule({
@@ -44,6 +41,7 @@ import { LessonDescriptionComponent } from './settings-student/lesson-descriptio
     SettingsStudentComponent,
     SettingsTutorComponent,
     LessonDescriptionComponent,
+    LessonTutorDescriptionComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,7 +63,8 @@ import { LessonDescriptionComponent } from './settings-student/lesson-descriptio
     ReactiveFormsModule,
     MatNativeDateModule,
     MatListModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,7 +1,18 @@
 <div class="main-div">
-  <mat-form-field appearance="outline">
-    <mat-label>Koszt lekcji</mat-label>
-    <input matInput #input type="number" placeholder="0" class="money-input">
-    <span matSuffix>zł/h</span>
-  </mat-form-field>
+  <p>Uzupełnij opisy oferowanych korepetycji.</p>
+  <mat-accordion multi>
+    <app-lesson-tutor-description *ngFor="let lesson of lessons; index as i" [lesson]="lesson" [index]="i + 1">
+    </app-lesson-tutor-description>
+  </mat-accordion>
+
+  <div id="add-button">
+    <button mat-fab color="accent" (click)="addLesson()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <div id="save-settings-button">
+    <button mat-raised-button color="accent">Zapisz zmiany</button>
+  </div>
+
 </div>

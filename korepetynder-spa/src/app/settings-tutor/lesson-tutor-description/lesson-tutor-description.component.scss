@@ -1,23 +1,12 @@
-// @import "../settings/settings.component.scss"; // TODO czemu nie działa?
-
 .main-div {
-  max-width: 32em;
+  max-width: 40em;
   margin: 2em;
   margin-left: auto;
   margin-right: auto;
 }
 
-.status-checkbox {
-  margin: 0 10px;
-}
-
-.status-slider {
-  margin: 0 10px;
-}
-
 mat-form-field {
   width: 100%;
-  margin: 5px;
 }
 
 .small-mat-forms {
@@ -37,12 +26,4 @@ input.number-input {
 #add-button {
   margin: 10px;
   float: right;
-}
-
-#save-settings-button {
-  margin: 5px;
-}
-
-p {
-  margin: 10px;
 }
