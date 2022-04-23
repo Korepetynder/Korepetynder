@@ -27,7 +27,7 @@ namespace Korepetynder.Services.Subjects
             if (subjectExists)
             {
                 throw new InvalidOperationException("Subject with name " + subjectRequest.Name + " already exists");
-            }    
+            }
 
             var subject = new Subject(subjectRequest.Name);
             _korepetynderDbContext.Subjects.Add(subject);
@@ -56,7 +56,8 @@ namespace Korepetynder.Services.Subjects
         public async Task<SubjectResponse?> GetSubject(int id) =>
             await _korepetynderDbContext.Subjects
                 .AsNoTracking()
+                .Where(subject => subject.Id == id)
                 .Select(subject => new SubjectResponse(subject.Id, subject.Name))
-                .SingleOrDefaultAsync(subject => subject.Id == id);
+                .SingleOrDefaultAsync();
     }
 }

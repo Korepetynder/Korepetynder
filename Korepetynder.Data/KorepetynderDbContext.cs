@@ -21,16 +21,11 @@ namespace Korepetynder.Data
             modelBuilder.Entity<User>()
                 .Property(user => user.FullName)
                 .HasComputedColumnSql($"[{nameof(User.FirstName)}] + ' ' + [{nameof(User.LastName)}]");
-
-
-            modelBuilder.Entity<Lesson>()
-                .HasCheckConstraint($"CK_Lesson_{nameof(Lesson.StudentId)}_{nameof(Lesson.TeacherId)}",
-                    $"[{nameof(Lesson.StudentId)}] IS NULL OR [{nameof(Lesson.TeacherId)}] IS NULL");
-            modelBuilder.Entity<Lesson>()
+            modelBuilder.Entity<StudentLesson>()
                 .HasMany(lesson => lesson.Levels)
                 .WithMany(level => level.Lessons)
                 .UsingEntity(join => join.ToTable("LessonLevels"));
-            modelBuilder.Entity<Lesson>()
+            modelBuilder.Entity<StudentLesson>()
                 .HasMany(lesson => lesson.Languages)
                 .WithMany(language => language.Lessons)
                 .UsingEntity(join => join.ToTable("LessonLanguages"));
@@ -59,8 +54,9 @@ namespace Korepetynder.Data
         public DbSet<Location> Locations => Set<Location>();
         public DbSet<Level> Levels => Set<Level>();
         public DbSet<Language> Languages => Set<Language>();
-        public DbSet<Lesson> Lessons => Set<Lesson>();
-        public DbSet<Length> Lengths => Set<Length>();
+        public DbSet<StudentLesson> StudentLesson => Set<StudentLesson>();
+        public DbSet<TeacherLesson> TeacherLesson => Set<TeacherLesson>();
+        public DbSet<Frequency> Frequencies => Set<Frequency>();
 
     }
 }

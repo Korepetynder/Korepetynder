@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Korepetynder.Data.Migrations
 {
     [DbContext(typeof(KorepetynderDbContext))]
-    [Migration("20220404231438_AddInitialModels")]
-    partial class AddInitialModels
+    [Migration("20220422184423_AddedWeights")]
+    partial class AddedWeights
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,30 @@ namespace Korepetynder.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Frequency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Frequencies");
+                });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Language", b =>
                 {
@@ -45,27 +69,6 @@ namespace Korepetynder.Data.Migrations
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.Frequency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Lengths");
-                });
-
             modelBuilder.Entity("Korepetynder.Data.DbModels.Lesson", b =>
                 {
                     b.Property<int>("Id")
@@ -74,7 +77,7 @@ namespace Korepetynder.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("LengthId")
+                    b.Property<int?>("FrequencyId")
                         .HasColumnType("int");
 
                     b.Property<int?>("StudentId")
@@ -88,7 +91,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LengthId");
+                    b.HasIndex("FrequencyId");
 
                     b.HasIndex("StudentId");
 
@@ -113,6 +116,9 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -200,7 +206,10 @@ namespace Korepetynder.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("PreferredCost")
+                    b.Property<int>("PreferredCostMaximum")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PreferredCostMinimum")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -375,9 +384,7 @@ namespace Korepetynder.Data.Migrations
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Frequency", "Frequency")
                         .WithMany("Lessons")
-                        .HasForeignKey("LengthId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FrequencyId");
 
                     b.HasOne("Korepetynder.Data.DbModels.Student", "Student")
                         .WithMany("PreferredLessons")
@@ -405,7 +412,7 @@ namespace Korepetynder.Data.Migrations
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Location", "ParentLocation")
-                        .WithMany("SubLocations")
+                        .WithMany("Sublocations")
                         .HasForeignKey("ParentLocationId");
 
                     b.Navigation("ParentLocation");
@@ -534,7 +541,7 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
                 {
-                    b.Navigation("SubLocations");
+                    b.Navigation("Sublocations");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.ProfilePicture", b =>

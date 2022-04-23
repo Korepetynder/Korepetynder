@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Korepetynder.Data.Migrations
 {
     [DbContext(typeof(KorepetynderDbContext))]
-    [Migration("20220404231438_AddInitialModels")]
-    partial class AddInitialModels
+    [Migration("20220422134601_CorrectedStudentModel")]
+    partial class CorrectedStudentModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -200,7 +200,10 @@ namespace Korepetynder.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("PreferredCost")
+                    b.Property<int>("PreferredCostMaximum")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PreferredCostMinimum")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -405,7 +408,7 @@ namespace Korepetynder.Data.Migrations
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Location", "ParentLocation")
-                        .WithMany("SubLocations")
+                        .WithMany("Sublocations")
                         .HasForeignKey("ParentLocationId");
 
                     b.Navigation("ParentLocation");
@@ -534,7 +537,7 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
                 {
-                    b.Navigation("SubLocations");
+                    b.Navigation("Sublocations");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.ProfilePicture", b =>
