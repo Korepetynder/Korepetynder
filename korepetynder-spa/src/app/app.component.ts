@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef, OnDestroy} from '@angular/core';
-import { SettingsComponent } from './settings/settings.component';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +10,7 @@ import { SettingsComponent } from './settings/settings.component';
 export class AppComponent implements OnDestroy {
   title = 'korepetynder-spa';
   mobileQuery: MediaQueryList;
+  @Input() settingsTab: number = 0;
 
   private _mobileQueryListener: () => void;
 
@@ -22,5 +22,9 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  setSelectedTab(id: number): void {
+    this.settingsTab = id;
   }
 }

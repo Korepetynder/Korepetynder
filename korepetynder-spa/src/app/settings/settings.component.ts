@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-settings',
@@ -6,11 +7,5 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent {
-  selectedTab: number = 0;
-
-  constructor() { }
-
-  setSelectedTab(id: number): void {
-    this.selectedTab = id;
-  }
+  constructor(public appComponent: AppComponent) { }
 }
