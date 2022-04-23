@@ -5,3 +5,17 @@
 .mat-form-field + .mat-form-field {
   margin-left: 8px;
 }
+
+.main-div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidenav-container {
+  flex: 1 0 auto;
+}
+
+h2 {
+  margin: 2px;
+}

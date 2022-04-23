@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent {
+  selectedTab: number = 0;
 
   constructor() { }
+
+  setSelectedTab(id: number): void {
+    this.selectedTab = id;
+  }
 }

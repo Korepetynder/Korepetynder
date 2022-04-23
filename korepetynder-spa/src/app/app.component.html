@@ -1,17 +1,39 @@
+<div class="main-div">
 <mat-toolbar color="primary">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+  <button mat-icon-button class="example-icon" (click)="snav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>Korepetynder</span>
   <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+  <button mat-icon-button class="example-icon favorite-icon">
     <mat-icon>favorite</mat-icon>
   </button>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+  <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menuLogout">
     <mat-icon>account_circle</mat-icon>
   </button>
+
+  <mat-menu #menuLogout="matMenu">
+    <button mat-menu-item>
+      <mat-icon>logout</mat-icon>
+      <span>Wyloguj się</span>
+    </button>
+  </mat-menu>
+
 </mat-toolbar>
 
-<app-settings></app-settings>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #snav mode="over">
+    <h2>Ustawienia:</h2>
+    <mat-nav-list>
+      <a mat-list-item>Podstawowe</a>
+      <a mat-list-item>Ucznia</a>
+      <a mat-list-item>Korepetytora</a>
+    </mat-nav-list>
+  </mat-sidenav>
 
-<!--<app-sign-in></app-sign-in>-->
+  <mat-sidenav-content>
+    <app-settings></app-settings>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+</div>
