@@ -23,7 +23,7 @@ namespace Korepetynder.Services.Frequencies
         public async Task<FrequencyResponse> AddFrequency(FrequencyRequest frequencyRequest)
         {
             var frequencyExists = await _korepetynderDbContext.Frequencies
-                .AnyAsync(frequency => frequency.Name == frequency.Name);
+                .AnyAsync(frequency => frequency.Name == frequencyRequest.Name);
             if (frequencyExists)
             {
                 throw new InvalidOperationException("Frequency with name " + frequencyRequest.Name + " already exists");
@@ -33,13 +33,13 @@ namespace Korepetynder.Services.Frequencies
             _korepetynderDbContext.Frequencies.Add(frequency);
             await _korepetynderDbContext.SaveChangesAsync();
 
-            return new FrequencyResponse(frequency.Id, frequency.Name, frequency.Weight);
+            return new FrequencyResponse(frequency.Id, frequency.Name);
         }
 
         public async Task<PagedData<FrequencyResponse>> GetFrequencies(SieveModel sieveModel)
         {
             var frequencies = _korepetynderDbContext.Frequencies
-                .OrderBy(frequency => frequency.Name)
+                .OrderBy(frequency => frequency.Weight)
                 .AsNoTracking();
 
             frequencies = _sieveProcessor.Apply(sieveModel, frequencies, applyPagination: false);
@@ -49,14 +49,16 @@ namespace Korepetynder.Services.Frequencies
             frequencies = _sieveProcessor.Apply(sieveModel, frequencies, applyFiltering: false, applySorting: false);
 
             return new PagedData<FrequencyResponse>(count, await frequencies
-                .Select(frequency => new FrequencyResponse(frequency.Id, frequency.Name, frequency.Weight))
+                .Select(frequency => new FrequencyResponse(frequency.Id, frequency.Name))
                 .ToListAsync());
         }
 
         public async Task<FrequencyResponse?> GetFrequency(int id) =>
             await _korepetynderDbContext.Frequencies
                 .AsNoTracking()
-                .Select(frequency => new FrequencyResponse(frequency.Id, frequency.Name, frequency.Weight))
-                .SingleOrDefaultAsync(frequency => frequency.Id == id);
+                .Where(frequency => frequency.Id == id)
+                .OrderBy(frequency => frequency.Weight)
+                .Select(frequency => new FrequencyResponse(frequency.Id, frequency.Name))
+                .SingleOrDefaultAsync();
     }
 }

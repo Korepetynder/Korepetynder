@@ -1,16 +1,20 @@
 using Korepetynder.Contracts.Requests.Languages;
 using Korepetynder.Contracts.Responses.Languages;
 using Korepetynder.Services.Languages;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
 {
-    
+
     /// <summary>
     /// Controller for languages management.
     /// </summary>
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
     public class LanguagesController : ControllerBase

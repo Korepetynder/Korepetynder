@@ -22,7 +22,7 @@ namespace Korepetynder.Services.Levels
 
         public async Task<LevelResponse> AddLevel(LevelRequest levelRequest)
         {
-            var levelExists = await _korepetynderDbContext.Subjects
+            var levelExists = await _korepetynderDbContext.Levels
                 .AnyAsync(level => level.Name == levelRequest.Name);
             if (levelExists)
             {
@@ -33,13 +33,13 @@ namespace Korepetynder.Services.Levels
             _korepetynderDbContext.Levels.Add(level);
             await _korepetynderDbContext.SaveChangesAsync();
 
-            return new LevelResponse(level.Id, level.Name, level.Weight);
+            return new LevelResponse(level.Id, level.Name);
         }
 
         public async Task<PagedData<LevelResponse>> GetLevels(SieveModel sieveModel)
         {
             var levels = _korepetynderDbContext.Levels
-                .OrderBy(level => level.Name)
+                .OrderBy(level => level.Weight)
                 .AsNoTracking();
 
             levels = _sieveProcessor.Apply(sieveModel, levels, applyPagination: false);
@@ -49,14 +49,16 @@ namespace Korepetynder.Services.Levels
             levels = _sieveProcessor.Apply(sieveModel, levels, applyFiltering: false, applySorting: false);
 
             return new PagedData<LevelResponse>(count, await levels
-                .Select(level => new LevelResponse(level.Id, level.Name, level.Weight))
+                .Select(level => new LevelResponse(level.Id, level.Name))
                 .ToListAsync());
         }
 
         public async Task<LevelResponse?> GetLevel(int id) =>
             await _korepetynderDbContext.Levels
                 .AsNoTracking()
-                .Select(level => new LevelResponse(level.Id, level.Name, level.Weight))
-                .SingleOrDefaultAsync(level => level.Id == id);
+                .Where(level => level.Id == id)
+                .OrderBy(level => level.Weight)
+                .Select(level => new LevelResponse(level.Id, level.Name))
+                .SingleOrDefaultAsync();
     }
 }

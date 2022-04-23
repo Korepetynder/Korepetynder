@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Korepetynder.Contracts.Responses.Languages;
 using Korepetynder.Contracts.Responses.Levels;
+using Microsoft.AspNetCore.Http;
 
 namespace Korepetynder.Services.Students
 {
@@ -21,18 +22,20 @@ namespace Korepetynder.Services.Students
     {
         private readonly KorepetynderDbContext _korepetynderDbContext;
         private readonly ISieveProcessor _sieveProcessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public StudentService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor)
+        public StudentService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor, IHttpContextAccessor httpContextAccessor)
         {
             _korepetynderDbContext = korepetynderDbContext;
             _sieveProcessor = sieveProcessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<StudentLessonResponse> AddLesson(LessonCreationRequest request)
         {
-            Guid currentId = new Guid(); //tu też musi być id
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.Student is null)
+            if (studentUser.StudentId is null)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
@@ -46,7 +49,7 @@ namespace Korepetynder.Services.Students
             }
 
             var lesson = new StudentLesson();
-            lesson.Student = studentUser.Student;
+            lesson.StudentId = studentUser.StudentId.Value;
             lesson.Frequency = frequency;
             lesson.Subject = subject;
             lesson.Levels = levels;
@@ -57,9 +60,9 @@ namespace Korepetynder.Services.Students
             return new StudentLessonResponse(lesson);
         }
 
-        public async Task<StudentResponse> AddStudent(StudentCreationRequest request)
+        public async Task<StudentResponse> InitializeStudent(StudentCreationRequest request)
         {
-            Guid currentId = new Guid(); //tu musi być id, nie wiem skąd
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
             if (studentUser.Student is not null)
             {
@@ -79,19 +82,22 @@ namespace Korepetynder.Services.Students
             studentUser.Student = student;
             _korepetynderDbContext.Students.Add(student);
             await _korepetynderDbContext.SaveChangesAsync();
-            return new StudentResponse(student.Id);
+            return new StudentResponse(student.Id, student.PreferredCostMinimum, student.PreferredCostMaximum, locations.Select(location => location.Id));
         }
 
         public async Task<PagedData<StudentLessonResponse>> GetLessons(SieveModel model)
         {
-            Guid currentId = new Guid(); //tu też musi być id
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.Student is null)
+            if (studentUser.StudentId is null)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
             var userLessons =  _korepetynderDbContext.StudentLesson
                 .Where(lesson => lesson.StudentId == studentUser.StudentId)
+                .Include(lesson => lesson.Frequency)
+                .Include(lesson => lesson.Languages)
+                .Include(lesson => lesson.Levels)
                 .OrderBy(lesson => lesson.Id)
                 .AsNoTracking();
             userLessons = _sieveProcessor.Apply(model, userLessons, applyPagination: false);

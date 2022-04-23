@@ -1,12 +1,16 @@
 using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Services.Students;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
 {
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
@@ -26,11 +30,11 @@ namespace Korepetynder.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<StudentResponse>> PostSubject([FromBody] StudentCreationRequest studentRequest)
+        public async Task<ActionResult<StudentResponse>> PostStudent([FromBody] StudentCreationRequest studentRequest)
         {
             try
             {
-                var student = await _studentsService.AddStudent(studentRequest);
+                var student = await _studentsService.InitializeStudent(studentRequest);
 
                 return student;
             }
@@ -45,7 +49,7 @@ namespace Korepetynder.Api.Controllers
         /// </summary>
         /// <param name="lessonRequest">Request containing data for a new lesson.</param>
         /// <returns>Newly created lesson.</returns>
-        [HttpPost("/lessons")]
+        [HttpPost("Lessons")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<StudentLessonResponse>> PostLesson([FromBody] LessonCreationRequest lessonRequest)
@@ -67,7 +71,7 @@ namespace Korepetynder.Api.Controllers
         /// </summary>
         /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
         /// <returns>List of lessons.</returns>
-        [HttpGet("/lessons")]
+        [HttpGet("Lessons")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<StudentLessonResponse>>> GetLessons([FromQuery] SieveModel sieveModel)

@@ -12,18 +12,15 @@ namespace Korepetynder.Contracts.Responses.Levels
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int Weight { get; set; }
         public LevelResponse(Level level)
         {
             Id = level.Id;
             Name = level.Name;
-            Weight = level.Weight;
         }
-        public LevelResponse(int id, string name, int weight)
+        public LevelResponse(int id, string name)
         {
             Id = id;
             Name = name;
-            Weight = weight;
         }
     }
 }

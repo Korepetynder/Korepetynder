@@ -22,11 +22,11 @@ namespace Korepetynder.Services.Languages
 
         public async Task<LanguageResponse> AddLanguage(LanguageRequest languageRequest)
         {
-            var languageExists = await _korepetynderDbContext.Frequencies
+            var languageExists = await _korepetynderDbContext.Languages
                 .AnyAsync(language => language.Name == languageRequest.Name);
             if (languageExists)
             {
-                throw new InvalidOperationException("Subject with name " + languageRequest.Name + " already exists");
+                throw new InvalidOperationException("Language with name " + languageRequest.Name + " already exists");
             }    
 
             var language = new Language(languageRequest.Name);
@@ -54,9 +54,10 @@ namespace Korepetynder.Services.Languages
         }
 
         public async Task<LanguageResponse?> GetLanguage(int id) =>
-            await _korepetynderDbContext.Subjects
+            await _korepetynderDbContext.Languages
                 .AsNoTracking()
+                .Where(x => x.Id == id)
                 .Select(language => new LanguageResponse(language.Id, language.Name))
-                .SingleOrDefaultAsync(subject => subject.Id == id);
+                .SingleOrDefaultAsync();
     }
 }

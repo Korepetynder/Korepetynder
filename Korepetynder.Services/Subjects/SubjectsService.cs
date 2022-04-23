@@ -56,7 +56,8 @@ namespace Korepetynder.Services.Subjects
         public async Task<SubjectResponse?> GetSubject(int id) =>
             await _korepetynderDbContext.Subjects
                 .AsNoTracking()
+                .Where(subject => subject.Id == id)
                 .Select(subject => new SubjectResponse(subject.Id, subject.Name))
-                .SingleOrDefaultAsync(subject => subject.Id == id);
+                .SingleOrDefaultAsync();
     }
 }

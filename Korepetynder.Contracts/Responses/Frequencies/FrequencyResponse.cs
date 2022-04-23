@@ -11,19 +11,16 @@ namespace Korepetynder.Contracts.Responses.Frequencies
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Weight { get; set; }
 
         public FrequencyResponse(Frequency frequency)
         {
             Id = frequency.Id;
             Name = frequency.Name;
-            Weight = frequency.Weight;
         }
-        public FrequencyResponse(int id, string name, int weight)
+        public FrequencyResponse(int id, string name)
         {
             Id = id;
             Name = name;
-            Weight = weight;
         }
     }
 }

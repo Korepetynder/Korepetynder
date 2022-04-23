@@ -13,12 +13,12 @@ namespace Korepetynder.Contracts.Requests.Students
         public IEnumerable<int> LevelsIds { get; set; }
         public IEnumerable<int> LanguagesIds { get; set; }
 
-        public LessonCreationRequest(int frequencyId, int subjectId, IEnumerable<int> levelsIds, IEnumerable<int> languageIds)
+        public LessonCreationRequest(int frequencyId, int subjectId, IEnumerable<int> levelsIds, IEnumerable<int> languagesIds)
         {
             FrequencyId = frequencyId;
             SubjectId = subjectId;
             LevelsIds = levelsIds;
-            LanguagesIds = languageIds;
+            LanguagesIds = languagesIds;
         }
 
     }

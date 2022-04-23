@@ -1,12 +1,16 @@
 using Korepetynder.Contracts.Requests.Levels;
 using Korepetynder.Contracts.Responses.Levels;
 using Korepetynder.Services.Levels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
 {
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
     public class LevelsController : ControllerBase
@@ -19,46 +23,46 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Gets the list of subjects.
+        /// Gets the list of levels.
         /// </summary>
         /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
-        /// <returns>List of subjects.</returns>
+        /// <returns>List of levels.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<LevelResponse>>> GetLevels([FromQuery] SieveModel sieveModel)
         {
-            var subjects = await _levelsService.GetLevels(sieveModel);
+            var levels = await _levelsService.GetLevels(sieveModel);
 
-            Response.Headers.Add("X-Total-Count", subjects.TotalCount.ToString());
+            Response.Headers.Add("X-Total-Count", levels.TotalCount.ToString());
 
-            return subjects.Entities.ToList();
+            return levels.Entities.ToList();
         }
 
         /// <summary>
-        /// Gets the specified subject.
+        /// Gets the specified level.
         /// </summary>
-        /// <param name="id">ID of the subject.</param>
-        /// <returns>Subject.</returns>
+        /// <param name="id">ID of the level.</param>
+        /// <returns>Level.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<LevelResponse>> GetLevel([FromRoute] int id)
         {
-            var subject = await _levelsService.GetLevel(id);
+            var level = await _levelsService.GetLevel(id);
 
-            if (subject == null)
+            if (level == null)
             {
                 return NotFound();
             }
 
-            return subject;
+            return level;
         }
 
         /// <summary>
-        /// Creates a new subject.
+        /// Creates a new level.
         /// </summary>
-        /// <param name="levelRequest">Request containing data for a new subject.</param>
-        /// <returns>Newly created subject.</returns>
+        /// <param name="levelRequest">Request containing data for a new level.</param>
+        /// <returns>Newly created level.</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

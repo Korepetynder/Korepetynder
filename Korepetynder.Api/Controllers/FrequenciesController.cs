@@ -1,12 +1,16 @@
 using Korepetynder.Contracts.Requests.Frequencies;
 using Korepetynder.Contracts.Responses.Frequencies;
 using Korepetynder.Services.Frequencies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
 {
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
     public class FrequenciesController : ControllerBase
