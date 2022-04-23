@@ -27,7 +27,7 @@ namespace Korepetynder.Services.Subjects
             if (subjectExists)
             {
                 throw new InvalidOperationException("Subject with name " + subjectRequest.Name + " already exists");
-            }    
+            }
 
             var subject = new Subject(subjectRequest.Name);
             _korepetynderDbContext.Subjects.Add(subject);

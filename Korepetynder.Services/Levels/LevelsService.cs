@@ -27,7 +27,7 @@ namespace Korepetynder.Services.Levels
             if (levelExists)
             {
                 throw new InvalidOperationException("Level with name " + levelRequest.Name + " already exists");
-            }    
+            }
 
             var level = new Level(levelRequest.Name, levelRequest.Weight);
             _korepetynderDbContext.Levels.Add(level);

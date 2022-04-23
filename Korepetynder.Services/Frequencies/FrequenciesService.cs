@@ -27,7 +27,7 @@ namespace Korepetynder.Services.Frequencies
             if (frequencyExists)
             {
                 throw new InvalidOperationException("Frequency with name " + frequencyRequest.Name + " already exists");
-            }    
+            }
 
             var frequency = new Frequency(frequencyRequest.Name, frequencyRequest.Weight);
             _korepetynderDbContext.Frequencies.Add(frequency);

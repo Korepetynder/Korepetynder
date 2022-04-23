@@ -27,7 +27,7 @@ namespace Korepetynder.Services.Locations
             if (locationExists)
             {
                 throw new InvalidOperationException("Location with name " + locationRequest.Name + " already exists");
-            }    
+            }
             var location = new Location(locationRequest.Name);
             if (locationRequest.ParentLocationId != null)
             {

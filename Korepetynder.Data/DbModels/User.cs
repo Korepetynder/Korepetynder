@@ -18,7 +18,7 @@ namespace Korepetynder.Data.DbModels
         public int Age { get; set; }
         public int? TeacherId { get; set; }
         public int? StudentId { get; set; }
-        
+
         [ForeignKey(nameof(TeacherId))]
         public Teacher? Teacher { get; set; }
 
@@ -31,7 +31,7 @@ namespace Korepetynder.Data.DbModels
             FirstName = firstName;
             LastName = lastName;
             FullName = firstName + ' ' + lastName;
-            UserName = userName; 
+            UserName = userName;
             Age = age;
         }
 

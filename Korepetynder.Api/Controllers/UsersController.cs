@@ -59,7 +59,7 @@ namespace Korepetynder.Api.Controllers
                 return user;
             }
             catch (InvalidOperationException)
-            { 
+            {
                 return BadRequest();
             }
         }

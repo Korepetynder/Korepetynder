@@ -93,7 +93,7 @@ namespace Korepetynder.Services.Students
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
-            var userLessons =  _korepetynderDbContext.StudentLesson
+            var userLessons = _korepetynderDbContext.StudentLesson
                 .Where(lesson => lesson.StudentId == studentUser.StudentId)
                 .Include(lesson => lesson.Frequency)
                 .Include(lesson => lesson.Languages)

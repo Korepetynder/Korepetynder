@@ -27,7 +27,7 @@ namespace Korepetynder.Services.Languages
             if (languageExists)
             {
                 throw new InvalidOperationException("Language with name " + languageRequest.Name + " already exists");
-            }    
+            }
 
             var language = new Language(languageRequest.Name);
             _korepetynderDbContext.Languages.Add(language);

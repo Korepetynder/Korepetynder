@@ -10,9 +10,9 @@ using Sieve.Services;
 
 namespace Korepetynder.Services
 {
-	public static class Configurator
-	{
-		public static void ConfigureServices(this IServiceCollection services)
+    public static class Configurator
+    {
+        public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<ISieveProcessor, SieveProcessor>();
 
@@ -24,6 +24,6 @@ namespace Korepetynder.Services
             services.AddScoped<ILocationsService, LocationsService>();
             services.AddScoped<IUsersService, UserService>();
         }
-	}
+    }
 }
 
