@@ -1,8 +1,9 @@
 using Korepetynder.Contracts.Requests.Subjects;
 using Korepetynder.Contracts.Responses.Subjects;
 using Korepetynder.Services.Subjects;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
@@ -10,6 +11,8 @@ namespace Korepetynder.Api.Controllers
     /// <summary>
     /// Controller for subjects management.
     /// </summary>
+    [Authorize]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
     public class SubjectsController : ControllerBase

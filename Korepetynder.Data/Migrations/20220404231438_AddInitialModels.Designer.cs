@@ -45,7 +45,7 @@ namespace Korepetynder.Data.Migrations
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.Length", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Frequency", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -373,7 +373,7 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Lesson", b =>
                 {
-                    b.HasOne("Korepetynder.Data.DbModels.Length", "Length")
+                    b.HasOne("Korepetynder.Data.DbModels.Frequency", "Frequency")
                         .WithMany("Lessons")
                         .HasForeignKey("LengthId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -393,7 +393,7 @@ namespace Korepetynder.Data.Migrations
                         .WithMany("Lessons")
                         .HasForeignKey("TeacherId");
 
-                    b.Navigation("Length");
+                    b.Navigation("Frequency");
 
                     b.Navigation("Student");
 
@@ -527,7 +527,7 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.Length", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Frequency", b =>
                 {
                     b.Navigation("Lessons");
                 });

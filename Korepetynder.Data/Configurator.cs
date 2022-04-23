@@ -3,15 +3,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Korepetynder.Data
 {
-	public static class Configurator
-	{
-		public static void ConfigureDatabase(this IServiceCollection services, string connectionString)
+    public static class Configurator
+    {
+        public static void ConfigureDatabase(this IServiceCollection services, string connectionString)
         {
-			services.AddDbContext<KorepetynderDbContext>(options =>
-			{
-				options.UseSqlServer(connectionString);
-			});
+            services.AddDbContext<KorepetynderDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
         }
-	}
+    }
 }
 

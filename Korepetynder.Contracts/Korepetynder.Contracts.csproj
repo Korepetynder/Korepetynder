@@ -10,4 +10,8 @@
     <None Remove="Requests\" />
     <None Remove="Responses\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Korepetynder.Data\Korepetynder.Data.csproj" />
+  </ItemGroup>
 </Project>
