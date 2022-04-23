@@ -13,11 +13,11 @@ namespace Korepetynder.Api.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentsService;
 
-        public StudentsController(IStudentService studentsService)
+        public StudentController(IStudentService studentsService)
         {
             _studentsService = studentsService;
         }

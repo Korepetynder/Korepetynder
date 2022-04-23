@@ -22,7 +22,7 @@ namespace Korepetynder.Services
             services.AddScoped<ILanguagesService, LanguagesService>();
             services.AddScoped<IFrequenciesService, FrequenciesService>();
             services.AddScoped<ILocationsService, LocationsService>();
-            services.AddScoped<IUsersService, UserService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

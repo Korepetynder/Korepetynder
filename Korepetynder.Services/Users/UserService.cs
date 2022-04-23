@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Korepetynder.Services.Users
 {
-    public class UserService : IUsersService
+    public class UserService : IUserService
     {
         private readonly KorepetynderDbContext _korepetynderDbContext;
         private readonly ISieveProcessor _sieveProcessor;

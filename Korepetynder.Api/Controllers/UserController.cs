@@ -13,11 +13,11 @@ namespace Korepetynder.Api.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IUsersService _usersService;
+        private readonly IUserService _usersService;
 
-        public UsersController(IUsersService usersService)
+        public UserController(IUserService usersService)
         {
             _usersService = usersService;
         }
