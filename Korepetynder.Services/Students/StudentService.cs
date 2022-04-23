@@ -3,18 +3,10 @@ using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
 using Korepetynder.Services.Models;
-using System;
-using System.Collections.Generic;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Korepetynder.Contracts.Responses.Languages;
-using Korepetynder.Contracts.Responses.Levels;
-using Microsoft.AspNetCore.Http;
 
 namespace Korepetynder.Services.Students
 {

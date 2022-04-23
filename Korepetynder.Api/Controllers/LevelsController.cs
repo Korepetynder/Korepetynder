@@ -2,7 +2,6 @@ using Korepetynder.Contracts.Requests.Levels;
 using Korepetynder.Contracts.Responses.Levels;
 using Korepetynder.Services.Levels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using Sieve.Models;

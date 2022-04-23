@@ -2,10 +2,8 @@ using Korepetynder.Contracts.Requests.User;
 using Korepetynder.Contracts.Responses.User;
 using Korepetynder.Services.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
 {

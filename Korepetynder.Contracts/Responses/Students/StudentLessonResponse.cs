@@ -2,11 +2,6 @@ using Korepetynder.Contracts.Responses.Frequencies;
 using Korepetynder.Contracts.Responses.Languages;
 using Korepetynder.Contracts.Responses.Levels;
 using Korepetynder.Data.DbModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Korepetynder.Contracts.Responses.Students
 {

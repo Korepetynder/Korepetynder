@@ -2,7 +2,6 @@ using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Services.Students;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using Sieve.Models;

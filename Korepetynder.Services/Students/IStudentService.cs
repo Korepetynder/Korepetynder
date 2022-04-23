@@ -2,11 +2,6 @@ using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Services.Models;
 using Sieve.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Korepetynder.Services.Students
 {

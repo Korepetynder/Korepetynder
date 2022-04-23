@@ -2,7 +2,6 @@ using Korepetynder.Contracts.Requests.Locations;
 using Korepetynder.Contracts.Responses.Locations;
 using Korepetynder.Services.Locations;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using Sieve.Models;
