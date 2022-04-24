@@ -10,7 +10,7 @@ namespace Korepetynder.Api.Controllers
 {
     [Authorize]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class StudentController : ControllerBase
     {
@@ -25,11 +25,11 @@ namespace Korepetynder.Api.Controllers
         /// Creates a new student connected to provided user.
         /// </summary>
         /// <param name="studentRequest">Request containing data for a new user.</param>
-        /// <returns>Newly created subject.</returns>
+        /// <returns>Newly created user.</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<StudentResponse>> PostStudent([FromBody] StudentCreationRequest studentRequest)
+        public async Task<ActionResult<StudentResponse>> PostStudent([FromBody] StudentRequest studentRequest)
         {
             try
             {
@@ -42,7 +42,67 @@ namespace Korepetynder.Api.Controllers
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// Gets student connected to provided user.
+        /// </summary>
+        /// <returns>Newly created user.</returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<StudentResponse>> GetStudent()
+        {
+            try
+            {
+                var student = await _studentsService.GetStudentData();
 
+                return student;
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Updates student profile connected to provided user.
+        /// </summary>
+        /// <returns>Updated student.</returns>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<StudentResponse>> PutStudent(StudentRequest request)
+        {
+            try
+            {
+                var student = await _studentsService.UpdateStudent(request);
+
+                return student;
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
+            {
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Removes student connected to provided user.
+        /// </summary>
+        /// <returns>Newly created subject.</returns>
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteStudent()
+        {
+            try
+            {
+                await _studentsService.DeleteStudent();
+
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
         /// <summary>
         /// Creates a new lesson that currently active student is looking for.
         /// </summary>
@@ -87,5 +147,33 @@ namespace Korepetynder.Api.Controllers
                 return BadRequest();
             }
         }
+
+        /// <summary>
+        /// Deletes lesson with given id, if it belongs to currently logged user
+        /// </summary>
+        /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
+        /// <returns>List of lessons.</returns>
+        [HttpDelete("Lessons/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult> GetLessons([FromRoute] int id)
+        {
+            try
+            {
+                await _studentsService.DeleteLesson(id);
+
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+            catch (ArgumentException)
+            {
+                return Forbid();
+            }
+        }
+
     }
 }

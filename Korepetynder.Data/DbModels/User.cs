@@ -28,6 +28,12 @@ namespace Korepetynder.Data.DbModels
         public User(Guid id, string firstName, string lastName, string userName, int age)
         {
             Id = id;
+            SetValues(firstName, lastName, userName, age);
+        }
+
+        public void SetValues(string firstName, string lastName, string userName, int age)
+        {
+
             FirstName = firstName;
             LastName = lastName;
             FullName = firstName + ' ' + lastName;
