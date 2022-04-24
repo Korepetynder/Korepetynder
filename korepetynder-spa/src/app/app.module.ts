@@ -26,6 +26,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { LayoutModule } from '@angular/cdk/layout';
 import { HomeComponent } from './home/home.component';
+import { MatCardModule } from "@angular/material/card";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 
 
@@ -46,7 +48,9 @@ import { HomeComponent } from './home/home.component';
     MatListModule,
     MatMenuModule,
     MsalModule,
-    LayoutModule
+    LayoutModule,
+    MatCardModule,
+    MatFormFieldModule
   ],
   providers: [
     {
