@@ -41,5 +41,21 @@ namespace Korepetynder.Services.Users
             return new UserResponse(user.Id, user.FirstName, user.LastName, user.UserName, user.Age, user.StudentId is not null, user.TeacherId is not null);
 
         }
+
+        public async Task<UserRolesResponse> GetUserRoles()
+        {
+            var id = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var userRoles = await _korepetynderDbContext.Users
+                .Where(u => u.Id == id)
+                .Select(user => new UserRolesResponse(user.StudentId != null, user.TeacherId != null))
+                .SingleOrDefaultAsync();
+
+            if (userRoles is null)
+            {
+                throw new InvalidOperationException("User not initialized");
+            }
+
+            return userRoles;
+        }
     }
 }

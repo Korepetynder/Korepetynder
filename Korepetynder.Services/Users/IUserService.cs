@@ -7,5 +7,6 @@ namespace Korepetynder.Services.Users
     {
         Task<UserResponse> InitializeUser(UserCreationRequest request);
         Task<UserResponse> GetUser();
+        Task<UserRolesResponse> GetUserRoles();
     }
 }

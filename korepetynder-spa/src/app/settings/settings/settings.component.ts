@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { AppComponent } from '../app.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-settings',
@@ -7,5 +6,5 @@ import { AppComponent } from '../app.component';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent {
-  constructor(public appComponent: AppComponent) { }
+  constructor() { }
 }
