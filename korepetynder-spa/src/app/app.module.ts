@@ -24,6 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { LayoutModule } from '@angular/cdk/layout';
 
 
 
@@ -42,7 +43,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatSidenavModule,
     MatListModule,
     MatMenuModule,
-    MsalModule
+    MsalModule,
+    LayoutModule
   ],
   providers: [
     {
