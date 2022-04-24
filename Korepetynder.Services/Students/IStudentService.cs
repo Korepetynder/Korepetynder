@@ -7,9 +7,13 @@ namespace Korepetynder.Services.Students
 {
     public interface IStudentService
     {
-        Task<StudentResponse> InitializeStudent(StudentCreationRequest request);
+        Task<StudentResponse> InitializeStudent(StudentRequest request);
+        Task<StudentResponse> UpdateStudent(StudentRequest request);
 
+        Task DeleteStudent();
+        Task<StudentResponse> GetStudentData();
         Task<PagedData<StudentLessonResponse>> GetLessons(SieveModel model);
         Task<StudentLessonResponse> AddLesson(LessonCreationRequest request);
+        Task DeleteLesson(int id);
     }
 }

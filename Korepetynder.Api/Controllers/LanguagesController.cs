@@ -14,7 +14,7 @@ namespace Korepetynder.Api.Controllers
     /// </summary>
     [Authorize]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class LanguagesController : ControllerBase
     {
