@@ -73,11 +73,7 @@ namespace Korepetynder.Services.Students
             {
                 throw new InvalidOperationException("User with id: " + currentId + " already is a student");
             }
-            var student = new Student
-            {
-                PreferredCostMinimum = request.MinimalCost,
-                PreferredCostMaximum = request.MaximalCost,
-            };
+            var student = new Student();
             var locations = await _korepetynderDbContext.Locations.Where(location => request.Locations.Contains(location.Id)).ToListAsync();
             if (locations.Count != request.Locations.Count())
             {
@@ -87,7 +83,7 @@ namespace Korepetynder.Services.Students
             studentUser.Student = student;
             _korepetynderDbContext.Students.Add(student);
             await _korepetynderDbContext.SaveChangesAsync();
-            return new StudentResponse(student.Id, student.PreferredCostMinimum, student.PreferredCostMaximum, locations.Select(location => location.Id));
+            return new StudentResponse(student.Id,locations.Select(location => location.Id));
         }
 
         public async Task<StudentResponse> UpdateStudent(StudentRequest request)
@@ -108,11 +104,9 @@ namespace Korepetynder.Services.Students
                 throw new ArgumentException("Location does not exists");
             }
             var student = studentUser.Student!;
-            student.PreferredCostMinimum = request.MinimalCost;
-            student.PreferredCostMaximum = request.MaximalCost;
             student.PreferredLocations = locations;
             await _korepetynderDbContext.SaveChangesAsync();
-            return new StudentResponse(student.Id, student.PreferredCostMinimum, student.PreferredCostMaximum, locations.Select(location => location.Id));
+            return new StudentResponse(student.Id, locations.Select(location => location.Id));
         }
         public async Task<StudentResponse> GetStudentData()
         {
@@ -127,7 +121,7 @@ namespace Korepetynder.Services.Students
                 throw new InvalidOperationException("User with id: " + currentId + " already is not a student");
             }
             var student = studentUser.Student;
-            return new StudentResponse(student.Id, student.PreferredCostMinimum, student.PreferredCostMaximum, student.PreferredLocations.Select(location => location.Id));
+            return new StudentResponse(student.Id, student.PreferredLocations.Select(location => location.Id));
         }
         public async Task<PagedData<StudentLessonResponse>> GetLessons(SieveModel model)
         {
@@ -193,7 +187,7 @@ namespace Korepetynder.Services.Students
             var allLessons = new LinkedList<TeacherLesson>();
             foreach (var searchLesson in studentUser.Student.PreferredLessons) {
                 var lessons = await _korepetynderDbContext.TeacherLesson
-                .Where(lesson => lesson.Cost >= studentUser.Student.PreferredCostMinimum && lesson.Cost <= studentUser.Student.PreferredCostMaximum)
+                .Where(lesson => lesson.Cost >= searchLesson.PreferredCostMinimum && lesson.Cost <= searchLesson.PreferredCostMaximum)
                 .Where(lesson => lesson.Subject == searchLesson.Subject)
                 .Where(lesson => searchLesson.Frequency == null || lesson.Frequency >= searchLesson.Frequency)
                 .Where(lesson => lesson.Teacher.TeachingLocations.Any(el => studentUser.Student.PreferredLocations.Contains(el)))
