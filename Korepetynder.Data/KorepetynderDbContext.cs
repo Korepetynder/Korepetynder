@@ -43,6 +43,10 @@ namespace Korepetynder.Data
                 .HasMany(teacher => teacher.TeachingLocations)
                 .WithMany(location => location.Teachers)
                 .UsingEntity(join => join.ToTable("TeacherTeachingLocations"));
+
+            modelBuilder.Entity<User>()
+                .Property(user => user.BirthDate)
+                .HasConversion(date => date, date => DateTime.SpecifyKind(date, DateTimeKind.Utc));
         }
 
         public DbSet<User> Users => Set<User>();

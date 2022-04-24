@@ -12,15 +12,15 @@ namespace Korepetynder.Contracts.Requests.Users
         [MaxLength(100)]
         public string Email { get; set; }
         [MaxLength(15)]
-        public string? TelephoneNumber { get; set; }
-        public int Age { get; set; }
-        public UserRequest(string firstName, string lastName, string email, int age, string? telephoneNumber)
+        public string? PhoneNumber { get; set; }
+        public DateTime BirthDate { get; set; }
+        public UserRequest(string firstName, string lastName, string email, DateTime birthDate, string? phoneNumber)
         {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
-            TelephoneNumber = telephoneNumber;
-            Age = age;
+            PhoneNumber = phoneNumber;
+            BirthDate = birthDate;
         }
     }
 }
