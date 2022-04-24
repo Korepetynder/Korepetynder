@@ -52,11 +52,25 @@ namespace Korepetynder.Services.Students
             return new StudentLessonResponse(lesson);
         }
 
-        public async Task<StudentResponse> InitializeStudent(StudentCreationRequest request)
+        public async Task DeleteLesson(int id)
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var currentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
+            var lesson = await _korepetynderDbContext.StudentLesson.Where(lesson => lesson.Id == id).SingleAsync();
+            if (currentUser.StudentId != lesson.StudentId)
+            {
+                throw new ArgumentException("Lesson does not belong to student");
+            }
+           
+            _korepetynderDbContext.StudentLesson.Remove(lesson);
+            await _korepetynderDbContext.SaveChangesAsync();
+        }
+
+        public async Task<StudentResponse> InitializeStudent(StudentRequest request)
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.Student is not null)
+            if (studentUser.StudentId is not null)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " already is a student");
             }
@@ -77,6 +91,45 @@ namespace Korepetynder.Services.Students
             return new StudentResponse(student.Id, student.PreferredCostMinimum, student.PreferredCostMaximum, locations.Select(location => location.Id));
         }
 
+        public async Task<StudentResponse> UpdateStudent(StudentRequest request)
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var studentUser = await _korepetynderDbContext.Users
+                .Where(user => user.Id == currentId)
+                .Include(user => user.Student)
+                .Include(user => user.Student.PreferredLocations)
+                .SingleAsync();
+            if (studentUser.StudentId is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " already is not a student");
+            }
+            var locations = await _korepetynderDbContext.Locations.Where(location => request.Locations.Contains(location.Id)).ToListAsync();
+            if (locations.Count != request.Locations.Count())
+            {
+                throw new ArgumentException("Location does not exists");
+            }
+            var student = studentUser.Student!;
+            student.PreferredCostMinimum = request.MinimalCost;
+            student.PreferredCostMaximum = request.MaximalCost;
+            student.PreferredLocations = locations;
+            await _korepetynderDbContext.SaveChangesAsync();
+            return new StudentResponse(student.Id, student.PreferredCostMinimum, student.PreferredCostMaximum, locations.Select(location => location.Id));
+        }
+        public async Task<StudentResponse> GetStudentData()
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var studentUser = await _korepetynderDbContext.Users
+                .Where(user => user.Id == currentId)
+                .Include(user => user.Student)
+                .Include(user => user.Student!.PreferredLocations)
+                .SingleAsync();
+            if (studentUser.Student is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " already is not a student");
+            }
+            var student = studentUser.Student;
+            return new StudentResponse(student.Id, student.PreferredCostMinimum, student.PreferredCostMaximum, student.PreferredLocations.Select(location => location.Id));
+        }
         public async Task<PagedData<StudentLessonResponse>> GetLessons(SieveModel model)
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
@@ -101,6 +154,24 @@ namespace Korepetynder.Services.Students
             return new PagedData<StudentLessonResponse>(count, await userLessons
                 .Select(lesson => new StudentLessonResponse(lesson))
                 .ToListAsync());
+        }
+
+        public async Task DeleteStudent()
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var studentUser = await _korepetynderDbContext.Users
+                .Where(user => user.Id == currentId)
+                .Include(user => user.Student)
+                .SingleAsync();
+            if (studentUser.Student is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
+            }
+            _korepetynderDbContext.Students.Remove(studentUser.Student);
+            studentUser.Student = null;
+            studentUser.StudentId = null;
+            _korepetynderDbContext.SaveChanges();
+
         }
     }
 }

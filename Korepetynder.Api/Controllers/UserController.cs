@@ -28,7 +28,7 @@ namespace Korepetynder.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserResponse>> PostUser([FromBody] UserCreationRequest userRequest)
+        public async Task<ActionResult<UserResponse>> PostUser([FromBody] UserRequest userRequest)
         {
             try
             {
@@ -41,6 +41,27 @@ namespace Korepetynder.Api.Controllers
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// Updates user data with provided one
+        /// </summary>
+        /// <returns>User data.</returns>
+        [HttpPut()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserResponse>> PutUser([FromBody] UserRequest userRequest)
+        {
+            try
+            {
+                var user = await _usersService.UpdateUser(userRequest);
+
+                return user;
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
+
         /// <summary>
         /// Returns currently logged user data (if he was initiated)
         /// </summary>

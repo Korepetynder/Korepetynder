@@ -5,7 +5,8 @@ namespace Korepetynder.Services.Users
 {
     public interface IUserService
     {
-        Task<UserResponse> InitializeUser(UserCreationRequest request);
+        Task<UserResponse> InitializeUser(UserRequest request);
+        Task<UserResponse> UpdateUser(UserRequest request);
         Task<UserResponse> GetUser();
         Task<UserRolesResponse> GetUserRoles();
     }
