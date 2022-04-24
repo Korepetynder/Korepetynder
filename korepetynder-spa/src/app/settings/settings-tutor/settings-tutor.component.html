@@ -1,25 +1,31 @@
-<div class="main-div">
-  <p>Uzupełnij opisy oferowanych korepetycji.</p>
-  <mat-accordion multi>
-    <app-lesson-tutor-description *ngFor="let lesson of lessons; index as i" [lesson]="lesson" [index]="i + 1">
-    </app-lesson-tutor-description>
-  </mat-accordion>
-
-  <div id="add-button">
-    <button mat-fab color="accent" (click)="addLesson()">
-      <mat-icon>add</mat-icon>
-    </button>
+<form class="main-div" [formGroup]="profileForm">
+  <div>
+    <mat-slide-toggle class="status-slider" formControlName="isTutor">Chcę być korepetytorem.</mat-slide-toggle>
   </div>
 
-  <div *ngIf="router.url === '/settings'" class="save-settings-button">
-    <button mat-raised-button color="accent">Zapisz zmiany</button>
+  <div *ngIf="isTutor">
+    <p>Uzupełnij opisy oferowanych korepetycji.</p>
+    <mat-accordion multi>
+      <app-lesson-tutor-description *ngFor="let lesson of lessons; index as i" [lesson]="lesson" [index]="i + 1">
+      </app-lesson-tutor-description>
+    </mat-accordion>
+
+    <div id="add-button">
+      <button mat-fab color="accent" (click)="addLesson()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="router.url === '/settings'" class="save-settings-button">
+      <button mat-raised-button color="accent">Zapisz zmiany</button>
+    </div>
+
+    <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
+      <button mat-raised-button color="accent" matStepperNext>Dalej</button>
+    </div>
+    <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
+      <button mat-raised-button color="accent" matStepperPrevious>Wróć</button>
+    </div>
   </div>
 
-  <div *ngIf="router.url === '/account-init'" class="save-settings-button">
-    <button mat-raised-button color="accent" matStepperNext>Dalej</button>
-  </div>
-  <div *ngIf="router.url === '/account-init'" class="save-settings-button">
-    <button mat-raised-button color="accent" matStepperPrevious>Wróć</button>
-  </div>
-
-</div>
+</form>

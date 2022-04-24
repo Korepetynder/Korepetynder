@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Lesson } from './lesson-tutor-description/lesson-model';
 
@@ -7,9 +8,13 @@ import { Lesson } from './lesson-tutor-description/lesson-model';
   templateUrl: './settings-tutor.component.html',
   styleUrls: ['./settings-tutor.component.scss']
 })
-export class SettingsTutorComponent {
+export class SettingsTutorComponent implements OnInit {
+  isTutor: boolean = true;
+  profileForm = this.fb.group({
+    isTutor: [true],
+  });
 
-  constructor(public router: Router) { }
+  constructor(public router: Router, private fb: FormBuilder) { }
 
   lessons: Lesson[] = [];
 
@@ -21,4 +26,12 @@ export class SettingsTutorComponent {
     this.lessons.splice(id - 1, 1);
   }
 
+  ngOnInit() {
+    this.profileForm.valueChanges.subscribe(val => {
+      if (val.isTutor === true)
+         this.isTutor = true;
+      else
+         this.isTutor = false;
+    });
+  }
 }

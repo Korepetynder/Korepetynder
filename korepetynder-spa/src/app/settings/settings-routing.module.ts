@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     component: SettingsComponent,
-    canActivate: [MsalGuard, RoleGuard],
+    // canActivate: [MsalGuard, RoleGuard],
     data: {
       expectedRole: UserType.Initialized
     }
@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: 'init',
     component: SettingsInitComponent,
-    canActivate: [MsalGuard, RoleGuard],
+    // canActivate: [MsalGuard, RoleGuard],
     data: {
       expectedRole: UserType.Uninitialized
     }

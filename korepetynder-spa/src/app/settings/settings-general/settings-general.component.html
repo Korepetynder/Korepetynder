@@ -1,27 +1,22 @@
-<div class="main-div">
-  <div>
-    <mat-slide-toggle class="status-slider">Chcę być uczniem.</mat-slide-toggle>
-    <mat-slide-toggle class="status-slider">Chcę być korepetytorem.</mat-slide-toggle>
-  </div>
-
+<form class="main-div" [formGroup]="profileForm">
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Imię</mat-label>
-      <input matInput #input placeholder="Np. Jan">
+      <input matInput #input placeholder="Np. Jan" formControlName="firstName">
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Nazwisko</mat-label>
-      <input matInput #input placeholder="Np. Kowalski">
+      <input matInput #input placeholder="Np. Kowalski" formControlName="lastName">
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Data urodzenia</mat-label>
-      <input matInput [matDatepicker]="picker" placeholder="Np. 4/20/2001">
+      <input matInput [matDatepicker]="picker" placeholder="Np. 4/20/2001" formControlName="birthDate">
       <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
@@ -31,26 +26,26 @@
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Miasto</mat-label>
-      <input matInput #input placeholder="Np. Warszawa">
+      <input matInput #input placeholder="Np. Warszawa" formControlName="city">
     </mat-form-field>
   </div>
 
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Ulica</mat-label>
-      <input matInput #input placeholder="Np. Jana Pawła II">
+      <input matInput #input placeholder="Np. Jana Pawła II" formControlName="street">
     </mat-form-field>
   </div>
 
   <div class="small-mat-forms">
     <mat-form-field appearance="outline" class="small-mat-form-field">
       <mat-label>Numer domu</mat-label>
-      <input matInput #input placeholder="Np. 21">
+      <input matInput #input placeholder="Np. 21" formControlName="houseNumber">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="small-mat-form-field">
       <mat-label>Numer mieszkania (opcjonalne)</mat-label>
-      <input matInput #input placeholder="Np. 37">
+      <input matInput #input placeholder="Np. 37" formControlName="flatNumber">
     </mat-form-field>
   </div>
 
@@ -58,8 +53,8 @@
     <button mat-raised-button color="accent">Zapisz zmiany</button>
   </div>
 
-  <div *ngIf="router.url === '/account-init'" class="save-settings-button">
+  <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
     <button mat-raised-button color="accent" matStepperNext>Dalej</button>
   </div>
 
-</div>
+</form>
