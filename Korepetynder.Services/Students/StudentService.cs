@@ -61,7 +61,7 @@ namespace Korepetynder.Services.Students
             {
                 throw new ArgumentException("Lesson does not belong to student");
             }
-           
+
             _korepetynderDbContext.StudentLesson.Remove(lesson);
             await _korepetynderDbContext.SaveChangesAsync();
         }
@@ -96,8 +96,8 @@ namespace Korepetynder.Services.Students
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users
                 .Where(user => user.Id == currentId)
-                .Include(user => user.Student)
-                .Include(user => user.Student.PreferredLocations)
+                .Include(user => user.Student!)
+                    .ThenInclude(student => student.PreferredLocations)
                 .SingleAsync();
             if (studentUser.StudentId is null)
             {
