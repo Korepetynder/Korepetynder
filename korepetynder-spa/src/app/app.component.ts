@@ -1,34 +1,30 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
-import { filter, takeUntil } from 'rxjs';
+import { filter, map, Observable, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   title = 'korepetynder-spa';
-  mobileQuery: MediaQueryList;
-  @Input() settingsTab: number = 0;
-  maxSettingsTab: number = 2;
-
   isIframe = false;
 
-  private _mobileQueryListener: () => void;
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches),
+      shareReplay()
+    );
 
   constructor(
-    changeDetectorRef: ChangeDetectorRef,
-    media: MediaMatcher,
     private msalBroadcastService: MsalBroadcastService,
-    private authService: MsalService
+    private authService: MsalService,
+    private breakpointObserver: BreakpointObserver
   ) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+
   }
 
   ngOnInit(): void {
@@ -43,12 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
       })
   }
 
-  ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
-  }
-
   setSelectedTab(id: number): void {
-    this.settingsTab = id;
+
   }
 
   private checkAndSetActiveAccount() {
