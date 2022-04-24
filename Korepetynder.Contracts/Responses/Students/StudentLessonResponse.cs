@@ -10,12 +10,18 @@ namespace Korepetynder.Contracts.Responses.Students
         public int Id { get; set; }
         public int? Frequency { get; set; }
         public SubjectResponse Subject { get; set; }
+
+        public int PreferredCostMinimum { get; set; }
+        public int PreferredCostMaximum { get; set; }
+
         public IEnumerable<LanguageResponse> Languages { get; set; }
         public IEnumerable<LevelResponse> Levels { get; set; }
 
         public StudentLessonResponse(StudentLesson lesson)
         {
             Id = lesson.Id;
+            PreferredCostMaximum = lesson.PreferredCostMaximum;
+            PreferredCostMinimum = lesson.PreferredCostMinimum;
             Frequency = lesson.Frequency;
             Subject = new SubjectResponse(lesson.Subject);
             List<LanguageResponse> languages = new List<LanguageResponse>();
@@ -29,15 +35,6 @@ namespace Korepetynder.Contracts.Responses.Students
             {
                 levels.Add(new LevelResponse(level));
             }
-            Levels = levels;
-        }
-
-        public StudentLessonResponse(int id, int frequency, SubjectResponse subject, IEnumerable<LanguageResponse> languages, IEnumerable<LevelResponse> levels)
-        {
-            Id = id;
-            Frequency = frequency;
-            Subject = subject;
-            Languages = languages;
             Levels = levels;
         }
     }
