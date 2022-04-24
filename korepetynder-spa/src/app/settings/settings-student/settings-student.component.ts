@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Lesson } from './lesson-description/lesson-model';
 
 @Component({
   selector: 'app-settings-student',
@@ -12,36 +11,31 @@ export class SettingsStudentComponent implements OnInit {
   isStudent: boolean = true;
   profileForm = this.fb.group({
     isStudent: [true],
+    lessons: this.fb.array([])
   });
 
   constructor(public router: Router, private fb: FormBuilder) { }
 
-  // get lessons() {
-  //   return this.profileForm.get('lessons') as FormArray;
-  // }
+  get lessons() {
+    return this.profileForm.get('lessons') as FormArray;
+  }
 
-  // addLesson(): void {
-  //   this.lessons.push(this.fb.group({
-  //     course: [''],
-  //     level: [''],
-  //     minCost: [''],
-  //     maxCost: [''],
-  //     hoursWeekly: [''],
-  //   }));
-  // }
-
-  // removeLesson(id: number): void {
-  //   this.lessons.removeAt(id - 1);
-  // }
-
-  lessons: Lesson[] = [];
+  get lessonsControls() {
+    return this.lessons.controls as FormGroup[];
+  }
 
   addLesson(): void {
-    this.lessons.push({} as Lesson);
+    this.lessons.push(this.fb.group({
+      course: ['',  [Validators.required]],
+      level: ['',  [Validators.required]],
+      minCost: [''],
+      maxCost: [''],
+      hoursWeekly: [''],
+    }));
   }
 
   removeLesson(id: number): void {
-    this.lessons.splice(id - 1, 1);
+    this.lessons.removeAt(id - 1);
   }
 
   ngOnInit() {

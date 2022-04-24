@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
 import { SettingsStudentComponent } from '../settings-student.component';
-import { Lesson } from './lesson-model';
 
 @Component({
   selector: 'app-lesson-description',
@@ -11,10 +10,13 @@ import { Lesson } from './lesson-model';
 })
 export class LessonDescriptionComponent implements OnInit {
   @Input() index: number = 0;
-  @Input() lesson: Lesson = {} as Lesson;
-
-  controlCourse = new FormControl();
-  controlLevel = new FormControl();
+  @Input() lesson: FormGroup = this.fb.group({
+    course: [''],
+    level: [''],
+    minCost: [''],
+    maxCost: [''],
+    hoursWeekly: [''],
+  });
 
   optionsCourse: string[] = ['Matematyka', 'Język polski', 'Język angielski'];
   optionsLevel: string[] = ['Szkoła podstawowa', 'Szkoła ogólnokształcąca'];
@@ -22,15 +24,15 @@ export class LessonDescriptionComponent implements OnInit {
   filteredOptionsCourse!: Observable<string[]>;
   filteredOptionsLevel!: Observable<string[]>;
 
-  constructor(public settingsStudent: SettingsStudentComponent) { }
+  constructor(public settingsStudent: SettingsStudentComponent, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.filteredOptionsCourse = this.controlCourse.valueChanges.pipe(
+    this.filteredOptionsCourse = this.lesson.get('course')!.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(this.optionsCourse, value)),
     );
 
-    this.filteredOptionsLevel = this.controlLevel.valueChanges.pipe(
+    this.filteredOptionsLevel = this.lesson.get('level')!.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(this.optionsLevel, value)),
     );

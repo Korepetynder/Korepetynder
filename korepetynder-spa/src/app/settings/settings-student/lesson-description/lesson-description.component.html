@@ -1,50 +1,52 @@
-<mat-expansion-panel>
-  <mat-expansion-panel-header>
-    <mat-panel-title>
-      Opis {{index}}
-    </mat-panel-title>
-  </mat-expansion-panel-header>
+<form [formGroup]="lesson">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Opis {{index}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Przedmiot</mat-label>
-    <input matInput [formControl]="controlCourse" [matAutocomplete]="autoCourse" [(ngModel)]="lesson.course">
-    <mat-autocomplete autoActiveFirstOption #autoCourse="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptionsCourse | async" [value]="option">
-        {{option}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Przedmiot</mat-label>
+      <input matInput formControlName="course" [matAutocomplete]="autoCourse">
+      <mat-autocomplete autoActiveFirstOption #autoCourse="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptionsCourse | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Poziom</mat-label>
-    <input matInput [formControl]="controlLevel" [matAutocomplete]="autoLevel" [(ngModel)]="lesson.level">
-    <mat-autocomplete autoActiveFirstOption #autoLevel="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptionsLevel | async" [value]="option">
-        {{option}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Poziom</mat-label>
+      <input matInput formControlName="level" [matAutocomplete]="autoLevel">
+      <mat-autocomplete autoActiveFirstOption #autoLevel="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptionsLevel | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Minimalny koszt lekcji</mat-label>
-    <input matInput #input type="number" placeholder="0" class="number-input" [(ngModel)]="lesson.minCost">
-    <span matSuffix>zł/h</span>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Minimalny koszt lekcji</mat-label>
+      <input matInput #input type="number" placeholder="0" class="number-input" formControlName="minCost">
+      <span matSuffix>zł/h</span>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Maksymalny koszt lekcji</mat-label>
-    <input matInput #input type="number" placeholder="100" class="number-input" [(ngModel)]="lesson.maxCost">
-    <span matSuffix>zł/h</span>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Maksymalny koszt lekcji</mat-label>
+      <input matInput #input type="number" placeholder="100" class="number-input" formControlName="maxCost">
+      <span matSuffix>zł/h</span>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Liczba godzin zajęć tygodniowo</mat-label>
-    <input matInput #input type="number" placeholder="2" class="number-input" [(ngModel)]="lesson.hoursWeekly">
-    <span matSuffix>h</span>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Liczba godzin zajęć tygodniowo</mat-label>
+      <input matInput #input type="number" placeholder="2" class="number-input" formControlName="hoursWeekly">
+      <span matSuffix>h</span>
+    </mat-form-field>
 
-  <button mat-fab color="accent" (click)="settingsStudent.removeLesson(index)">
-    <mat-icon>delete</mat-icon>
-  </button>
+    <button mat-fab color="accent" (click)="settingsStudent.removeLesson(index)">
+      <mat-icon>delete</mat-icon>
+    </button>
 
-</mat-expansion-panel>
+  </mat-expansion-panel>
+</form>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Lesson } from './lesson-tutor-description/lesson-model';
 
 @Component({
   selector: 'app-settings-tutor',
@@ -12,18 +11,30 @@ export class SettingsTutorComponent implements OnInit {
   isTutor: boolean = true;
   profileForm = this.fb.group({
     isTutor: [true],
+    lessons: this.fb.array([])
   });
 
   constructor(public router: Router, private fb: FormBuilder) { }
 
-  lessons: Lesson[] = [];
+  get lessons() {
+    return this.profileForm.get('lessons') as FormArray;
+  }
+
+  get lessonsControls() {
+    return this.lessons.controls as FormGroup[];
+  }
 
   addLesson(): void {
-    this.lessons.push({} as Lesson);
+    this.lessons.push(this.fb.group({
+      course: ['',  [Validators.required]],
+      level: ['',  [Validators.required]],
+      cost: ['',  [Validators.required]],
+      hoursWeekly: [''],
+    }));
   }
 
   removeLesson(id: number): void {
-    this.lessons.splice(id - 1, 1);
+    this.lessons.removeAt(id - 1);
   }
 
   ngOnInit() {
