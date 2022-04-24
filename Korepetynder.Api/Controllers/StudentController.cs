@@ -173,6 +173,27 @@ namespace Korepetynder.Api.Controllers
                 return Forbid();
             }
         }
+        /// <summary>
+        /// Gets suggestions of teachers.
+        /// </summary>
+        /// <returns>List of teachers.</returns>
+        [HttpGet("Teachers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<TeacherDataResponse>>> GetTeachers()
+        {
+            try
+            {
+                var teachers = await _studentsService.GetSuggestedTeachers();
+
+                Response.Headers.Add("X-Total-Count", teachers.Count().ToString());
+                return teachers.ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
 
     }
 }

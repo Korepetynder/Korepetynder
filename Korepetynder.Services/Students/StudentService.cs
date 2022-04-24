@@ -31,7 +31,6 @@ namespace Korepetynder.Services.Students
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
-            var frequency = await _korepetynderDbContext.Frequencies.Where(frequency => frequency.Id == request.FrequencyId).SingleAsync();
             var subject = await _korepetynderDbContext.Subjects.Where(subject => subject.Id == request.SubjectId).SingleAsync();
             var levels = await _korepetynderDbContext.Levels.Where(level => request.LevelsIds.Contains(level.Id)).ToListAsync();
             var languages = await _korepetynderDbContext.Languages.Where(language => request.LanguagesIds.Contains(language.Id)).ToListAsync();
@@ -42,7 +41,7 @@ namespace Korepetynder.Services.Students
 
             var lesson = new StudentLesson();
             lesson.StudentId = studentUser.StudentId.Value;
-            lesson.Frequency = frequency;
+            lesson.Frequency = request.Frequency;
             lesson.Subject = subject;
             lesson.Levels = levels;
             lesson.Languages = languages;
@@ -143,6 +142,7 @@ namespace Korepetynder.Services.Students
                 .Include(lesson => lesson.Frequency)
                 .Include(lesson => lesson.Languages)
                 .Include(lesson => lesson.Levels)
+                .Include(lesson => lesson.Subject)
                 .OrderBy(lesson => lesson.Id)
                 .AsNoTracking();
             userLessons = _sieveProcessor.Apply(model, userLessons, applyPagination: false);
@@ -172,6 +172,43 @@ namespace Korepetynder.Services.Students
             studentUser.StudentId = null;
             _korepetynderDbContext.SaveChanges();
 
+        }
+
+        public async Task<IEnumerable<TeacherDataResponse>> GetSuggestedTeachers()
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var studentUser = await _korepetynderDbContext.Users
+                .Where(user => user.Id == currentId)
+                .Include(user => user.Student)
+                .Include(user => user.Student!.PreferredLocations)
+                .Include(user => user.Student!.PreferredLessons)
+                .ThenInclude(lesson => lesson.Languages)
+                .Include(user => user.Student!.PreferredLessons)
+                .ThenInclude(lesson => lesson.Levels)
+                .SingleAsync();
+            if (studentUser.Student is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
+            }
+            var allLessons = new LinkedList<TeacherLesson>();
+            foreach (var searchLesson in studentUser.Student.PreferredLessons) {
+                var lessons = await _korepetynderDbContext.TeacherLesson
+                .Where(lesson => lesson.Cost >= studentUser.Student.PreferredCostMinimum && lesson.Cost <= studentUser.Student.PreferredCostMaximum)
+                .Where(lesson => lesson.Subject == searchLesson.Subject)
+                .Where(lesson => searchLesson.Frequency == null || lesson.Frequency >= searchLesson.Frequency)
+                .Where(lesson => lesson.Teacher.TeachingLocations.Any(el => studentUser.Student.PreferredLocations.Contains(el)))
+                .Where(lesson => lesson.Languages.Any(el => searchLesson.Languages.Contains(el)))
+                .Where(lesson => lesson.Levels.Any(el => searchLesson.Levels.Contains(el)))
+                .Include(lesson => lesson.Teacher)
+                .Include(lesson => lesson.Teacher.User)
+                .OrderBy(lesson => lesson.Cost).ToListAsync();
+                allLessons.Concat(lessons);
+            }
+            var teachers = new HashSet<Teacher>();
+            foreach (var lesson in allLessons) {
+                teachers.Add(lesson.Teacher);
+            }
+            return teachers.Select(teacher => new TeacherDataResponse(teacher.User)).ToList();
         }
     }
 }
