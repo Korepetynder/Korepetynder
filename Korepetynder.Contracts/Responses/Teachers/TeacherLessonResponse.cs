@@ -2,18 +2,24 @@ using Korepetynder.Contracts.Responses.Languages;
 using Korepetynder.Contracts.Responses.Levels;
 using Korepetynder.Contracts.Responses.Subjects;
 using Korepetynder.Data.DbModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Korepetynder.Contracts.Responses.Students
 {
-    public class StudentLessonResponse
+    public class TeacherLessonResponse
     {
         public int Id { get; set; }
-        public int? Frequency { get; set; }
         public SubjectResponse Subject { get; set; }
+        public int? Frequency { get; set; }
         public IEnumerable<LanguageResponse> Languages { get; set; }
         public IEnumerable<LevelResponse> Levels { get; set; }
+        public int Cost { get; set; }
 
-        public StudentLessonResponse(StudentLesson lesson)
+        public TeacherLessonResponse(TeacherLesson lesson)
         {
             Id = lesson.Id;
             Frequency = lesson.Frequency;
@@ -30,15 +36,7 @@ namespace Korepetynder.Contracts.Responses.Students
                 levels.Add(new LevelResponse(level));
             }
             Levels = levels;
-        }
-
-        public StudentLessonResponse(int id, int frequency, SubjectResponse subject, IEnumerable<LanguageResponse> languages, IEnumerable<LevelResponse> levels)
-        {
-            Id = id;
-            Frequency = frequency;
-            Subject = subject;
-            Languages = languages;
-            Levels = levels;
+            Cost = lesson.Cost;
         }
     }
 }

@@ -21,5 +21,19 @@ namespace Korepetynder.Data.DbModels
         {
             Name = name;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+            if (obj is Location other && other.Id == Id)
+                return true;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }
