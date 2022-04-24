@@ -1,4 +1,4 @@
-namespace Korepetynder.Contracts.Responses.User
+namespace Korepetynder.Contracts.Responses.Users
 {
     public class UserRolesResponse
     {
