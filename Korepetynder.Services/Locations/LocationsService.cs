@@ -55,7 +55,9 @@ namespace Korepetynder.Services.Locations
             locations = _sieveProcessor.Apply(sieveModel, locations, applyFiltering: false, applySorting: false);
 
             return new PagedData<LocationResponse>(count, await locations
-                .Select(location => new LocationResponse(location.Id, location.Name, location.ParentLocationId))
+                .Where(location => location.ParentLocationId == null)
+                .Include(location => location.Sublocations)
+                .Select(location => new LocationResponse(location))
                 .ToListAsync());
         }
 

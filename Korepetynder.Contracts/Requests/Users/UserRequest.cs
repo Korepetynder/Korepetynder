@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Korepetynder.Contracts.Requests.User
+namespace Korepetynder.Contracts.Requests.Users
 {
     public class UserRequest
     {
@@ -10,13 +10,16 @@ namespace Korepetynder.Contracts.Requests.User
         [MaxLength(50)]
         public string LastName { get; set; }
         [MaxLength(100)]
-        public string UserName { get; set; }
+        public string Email { get; set; }
+        [MaxLength(15)]
+        public string? TelephoneNumber { get; set; }
         public int Age { get; set; }
-        public UserRequest(string firstName, string lastName, string userName, int age)
+        public UserRequest(string firstName, string lastName, string email, int age, string? telephoneNumber)
         {
             FirstName = firstName;
             LastName = lastName;
-            UserName = userName;
+            Email = email;
+            TelephoneNumber = telephoneNumber;
             Age = age;
         }
     }

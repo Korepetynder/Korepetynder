@@ -151,7 +151,6 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Deletes lesson with given id, if it belongs to currently logged user
         /// </summary>
-        /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
         /// <returns>List of lessons.</returns>
         [HttpDelete("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -172,6 +171,27 @@ namespace Korepetynder.Api.Controllers
             catch (ArgumentException)
             {
                 return Forbid();
+            }
+        }
+        /// <summary>
+        /// Gets suggestions of teachers.
+        /// </summary>
+        /// <returns>List of teachers.</returns>
+        [HttpGet("Teachers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<TeacherDataResponse>>> GetTeachers()
+        {
+            try
+            {
+                var teachers = await _studentsService.GetSuggestedTeachers();
+
+                Response.Headers.Add("X-Total-Count", teachers.Count().ToString());
+                return teachers.ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
             }
         }
 

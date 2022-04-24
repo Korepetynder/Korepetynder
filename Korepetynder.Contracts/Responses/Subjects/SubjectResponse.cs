@@ -1,3 +1,5 @@
+using Korepetynder.Data.DbModels;
+
 namespace Korepetynder.Contracts.Responses.Subjects
 {
     public class SubjectResponse
@@ -9,6 +11,12 @@ namespace Korepetynder.Contracts.Responses.Subjects
         {
             Id = id;
             Name = name;
+        }
+
+        public SubjectResponse(Subject subject)
+        {
+            Id = subject.Id;
+            Name = subject.Name;
         }
     }
 }
