@@ -28,13 +28,15 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { HomeComponent } from './home/home.component';
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    TutorCardComponent
   ],
   imports: [
     BrowserModule,
