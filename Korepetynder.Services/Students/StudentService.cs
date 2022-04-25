@@ -236,6 +236,8 @@ namespace Korepetynder.Services.Students
             lesson.Subject = subject;
             lesson.Levels = levels;
             lesson.Languages = languages;
+            lesson.PreferredCostMinimum = request.PreferredCostMinimum;
+            lesson.PreferredCostMaximum = request.PreferredCostMaximum;
             await _korepetynderDbContext.SaveChangesAsync();
 
             return new StudentLessonResponse(lesson);
