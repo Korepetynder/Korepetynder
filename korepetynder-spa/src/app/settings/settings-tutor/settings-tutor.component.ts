@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -38,7 +39,8 @@ export class SettingsTutorComponent implements OnInit {
     public router: Router,
     private fb: FormBuilder,
     private tutorSettingsService: TutorSettingsService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private _snackBar: MatSnackBar) { }
 
   get locationsCtrl() {
     return this.profileForm.get('locations') as FormControl;
@@ -70,7 +72,7 @@ export class SettingsTutorComponent implements OnInit {
   }
 
   removeLesson(id: number): void {
-    this.lessons.removeAt(id - 1);
+    this.lessons.removeAt(id);
   }
 
   ngOnInit() {
@@ -113,6 +115,7 @@ export class SettingsTutorComponent implements OnInit {
 
     saveObservable.subscribe(() => {
       this.isSaving = false;
+      this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
     });
   }
 }

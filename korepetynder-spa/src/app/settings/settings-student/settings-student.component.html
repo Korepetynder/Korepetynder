@@ -22,10 +22,10 @@
   </div>
 
   <div>
-    <button mat-raised-button color="accent" type="submit">Zapisz zmiany</button>
+    <button mat-raised-button color="accent" type="submit" [disabled]="isSaving">Zapisz zmiany</button>
   </div>
 
-  <div *ngIf="isStudent">
+  <div *ngIf="isStudentOldValue">
     <p>Uzupełnij opisy oczekiwań względem korepetycji.</p>
     <mat-accordion multi>
       <app-lesson-description *ngFor="let lesson of lessonsControls; let i = index" [lesson]="lesson" [index]="i + 1"

@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'
 
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
 import { LessonDescriptionComponent } from './settings-student/lesson-description/lesson-description.component';
@@ -56,7 +57,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
     MatAutocompleteModule,
     MatSlideToggleModule,
     MatStepperModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule
   ],
   providers: [
     {

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { of, take } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -27,6 +28,7 @@ export class SettingsStudentComponent implements OnInit {
 
   isSaving = false;
   isStudentOldValue = false;
+  isSaved = false;
 
   profileForm = this.fb.group({
     isStudent: [false],
@@ -38,7 +40,8 @@ export class SettingsStudentComponent implements OnInit {
     public router: Router,
     private fb: FormBuilder,
     private studentSettingsService: StudentSettingsService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private _snackBar: MatSnackBar) { }
 
   get locationsCtrl() {
     return this.profileForm.get('locations') as FormControl;
@@ -71,7 +74,7 @@ export class SettingsStudentComponent implements OnInit {
   }
 
   removeLesson(id: number): void {
-    this.lessons.removeAt(id - 1);
+    this.lessons.removeAt(id);
   }
 
   ngOnInit(): void {
@@ -107,6 +110,7 @@ export class SettingsStudentComponent implements OnInit {
     }
 
     this.isSaving = true;
+    this.isSaved = true;
     const studentRequest = new StudentRequest(this.locationsCtrl.value);
 
     const saveObservable = this.isStudent
@@ -115,6 +119,7 @@ export class SettingsStudentComponent implements OnInit {
 
     saveObservable.subscribe(() => {
       this.isSaving = false;
+      this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
     });
   }
 }

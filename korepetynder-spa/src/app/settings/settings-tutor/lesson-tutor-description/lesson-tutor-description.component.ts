@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { TutorLessonRequest } from '../../models/requests/tutorLessonRequest';
 import { Language } from '../../models/responses/language';
@@ -27,7 +28,8 @@ export class LessonTutorDescriptionComponent {
 
   isSaving = false;
 
-  constructor(private tutorSettingsService: TutorSettingsService) { }
+  constructor(private tutorSettingsService: TutorSettingsService,
+    private _snackBar: MatSnackBar) { }
 
   saveChanges(): void {
     if (this.lesson.invalid) {
@@ -45,6 +47,7 @@ export class LessonTutorDescriptionComponent {
 
     saveObservable.subscribe(lesson => {
       this.isSaving = false;
+      this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
       this.lessonId = lesson.id;
     });
   }
@@ -55,6 +58,7 @@ export class LessonTutorDescriptionComponent {
       : of(null);
 
     deleteObservable.subscribe(() => {
+      this._snackBar.open("Usunięto pomyślnie.", "OK", {duration: 5000});
       this.lessonRemove.emit();
     });
   }

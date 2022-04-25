@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DateTime } from 'luxon';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -37,7 +38,8 @@ export class SettingsGeneralComponent implements OnInit {
     public router: Router,
     private fb: FormBuilder,
     private userSetingsService: UserSettingsService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.userService.isInitialized().subscribe(isInitialized => {
@@ -67,7 +69,9 @@ export class SettingsGeneralComponent implements OnInit {
 
     saveObservable.subscribe(() => {
       this.isSaving = false;
+      this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
       this.completed.emit();
     });
   }
 }
+
