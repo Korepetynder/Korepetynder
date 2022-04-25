@@ -9,7 +9,7 @@ namespace Korepetynder.Contracts.Requests.Students
         public IEnumerable<int> LevelsIds { get; set; }
         public IEnumerable<int> LanguagesIds { get; set; }
 
-        public LessonCreationRequest(int? frequency, int subjectId, IEnumerable<int> levelsIds, IEnumerable<int> languagesIds, int preferredCostMinimum, int preferredCostMaximum)
+        public StudentLessonRequest(int? frequency, int subjectId, IEnumerable<int> levelsIds, IEnumerable<int> languagesIds, int preferredCostMinimum, int preferredCostMaximum)
         {
             PreferredCostMinimum = preferredCostMinimum;
             PreferredCostMaximum = preferredCostMaximum;
