@@ -4,6 +4,7 @@ using Korepetynder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Korepetynder.Data.Migrations
 {
     [DbContext(typeof(KorepetynderDbContext))]
-    partial class KorepetynderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220425131255_CorrectedTeacherLessonLanguageRelationship")]
+    partial class CorrectedTeacherLessonLanguageRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,23 +43,6 @@ namespace Korepetynder.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Languages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Polski"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Angielski"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Niemiecki"
-                        });
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Level", b =>
@@ -73,6 +58,9 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<int?>("TeacherLessonId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
@@ -81,27 +69,9 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Levels");
+                    b.HasIndex("TeacherLessonId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Szkoła podstawowa",
-                            Weight = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Liceum",
-                            Weight = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Studia wyższe",
-                            Weight = 3
-                        });
+                    b.ToTable("Levels");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
@@ -125,35 +95,6 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("ParentLocationId");
 
                     b.ToTable("Locations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Warszawa"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Wilanów",
-                            ParentLocationId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Śródmieście",
-                            ParentLocationId = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Łódź"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Kraków"
-                        });
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.MultimediaFile", b =>
@@ -267,23 +208,6 @@ namespace Korepetynder.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Subjects");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Matematyka"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Informatyka"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Chemia"
-                        });
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Teacher", b =>
@@ -344,8 +268,8 @@ namespace Korepetynder.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -369,15 +293,15 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TeacherId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TelephoneNumber")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -424,32 +348,17 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("LevelStudentLesson", b =>
                 {
+                    b.Property<int>("LessonsId")
+                        .HasColumnType("int");
+
                     b.Property<int>("LevelsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentLessonsId")
-                        .HasColumnType("int");
+                    b.HasKey("LessonsId", "LevelsId");
 
-                    b.HasKey("LevelsId", "StudentLessonsId");
-
-                    b.HasIndex("StudentLessonsId");
+                    b.HasIndex("LevelsId");
 
                     b.ToTable("LessonLevels", (string)null);
-                });
-
-            modelBuilder.Entity("LevelTeacherLesson", b =>
-                {
-                    b.Property<int>("LevelsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeacherLessonsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LevelsId", "TeacherLessonsId");
-
-                    b.HasIndex("TeacherLessonsId");
-
-                    b.ToTable("TeacherLessonLevels", (string)null);
                 });
 
             modelBuilder.Entity("LocationStudent", b =>
@@ -497,6 +406,13 @@ namespace Korepetynder.Data.Migrations
                     b.ToTable("TeacherStudents", (string)null);
                 });
 
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Level", b =>
+                {
+                    b.HasOne("Korepetynder.Data.DbModels.TeacherLesson", null)
+                        .WithMany("Levels")
+                        .HasForeignKey("TeacherLessonId");
+                });
+
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Location", "ParentLocation")
@@ -532,7 +448,7 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Korepetynder.Data.DbModels.Subject", "Subject")
-                        .WithMany("StudentLessons")
+                        .WithMany("Lessons")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -554,7 +470,7 @@ namespace Korepetynder.Data.Migrations
             modelBuilder.Entity("Korepetynder.Data.DbModels.TeacherLesson", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Subject", "Subject")
-                        .WithMany("TeacherLessons")
+                        .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -617,30 +533,15 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("LevelStudentLesson", b =>
                 {
-                    b.HasOne("Korepetynder.Data.DbModels.Level", null)
-                        .WithMany()
-                        .HasForeignKey("LevelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Korepetynder.Data.DbModels.StudentLesson", null)
                         .WithMany()
-                        .HasForeignKey("StudentLessonsId")
+                        .HasForeignKey("LessonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("LevelTeacherLesson", b =>
-                {
                     b.HasOne("Korepetynder.Data.DbModels.Level", null)
                         .WithMany()
                         .HasForeignKey("LevelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Korepetynder.Data.DbModels.TeacherLesson", null)
-                        .WithMany()
-                        .HasForeignKey("TeacherLessonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -711,9 +612,7 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Subject", b =>
                 {
-                    b.Navigation("StudentLessons");
-
-                    b.Navigation("TeacherLessons");
+                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Teacher", b =>
@@ -724,6 +623,11 @@ namespace Korepetynder.Data.Migrations
 
                     b.Navigation("User")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Korepetynder.Data.DbModels.TeacherLesson", b =>
+                {
+                    b.Navigation("Levels");
                 });
 #pragma warning restore 612, 618
         }

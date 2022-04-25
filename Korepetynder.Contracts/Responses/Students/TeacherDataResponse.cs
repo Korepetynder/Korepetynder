@@ -1,4 +1,5 @@
 using Korepetynder.Contracts.Responses.Locations;
+using Korepetynder.Contracts.Responses.Teachers;
 using Korepetynder.Data.DbModels;
 using System;
 using System.Collections.Generic;

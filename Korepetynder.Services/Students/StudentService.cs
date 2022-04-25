@@ -98,7 +98,7 @@ namespace Korepetynder.Services.Students
                 .SingleAsync();
             if (studentUser.StudentId is null)
             {
-                throw new InvalidOperationException("User with id: " + currentId + " already is not a student");
+                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
             var locations = await _korepetynderDbContext.Locations.Where(location => request.Locations.Contains(location.Id)).ToListAsync();
             if (locations.Count != request.Locations.Count())

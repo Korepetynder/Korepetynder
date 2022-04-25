@@ -25,12 +25,20 @@ namespace Korepetynder.Data
                 .HasComputedColumnSql($"[{nameof(User.FirstName)}] + ' ' + [{nameof(User.LastName)}]");
             modelBuilder.Entity<StudentLesson>()
                 .HasMany(lesson => lesson.Levels)
-                .WithMany(level => level.Lessons)
+                .WithMany(level => level.StudentLessons)
                 .UsingEntity(join => join.ToTable("LessonLevels"));
+            modelBuilder.Entity<TeacherLesson>()
+                .HasMany(lesson => lesson.Levels)
+                .WithMany(level => level.TeacherLessons)
+                .UsingEntity(join => join.ToTable("TeacherLessonLevels"));
             modelBuilder.Entity<StudentLesson>()
                 .HasMany(lesson => lesson.Languages)
-                .WithMany(language => language.Lessons)
+                .WithMany(language => language.StudentLessons)
                 .UsingEntity(join => join.ToTable("LessonLanguages"));
+            modelBuilder.Entity<TeacherLesson>()
+                .HasMany(lesson => lesson.Languages)
+                .WithMany(language => language.TeacherLessons)
+                .UsingEntity(join => join.ToTable("TeacherLessonLanguages"));
 
             modelBuilder.Entity<Student>()
                 .HasMany(student => student.PreferredLocations)

@@ -3,6 +3,7 @@ using Korepetynder.Services.Levels;
 using Korepetynder.Services.Locations;
 using Korepetynder.Services.Students;
 using Korepetynder.Services.Subjects;
+using Korepetynder.Services.Teachers;
 using Korepetynder.Services.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Sieve.Services;
@@ -17,6 +18,7 @@ namespace Korepetynder.Services
 
             services.AddScoped<ISubjectsService, SubjectsService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<ILevelsService, LevelsService>();
             services.AddScoped<ILanguagesService, LanguagesService>();
             services.AddScoped<ILocationsService, LocationsService>();
