@@ -37,7 +37,6 @@ export class SettingsStudentComponent implements OnInit {
   });
 
   constructor(
-    public router: Router,
     private fb: FormBuilder,
     private studentSettingsService: StudentSettingsService,
     private userService: UserService,

@@ -36,7 +36,7 @@ export class SettingsTutorComponent implements OnInit {
   });
 
   constructor(
-    public router: Router,
+    private router: Router,
     private fb: FormBuilder,
     private tutorSettingsService: TutorSettingsService,
     private userService: UserService,
@@ -117,5 +117,9 @@ export class SettingsTutorComponent implements OnInit {
       this.isSaving = false;
       this.snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
     });
+  }
+
+  finish(): void {
+    this.router.navigate(['settings']);
   }
 }
