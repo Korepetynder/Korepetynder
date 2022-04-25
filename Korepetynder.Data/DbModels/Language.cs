@@ -11,7 +11,8 @@ namespace Korepetynder.Data.DbModels
         [MaxLength(30)]
         public string Name { get; set; }
 
-        public ICollection<StudentLesson> Lessons { get; set; } = new List<StudentLesson>();
+        public ICollection<StudentLesson> StudentLessons { get; set; } = new List<StudentLesson>();
+        public ICollection<TeacherLesson> TeacherLessons { get; set; } = new List<TeacherLesson>();
 
         public Language(string name)
         {

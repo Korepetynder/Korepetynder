@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Korepetynder.Contracts.Responses.Students
+namespace Korepetynder.Contracts.Responses.Teachers
 {
     public class TeacherLessonResponse
     {

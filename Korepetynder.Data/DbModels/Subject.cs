@@ -13,7 +13,8 @@ namespace Korepetynder.Data.DbModels
         [Sieve(CanFilter = true)]
         public string Name { get; set; }
 
-        public ICollection<StudentLesson> Lessons { get; set; } = new List<StudentLesson>();
+        public ICollection<StudentLesson> StudentLessons { get; set; } = new List<StudentLesson>();
+        public ICollection<TeacherLesson> TeacherLessons { get; set; } = new List<TeacherLesson>();
 
         public Subject(string name)
         {
