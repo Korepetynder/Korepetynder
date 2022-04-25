@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
+  <div *ngIf="!isEdit" class="save-settings-button">
     <button mat-raised-button color="accent" type="button" matStepperNext>Dalej</button>
   </div>
 

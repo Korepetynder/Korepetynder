@@ -2,7 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
+import { InteractionStatus } from '@azure/msal-browser';
 import { DateTime } from 'luxon';
+import { filter } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user.service';
 import { UserRequest } from '../models/requests/userRequest';
 import { UserSettingsService } from '../user-settings.service';
@@ -39,7 +42,9 @@ export class SettingsGeneralComponent implements OnInit {
     private fb: FormBuilder,
     private userSetingsService: UserSettingsService,
     private userService: UserService,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private msalBroadcastService: MsalBroadcastService,
+    private authService: MsalService) { }
 
   ngOnInit(): void {
     this.userService.isInitialized().subscribe(isInitialized => {
@@ -48,6 +53,13 @@ export class SettingsGeneralComponent implements OnInit {
         this.userSetingsService.getUser().subscribe(user => {
           this.profileForm.patchValue(user);
           this.birthDateCtrl.patchValue(DateTime.fromISO(user.birthDate, { zone: 'utc' }));
+        });
+      } else {
+        // Get email address from Azure AD B2C
+        this.msalBroadcastService.inProgress$.pipe(
+          filter(status => status === InteractionStatus.None)
+        ).subscribe(() => {
+          this.setEmail(this.authService.instance.getActiveAccount()?.idTokenClaims);
         });
       }
     });
@@ -72,6 +84,12 @@ export class SettingsGeneralComponent implements OnInit {
       this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
       this.completed.emit();
     });
+  }
+
+  private setEmail(claims: any): void {
+    if (claims['emails'].length > 0) {
+      this.emailCtrl.setValue(claims['emails'][0]);
+    }
   }
 }
 

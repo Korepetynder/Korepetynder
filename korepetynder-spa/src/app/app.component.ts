@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
 import { filter, map, Observable, shareReplay } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,8 @@ export class AppComponent implements OnInit {
   constructor(
     private msalBroadcastService: MsalBroadcastService,
     private authService: MsalService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
   ) {
 
   }
@@ -39,11 +41,19 @@ export class AppComponent implements OnInit {
       })
   }
 
-  setSelectedTab(id: number): void {
-
+  navigateToSettings(tabId: number): void {
+    this.router.navigate(['settings'], {
+      queryParams: {
+        tabId
+      }
+    });
   }
 
-  private checkAndSetActiveAccount() {
+  logout(): void {
+    this.authService.logout();
+  }
+
+  private checkAndSetActiveAccount(): void {
     /**
      * If no active account set but there are accounts signed in, sets first account to active account.
      * To use active account set here, subscribe to inProgress$ first in the component.
