@@ -1,0 +1,36 @@
+.main-div {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+mat-card {
+  height: 28em;
+  width: 30em;
+}
+
+mat-card-header {
+  padding: 1em;
+  padding-top: 2em;
+  display: flex;
+  justify-content: center;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-card-content {
+    padding: 1em;
+}
+
+mat-card-actions {
+    padding: 1em;
+    padding-bottom: 2em;
+}
+
+.login-button {
+    float: right;
+}

@@ -12,12 +12,12 @@ namespace Korepetynder.Data.DbModels
         [MaxLength(50)]
         public string LastName { get; set; }
         [MaxLength(15)]
-        public string? TelephoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         [MaxLength(100)]
         public string Email { get; set; }
         [MaxLength(100)]
         public string FullName { get; set; }
-        public int Age { get; set; }
+        public DateTime BirthDate { get; set; }
         public int? TeacherId { get; set; }
         public int? StudentId { get; set; }
 
@@ -27,21 +27,20 @@ namespace Korepetynder.Data.DbModels
         [ForeignKey(nameof(StudentId))]
         public Student? Student { get; set; }
 
-        public User(Guid id, string firstName, string lastName, int age, string email, string? telephoneNumber)
+        public User(Guid id, string firstName, string lastName, DateTime birthDate, string email, string? phoneNumber)
         {
             Id = id;
-            SetValues(firstName, lastName, age, email, telephoneNumber);
+            SetValues(firstName, lastName, birthDate, email, phoneNumber);
         }
 
-        public void SetValues(string firstName, string lastName, int age, string email, string? telephoneNumber)
+        public void SetValues(string firstName, string lastName, DateTime birthDate, string email, string? phoneNumber)
         {
-
             FirstName = firstName;
             LastName = lastName;
             FullName = firstName + ' ' + lastName;
-            Age = age;
+            BirthDate = birthDate;
             Email = email;
-            TelephoneNumber = telephoneNumber;
+            PhoneNumber = phoneNumber;
         }
 
     }

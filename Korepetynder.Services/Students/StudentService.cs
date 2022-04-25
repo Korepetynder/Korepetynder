@@ -45,6 +45,8 @@ namespace Korepetynder.Services.Students
             lesson.Subject = subject;
             lesson.Levels = levels;
             lesson.Languages = languages;
+            lesson.PreferredCostMinimum = request.PreferredCostMinimum;
+            lesson.PreferredCostMaximum = request.PreferredCostMaximum;
             await _korepetynderDbContext.StudentLesson.AddAsync(lesson);
             await _korepetynderDbContext.SaveChangesAsync();
 
@@ -60,7 +62,7 @@ namespace Korepetynder.Services.Students
             {
                 throw new ArgumentException("Lesson does not belong to student");
             }
-           
+
             _korepetynderDbContext.StudentLesson.Remove(lesson);
             await _korepetynderDbContext.SaveChangesAsync();
         }
@@ -91,8 +93,8 @@ namespace Korepetynder.Services.Students
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users
                 .Where(user => user.Id == currentId)
-                .Include(user => user.Student)
-                .Include(user => user.Student!.PreferredLocations)
+                .Include(user => user.Student!)
+                    .ThenInclude(student => student.PreferredLocations)
                 .SingleAsync();
             if (studentUser.StudentId is null)
             {
@@ -234,6 +236,8 @@ namespace Korepetynder.Services.Students
             lesson.Subject = subject;
             lesson.Levels = levels;
             lesson.Languages = languages;
+            lesson.PreferredCostMinimum = request.PreferredCostMinimum;
+            lesson.PreferredCostMaximum = request.PreferredCostMaximum;
             await _korepetynderDbContext.SaveChangesAsync();
 
             return new StudentLessonResponse(lesson);

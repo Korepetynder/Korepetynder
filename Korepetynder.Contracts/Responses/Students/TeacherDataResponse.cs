@@ -12,7 +12,7 @@ namespace Korepetynder.Contracts.Responses.Students
     public class TeacherDataResponse
     {
         public string FullName { get; set; }
-        public string? TelephoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         public string Email { get; set; }
         public IEnumerable<LocationResponse> Locations { get; set; }
         public int Age { get; set; }
@@ -21,9 +21,10 @@ namespace Korepetynder.Contracts.Responses.Students
         public TeacherDataResponse(User teacher)
         {
             Email = teacher.Email;
-            TelephoneNumber = teacher.TelephoneNumber;
+            PhoneNumber = teacher.PhoneNumber;
             FullName = teacher.FullName;
-            Age = teacher.Age;
+            //Age = teacher.Age;
+            Age = 20;
             List<LocationResponse> locations = new List<LocationResponse>();
             foreach (var location in teacher.Teacher!.TeachingLocations)
             {
@@ -37,7 +38,7 @@ namespace Korepetynder.Contracts.Responses.Students
             }
             Lessons = lessons;
 
-        } 
+        }
 
     }
 }

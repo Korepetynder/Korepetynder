@@ -1,0 +1,64 @@
+<form [formGroup]="lesson" (ngSubmit)="saveChanges()">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Opis {{index}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Przedmiot</mat-label>
+      <mat-select formControlName="subject">
+        <mat-option *ngFor="let subject of subjects" [value]="subject.id">
+          {{subject.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Poziom</mat-label>
+      <mat-select formControlName="levels" multiple>
+        <mat-option *ngFor="let level of levels" [value]="level.id">
+          {{level.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Język</mat-label>
+      <mat-select formControlName="languages" multiple>
+        <mat-option *ngFor="let language of languages" [value]="language.id">
+          {{language.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Koszt lekcji</mat-label>
+      <input matInput type="number" placeholder="0" class="number-input" formControlName="cost">
+      <span matSuffix>zł/h</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Liczba godzin zajęć tygodniowo</mat-label>
+      <input matInput type="number" placeholder="2" class="number-input" formControlName="frequency">
+      <span matSuffix>h</span>
+    </mat-form-field>
+
+    <div class="save-button">
+      <button mat-raised-button type="submit" color="accent" [disabled]="isSaving">
+        Zapisz
+      </button>
+    </div>
+    <div class="save-button" *ngIf="isSaving">
+      <mat-spinner diameter="30"></mat-spinner>
+    </div>
+
+    <div class="delete-button">
+      <button mat-fab color="accent" type="button" (click)="removeLesson()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+  </mat-expansion-panel>
+</form>

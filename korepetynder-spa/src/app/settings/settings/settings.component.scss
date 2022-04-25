@@ -1,0 +1,30 @@
+mat-form-field {
+  width: 100%;
+}
+
+.status-checkbox {
+  margin: 0 10px;
+}
+
+.small-mat-forms {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+input.money-input::-webkit-outer-spin-button,
+input.money-input::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.number-input {
+  -moz-appearance: textfield;
+}
+
+#add-button {
+  margin: 10px;
+  float: right;
+}
+
+#save-settings-button {
+  float: right
+}

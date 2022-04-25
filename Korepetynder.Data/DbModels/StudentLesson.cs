@@ -7,7 +7,7 @@ namespace Korepetynder.Data.DbModels
         public int Id { get; set; }
         public int PreferredCostMinimum { get; set; }
         public int PreferredCostMaximum { get; set; }
-        public int? Frequency { get; set; } = null!;
+        public int? Frequency { get; set; }
 
         public int SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]

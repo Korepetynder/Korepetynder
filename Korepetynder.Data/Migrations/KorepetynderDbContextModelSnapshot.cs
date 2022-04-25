@@ -41,6 +41,23 @@ namespace Korepetynder.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Languages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Polski"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Angielski"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Niemiecki"
+                        });
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Level", b =>
@@ -65,6 +82,26 @@ namespace Korepetynder.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Levels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Szkoła podstawowa",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Liceum",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Studia wyższe",
+                            Weight = 3
+                        });
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
@@ -88,6 +125,35 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("ParentLocationId");
 
                     b.ToTable("Locations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Warszawa"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Wilanów",
+                            ParentLocationId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Śródmieście",
+                            ParentLocationId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Łódź"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Kraków"
+                        });
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.MultimediaFile", b =>
@@ -201,6 +267,23 @@ namespace Korepetynder.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Subjects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Matematyka"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Informatyka"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Chemia"
+                        });
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Teacher", b =>
@@ -261,8 +344,8 @@ namespace Korepetynder.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -286,15 +369,15 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TeacherId")
                         .HasColumnType("int");
-
-                    b.Property<string>("TelephoneNumber")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 

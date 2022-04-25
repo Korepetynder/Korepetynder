@@ -66,9 +66,9 @@ namespace Korepetynder.Api.Controllers
         /// Returns currently logged user data (if he was initiated)
         /// </summary>
         /// <returns>User data.</returns>
-        [HttpGet()]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserResponse>> GetUser()
         {
             try
@@ -79,7 +79,28 @@ namespace Korepetynder.Api.Controllers
             }
             catch (InvalidOperationException)
             {
-                return BadRequest();
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Gets the roles assigned to the user.
+        /// </summary>
+        /// <returns>Roles.</returns>
+        [HttpGet("roles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserRolesResponse>> GetUserRoles()
+        {
+            try
+            {
+                var userRoles = await _usersService.GetUserRoles();
+
+                return userRoles;
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
             }
         }
     }

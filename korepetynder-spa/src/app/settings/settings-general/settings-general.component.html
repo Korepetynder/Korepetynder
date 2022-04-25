@@ -1,0 +1,47 @@
+<form class="main-div" [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Imię</mat-label>
+      <input matInput placeholder="Np. Jan" formControlName="firstName">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Nazwisko</mat-label>
+      <input matInput placeholder="Np. Kowalski" formControlName="lastName">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Adres email</mat-label>
+      <input matInput type="email" placeholder="Np. user@example.com" formControlName="email">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Numer telefonu</mat-label>
+      <input matInput type="tel" placeholder="Np. 123456789" formControlName="phoneNumber">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Data urodzenia</mat-label>
+      <input matInput [matDatepicker]="picker" placeholder="Np. 4/20/2001" formControlName="birthDate">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="save-settings-button">
+    <button mat-raised-button color="accent" type="submit" [disabled]="isSaving">
+      {{isEdit ? 'Zapisz zmiany' : 'Dalej'}}
+    </button>
+    <mat-spinner *ngIf="isSaving" diameter="30"></mat-spinner>
+  </div>
+
+</form>
