@@ -1,9 +1,7 @@
 using Korepetynder.Contracts.Requests.Teachers;
-using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Contracts.Responses.Teachers;
 using Korepetynder.Services.Teachers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using Sieve.Models;
@@ -32,7 +30,7 @@ namespace Korepetynder.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherResponse>> PostStudent([FromBody] TeacherRequest teacherRequest)
+        public async Task<ActionResult<TeacherResponse>> PostTeacher([FromBody] TeacherRequest teacherRequest)
         {
             try
             {
@@ -52,7 +50,7 @@ namespace Korepetynder.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherResponse>> GetStudent()
+        public async Task<ActionResult<TeacherResponse>> GetTeacher()
         {
             try
             {
@@ -67,13 +65,13 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Updates student profile connected to provided user.
+        /// Updates teacher profile connected to provided user.
         /// </summary>
-        /// <returns>Updated student.</returns>
+        /// <returns>Updated teacher.</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherResponse>> PutStudent(TeacherRequest request)
+        public async Task<ActionResult<TeacherResponse>> PutTeacher(TeacherRequest request)
         {
             try
             {
@@ -87,13 +85,13 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Removes student connected to provided user.
+        /// Removes teacher connected to provided user.
         /// </summary>
         /// <returns>Newly created subject.</returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteStudent()
+        public async Task<IActionResult> DeleteTeacher()
         {
             try
             {
@@ -107,7 +105,7 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Creates a new lesson that currently active student is looking for.
+        /// Creates a new lesson that currently active teacher is looking for.
         /// </summary>
         /// <param name="lessonRequest">Request containing data for a new lesson.</param>
         /// <returns>Newly created lesson.</returns>
@@ -129,7 +127,7 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Returns list of lessons that student is looking for
+        /// Returns list of lessons that teacher is looking for
         /// </summary>
         /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
         /// <returns>List of lessons.</returns>
@@ -154,12 +152,11 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Deletes lesson with given id, if it belongs to currently logged user
         /// </summary>
-        /// <returns>List of lessons.</returns>
         [HttpDelete("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> GetLessons([FromRoute] int id)
+        public async Task<IActionResult> DeleteLesson([FromRoute] int id)
         {
             try
             {

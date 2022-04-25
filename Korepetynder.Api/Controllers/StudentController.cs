@@ -151,12 +151,11 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Deletes lesson with given id, if it belongs to currently logged user
         /// </summary>
-        /// <returns>List of lessons.</returns>
         [HttpDelete("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> GetLessons([FromRoute] int id)
+        public async Task<IActionResult> DeleteLesson([FromRoute] int id)
         {
             try
             {
