@@ -177,6 +177,8 @@ namespace Korepetynder.Services.Students
                 .Include(user => user.Student)
                 .Include(user => user.Student!.PreferredLocations)
                 .Include(user => user.Student!.PreferredLessons)
+                .ThenInclude(lesson => lesson.Subject)
+                .Include(user => user.Student!.PreferredLessons)
                 .ThenInclude(lesson => lesson.Languages)
                 .Include(user => user.Student!.PreferredLessons)
                 .ThenInclude(lesson => lesson.Levels)
@@ -185,7 +187,7 @@ namespace Korepetynder.Services.Students
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
-            var allLessons = new LinkedList<TeacherLesson>();
+            IEnumerable<TeacherLesson> allLessons = new LinkedList<TeacherLesson>();
             foreach (var searchLesson in studentUser.Student.PreferredLessons) {
                 var lessons = await _korepetynderDbContext.TeacherLesson
                 .Where(lesson => lesson.Cost >= searchLesson.PreferredCostMinimum && lesson.Cost <= searchLesson.PreferredCostMaximum)
@@ -195,9 +197,13 @@ namespace Korepetynder.Services.Students
                 .Where(lesson => lesson.Languages.Any(el => searchLesson.Languages.Contains(el)))
                 .Where(lesson => lesson.Levels.Any(el => searchLesson.Levels.Contains(el)))
                 .Include(lesson => lesson.Teacher)
+                .Include(lesson => lesson.Languages)
+                .Include(lesson => lesson.Levels)
                 .Include(lesson => lesson.Teacher.User)
-                .OrderBy(lesson => lesson.Cost).ToListAsync();
-                allLessons.Concat(lessons);
+                .Include(lesson => lesson.Teacher.TeachingLocations)
+                .OrderBy(lesson => lesson.Cost)
+                .ToListAsync();
+                allLessons = allLessons.Concat(lessons);
             }
             var teachers = new HashSet<Teacher>();
             foreach (var lesson in allLessons) {
