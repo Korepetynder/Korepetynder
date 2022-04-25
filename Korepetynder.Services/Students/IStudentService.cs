@@ -14,7 +14,7 @@ namespace Korepetynder.Services.Students
         Task<StudentResponse> GetStudentData();
         Task<PagedData<StudentLessonResponse>> GetLessons(SieveModel model);
         Task<StudentLessonResponse> AddLesson(StudentLessonRequest request);
-        Task<StudentLessonResponse> UpdateLesson(StudentLessonUpdateRequest request);
+        Task<StudentLessonResponse> UpdateLesson(int id, StudentLessonRequest request);
         Task DeleteLesson(int id);
         Task<IEnumerable<TeacherDataResponse>> GetSuggestedTeachers();
     }

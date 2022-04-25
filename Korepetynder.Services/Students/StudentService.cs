@@ -204,7 +204,7 @@ namespace Korepetynder.Services.Students
             return teachers.Select(teacher => new TeacherDataResponse(teacher.User)).ToList();
         }
 
-        public async Task<StudentLessonResponse> UpdateLesson(StudentLessonUpdateRequest request)
+        public async Task<StudentLessonResponse> UpdateLesson(int id, StudentLessonRequest request)
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
@@ -213,7 +213,7 @@ namespace Korepetynder.Services.Students
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
             var lesson = await _korepetynderDbContext.StudentLesson
-                .Where(lesson => lesson.Id == request.Id)
+                .Where(lesson => lesson.Id == id)
                 .Include(lesson => lesson.Subject)
                 .Include(lesson => lesson.Levels)
                 .Include(lesson => lesson.Languages)

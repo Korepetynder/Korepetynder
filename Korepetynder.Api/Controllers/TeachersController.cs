@@ -89,14 +89,14 @@ namespace Korepetynder.Api.Controllers
         /// Updates chosen lesson
         /// </summary>
         /// <param name="lessonRequest">Request containing data for updated lesson.</param>
-        [HttpPut("Lessons")]
+        [HttpPut("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherLessonResponse>> PutLesson([FromBody] TeacherLessonUpdateRequest lessonRequest)
+        public async Task<ActionResult<TeacherLessonResponse>> PutLesson([FromRoute] int id, [FromBody] TeacherLessonRequest lessonRequest)
         {
             try
             {
-                var lesson = await _teachersService.UpdateLesson(lessonRequest);
+                var lesson = await _teachersService.UpdateLesson(id, lessonRequest);
 
                 return lesson;
             }
