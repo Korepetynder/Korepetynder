@@ -30,6 +30,12 @@ export class StudentSettingsService {
     return this.httpClient.put<Student>(this.apiUrl, studentRequest);
   }
 
+  deleteStudent(): Observable<any> {
+    return this.httpClient.delete(this.apiUrl).pipe(
+      tap(() => this.userService.refreshUserType())
+    );
+  }
+
   getLessons(): Observable<StudentLesson[]> {
     return this.httpClient.get<StudentLesson[]>(this.apiUrl + '/lessons');
   }

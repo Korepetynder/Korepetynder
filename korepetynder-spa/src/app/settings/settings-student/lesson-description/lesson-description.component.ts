@@ -22,8 +22,8 @@ export class LessonDescriptionComponent {
 
   @Output() lessonRemove = new EventEmitter<void>();
 
-  get lessonId(): number | null { return this.lesson.get('lessonId')!.value; }
-  set lessonId(id: number | null) { this.lesson.get('lessonId')!.setValue(id); }
+  get lessonId(): number | null { return this.lesson.get('id')!.value; }
+  set lessonId(id: number | null) { this.lesson.get('id')!.setValue(id); }
 
   isSaving = false;
 
@@ -46,7 +46,7 @@ export class LessonDescriptionComponent {
     saveObservable.subscribe(lesson => {
       this.isSaving = false;
       this.lessonId = lesson.id;
-      
+
     });
   }
 

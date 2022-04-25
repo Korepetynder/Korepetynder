@@ -1,4 +1,4 @@
-<form [formGroup]="lesson">
+<form [formGroup]="lesson" (ngSubmit)="saveChanges()">
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -51,7 +51,11 @@
       <span matSuffix>h</span>
     </mat-form-field>
 
-    <button mat-fab color="accent" (click)="removeLesson()">
+    <button mat-raised-button type="submit" color="accent">
+      Zapisz
+    </button>
+
+    <button mat-fab color="accent" type="button" (click)="removeLesson()">
       <mat-icon>delete</mat-icon>
     </button>
 

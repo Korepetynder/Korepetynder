@@ -10,7 +10,7 @@ import { UserResponse } from './models/responses/user';
   providedIn: 'root'
 })
 export class UserSettingsService {
-  private apiUrl = environment.apiUrl + '/users';
+  private apiUrl = environment.apiUrl + '/user';
 
   constructor(private httpClient: HttpClient, private userService: UserService) { }
 

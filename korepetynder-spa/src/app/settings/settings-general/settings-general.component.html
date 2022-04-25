@@ -1,4 +1,4 @@
-<form class="main-div" [formGroup]="profileForm">
+<form class="main-div" [formGroup]="profileForm" (ngSubmit)="saveChanges()">
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Imię</mat-label>
@@ -38,7 +38,7 @@
   </div>
 
   <div class="save-settings-button">
-    <button mat-raised-button color="accent" (click)="saveChanges()">
+    <button mat-raised-button color="accent" type="submit" [disabled]="isSaving">
       {{router.url === '/settings' ? 'Zapisz zmiany' : 'Dalej'}}
     </button>
   </div>

@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { of, take } from 'rxjs';
+import { UserService } from 'src/app/shared/services/user.service';
 import { StudentRequest } from '../models/requests/studentRequest';
 import { Language } from '../models/responses/language';
 import { Level } from '../models/responses/level';
@@ -14,23 +16,29 @@ import { StudentSettingsService } from '../student-settings.service';
   styleUrls: ['./settings-student.component.scss']
 })
 export class SettingsStudentComponent implements OnInit {
-  @Input() isStudent: boolean = false;
+  @Input() isEdit: boolean = false;
 
   @Input() languages: Language[] = [];
   @Input() levels: Level[] = [];
   @Input() locations: Location[] = [];
   @Input() subjects: Subject[] = [];
 
-  @Output() completed = new EventEmitter<void>();
+  @Output() statusChange = new EventEmitter<boolean>();
 
   isSaving = false;
+  isStudentOldValue = false;
 
   profileForm = this.fb.group({
+    isStudent: [false],
     locations: [[]],
     lessons: this.fb.array([])
   });
 
-  constructor(public router: Router, private fb: FormBuilder, private studentSettingsService: StudentSettingsService) { }
+  constructor(
+    public router: Router,
+    private fb: FormBuilder,
+    private studentSettingsService: StudentSettingsService,
+    private userService: UserService) { }
 
   get locationsCtrl() { return this.profileForm.get('locations') as FormControl; }
   get lessons() {
@@ -41,15 +49,22 @@ export class SettingsStudentComponent implements OnInit {
     return this.lessons.controls as FormGroup[];
   }
 
+  get isStudentCtrl() {
+    return this.profileForm.get('isStudent') as FormControl;
+  }
+  get isStudent() {
+    return this.isStudentCtrl.value as boolean;
+  }
+
   addLesson(): void {
     this.lessons.push(this.fb.group({
-      lessonId: [null],
-      subject: ['', [Validators.required]],
+      id: [null],
+      subject: [null, [Validators.required]],
       levels: [[]],
       languages: [[]],
-      minCost: [''],
-      maxCost: [''],
-      frequency: [''],
+      minCost: [null],
+      maxCost: [null],
+      frequency: [null],
     }));
   }
 
@@ -58,13 +73,30 @@ export class SettingsStudentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isStudent) {
-      this.studentSettingsService.getStudent().subscribe(student => this.profileForm.patchValue(student));
+    this.userService.isStudent().subscribe(isStudent => {
+      this.isStudentOldValue = isStudent;
+      this.isStudentCtrl.setValue(isStudent);
+      if (isStudent) {
+        this.studentSettingsService.getStudent().subscribe(student => this.profileForm.patchValue(student));
 
-      this.studentSettingsService.getLessons().subscribe(lessons => {
+        this.studentSettingsService.getLessons().subscribe(lessons => {
+          console.log(lessons);
+          lessons.forEach(() => this.addLesson());
+          this.lessons.patchValue(lessons.map(lesson => ({
+            id: lesson.id,
+            subject: lesson.subject.id,
+            levels: lesson.levels.map(level => level.id),
+            languages: lesson.languages.map(language => language.id),
+            minCost: lesson.preferredCostMinimum,
+            maxCost: lesson.preferredCostMaximum,
+            frequency: lesson.frequency
+          })));
+          console.log(this.lessons);
+        });
+      }
+    });
 
-      });
-    }
+    this.profileForm.statusChanges.subscribe(status => this.statusChange.emit(status === 'VALID'));
   }
 
   saveChanges(): void {
@@ -76,12 +108,11 @@ export class SettingsStudentComponent implements OnInit {
     const studentRequest = new StudentRequest(this.locationsCtrl.value);
 
     const saveObservable = this.isStudent
-      ? this.studentSettingsService.updateStudent(studentRequest)
-      : this.studentSettingsService.createStudent(studentRequest);
+      ? (this.isStudentOldValue ? this.studentSettingsService.updateStudent(studentRequest) : this.studentSettingsService.createStudent(studentRequest))
+      : (this.isStudentOldValue ? this.studentSettingsService.deleteStudent() : of(null));
 
     saveObservable.subscribe(() => {
       this.isSaving = false;
-      this.completed.emit();
     });
   }
 }

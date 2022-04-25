@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DateTime } from 'luxon';
+import { UserService } from 'src/app/shared/services/user.service';
 import { UserRequest } from '../models/requests/userRequest';
 import { UserSettingsService } from '../user-settings.service';
 
@@ -16,6 +17,7 @@ export class SettingsGeneralComponent implements OnInit {
   @Output() completed = new EventEmitter<void>();
 
   isSaving = false;
+  isInitialized = false;
 
   profileForm = this.fb.group({
     firstName: ['', [Validators.required]],
@@ -31,15 +33,22 @@ export class SettingsGeneralComponent implements OnInit {
   get phoneNumberCtrl() { return this.profileForm.get('phoneNumber') as FormControl; }
   get birthDateCtrl() { return this.profileForm.get('birthDate') as FormControl; }
 
-  constructor(public router: Router, private fb: FormBuilder, private userSetingsService: UserSettingsService) { }
+  constructor(
+    public router: Router,
+    private fb: FormBuilder,
+    private userSetingsService: UserSettingsService,
+    private userService: UserService) { }
 
   ngOnInit(): void {
-    if (this.isEdit) {
-      this.userSetingsService.getUser().subscribe(user => {
-        this.profileForm.patchValue(user);
-        this.birthDateCtrl.patchValue(DateTime.fromISO(user.birthDate, { zone: 'utc' }));
-      })
-    }
+    this.userService.isInitialized().subscribe(isInitialized => {
+      this.isInitialized = isInitialized;
+      if (isInitialized) {
+        this.userSetingsService.getUser().subscribe(user => {
+          this.profileForm.patchValue(user);
+          this.birthDateCtrl.patchValue(DateTime.fromISO(user.birthDate, { zone: 'utc' }));
+        });
+      }
+    });
   }
 
   saveChanges(): void {
@@ -52,9 +61,9 @@ export class SettingsGeneralComponent implements OnInit {
     const userRequest = new UserRequest(formValue.firstName, formValue.lastName, formValue.email,
       formValue.phoneNumber, formValue.birthDate);
 
-    const saveObservable = this.isEdit
+    const saveObservable = this.isInitialized
       ? this.userSetingsService.updateUser(userRequest)
-      : this.userSetingsService.createUser(userRequest)
+      : this.userSetingsService.createUser(userRequest);
 
     saveObservable.subscribe(() => {
       this.isSaving = false;
