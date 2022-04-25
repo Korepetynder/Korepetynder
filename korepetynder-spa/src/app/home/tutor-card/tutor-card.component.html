@@ -1,13 +1,13 @@
 <mat-card class="tutor-display-card">
   <mat-card-header>
     <div mat-card-avatar class="header-tutor-card-image"></div>
-    <mat-card-title>Korepetytor</mat-card-title>
-    <mat-card-subtitle>Kontakt: tel, e-mail</mat-card-subtitle>
+    <mat-card-title>{{tutor.name}}</mat-card-title>
+    <mat-card-subtitle>Kontakt: {{tutor.contactInfo}}</mat-card-subtitle>
   </mat-card-header>
   <mat-divider inset></mat-divider>
   <mat-card-content>
     <p>
-      Tutaj opis.
+      {{tutor.description}}
     </p>
   </mat-card-content>
 
