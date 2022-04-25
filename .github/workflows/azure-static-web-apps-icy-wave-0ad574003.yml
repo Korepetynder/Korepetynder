@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - korepetynder-spa/
+      - korepetynder-spa/**
       - .github/workflows/azure-static-web-apps-icy-wave-0ad574003.yml
   # pull_request:
   #   types: [opened, synchronize, reopened, closed]
