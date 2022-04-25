@@ -23,7 +23,7 @@ namespace Korepetynder.Services.Students
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<StudentLessonResponse> AddLesson(LessonCreationRequest request)
+        public async Task<StudentLessonResponse> AddLesson(StudentLessonRequest request)
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
@@ -133,7 +133,6 @@ namespace Korepetynder.Services.Students
             }
             var userLessons = _korepetynderDbContext.StudentLesson
                 .Where(lesson => lesson.StudentId == studentUser.StudentId)
-                .Include(lesson => lesson.Frequency)
                 .Include(lesson => lesson.Languages)
                 .Include(lesson => lesson.Levels)
                 .Include(lesson => lesson.Subject)
@@ -203,6 +202,41 @@ namespace Korepetynder.Services.Students
                 teachers.Add(lesson.Teacher);
             }
             return teachers.Select(teacher => new TeacherDataResponse(teacher.User)).ToList();
+        }
+
+        public async Task<StudentLessonResponse> UpdateLesson(int id, StudentLessonRequest request)
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
+            if (studentUser.StudentId is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
+            }
+            var lesson = await _korepetynderDbContext.StudentLesson
+                .Where(lesson => lesson.Id == id)
+                .Include(lesson => lesson.Subject)
+                .Include(lesson => lesson.Levels)
+                .Include(lesson => lesson.Languages)
+                .SingleAsync();
+            if (lesson.StudentId != studentUser.StudentId)
+            {
+                throw new ArgumentException("Lesson does not belong to current user");
+            }
+            var subject = await _korepetynderDbContext.Subjects.Where(subject => subject.Id == request.SubjectId).SingleAsync();
+            var levels = await _korepetynderDbContext.Levels.Where(level => request.LevelsIds.Contains(level.Id)).ToListAsync();
+            var languages = await _korepetynderDbContext.Languages.Where(language => request.LanguagesIds.Contains(language.Id)).ToListAsync();
+            if (levels.Count != request.LevelsIds.Count() || languages.Count != request.LanguagesIds.Count())
+            {
+                throw new InvalidOperationException("Provided incorrect id");
+            }
+
+            lesson.Frequency = request.Frequency;
+            lesson.Subject = subject;
+            lesson.Levels = levels;
+            lesson.Languages = languages;
+            await _korepetynderDbContext.SaveChangesAsync();
+
+            return new StudentLessonResponse(lesson);
         }
     }
 }

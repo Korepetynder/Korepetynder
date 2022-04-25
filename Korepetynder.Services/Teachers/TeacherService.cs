@@ -151,6 +151,41 @@ namespace Korepetynder.Services.Teachers
             return new TeacherResponse(teacher.Id, locations.Select(location => location.Id));
         }
 
+        public async Task<TeacherLessonResponse> UpdateLesson(int id, TeacherLessonRequest request)
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var teacherUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
+            if (teacherUser.TeacherId is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
+            }
+            var lesson = await _korepetynderDbContext.TeacherLesson
+                .Where(lesson => lesson.Id == id)
+                .Include(lesson => lesson.Subject)
+                .Include(lesson => lesson.Levels)
+                .Include(lesson => lesson.Languages)
+                .SingleAsync();
+            if (lesson.TeacherId != teacherUser.TeacherId)
+            {
+                throw new ArgumentException("Lesson does not belong to current user");
+            }
+            var subject = await _korepetynderDbContext.Subjects.Where(subject => subject.Id == request.SubjectId).SingleAsync();
+            var levels = await _korepetynderDbContext.Levels.Where(level => request.LevelsIds.Contains(level.Id)).ToListAsync();
+            var languages = await _korepetynderDbContext.Languages.Where(language => request.LanguagesIds.Contains(language.Id)).ToListAsync();
+            if (levels.Count != request.LevelsIds.Count() || languages.Count != request.LanguagesIds.Count())
+            {
+                throw new InvalidOperationException("Provided incorrect id");
+            }
+
+            lesson.Frequency = request.Frequency;
+            lesson.Subject = subject;
+            lesson.Levels = levels;
+            lesson.Languages = languages;
+            await _korepetynderDbContext.SaveChangesAsync();
+
+            return new TeacherLessonResponse(lesson);
+        }
+
         public async Task<TeacherResponse> UpdateTeacher(TeacherRequest request)
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);

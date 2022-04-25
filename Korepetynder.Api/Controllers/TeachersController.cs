@@ -84,6 +84,27 @@ namespace Korepetynder.Api.Controllers
                 return BadRequest();
             }
         }
+
+        /// <summary>
+        /// Updates chosen lesson
+        /// </summary>
+        /// <param name="lessonRequest">Request containing data for updated lesson.</param>
+        [HttpPut("Lessons/{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<TeacherLessonResponse>> PutLesson([FromRoute] int id, [FromBody] TeacherLessonRequest lessonRequest)
+        {
+            try
+            {
+                var lesson = await _teachersService.UpdateLesson(id, lessonRequest);
+
+                return lesson;
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
+            {
+                return BadRequest();
+            }
+        }
         /// <summary>
         /// Removes teacher connected to provided user.
         /// </summary>
