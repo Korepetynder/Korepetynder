@@ -9,6 +9,7 @@ import { MockTutors } from './mock-tutors';
   styleUrls: ['./tutor-card.component.scss']
 })
 export class TutorCardComponent implements OnInit {
+  panelOpenState = false;
   tutor: TutorDetails = MockTutors[0];
   id: number = 0;
 
