@@ -30,6 +30,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 import { MatExpansionModule } from "@angular/material/expansion";
+import { GalleryModule } from "ng-gallery";
 
 
 
@@ -39,23 +40,24 @@ import { MatExpansionModule } from "@angular/material/expansion";
     HomeComponent,
     TutorCardComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        MatSidenavModule,
-        MatListModule,
-        MatMenuModule,
-        MsalModule,
-        LayoutModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatExpansionModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatListModule,
+    MatMenuModule,
+    MsalModule,
+    LayoutModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatExpansionModule,
+    GalleryModule
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
