@@ -41,6 +41,7 @@
     <button mat-raised-button color="accent" type="submit" [disabled]="isSaving">
       {{isEdit ? 'Zapisz zmiany' : 'Dalej'}}
     </button>
+    <mat-spinner *ngIf="isSaving" diameter="30"></mat-spinner>
   </div>
 
 </form>

@@ -45,13 +45,20 @@
       <span matSuffix>h</span>
     </mat-form-field>
 
-    <button mat-raised-button type="submit" color="accent" [disabled]="isSaving">
-      Zapisz
-    </button>
+    <div class="save-button">
+      <button mat-raised-button type="submit" color="accent" [disabled]="isSaving">
+        Zapisz
+      </button>
+    </div>
+    <div class="save-button" *ngIf="isSaving">
+      <mat-spinner diameter="30"></mat-spinner>
+    </div>
 
-    <button mat-fab color="accent" type="button" (click)="removeLesson()">
-      <mat-icon>delete</mat-icon>
-    </button>
+    <div class="delete-button">
+      <button mat-fab color="accent" type="button" (click)="removeLesson()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
 
   </mat-expansion-panel>
 </form>

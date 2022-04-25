@@ -42,7 +42,7 @@ export class SettingsGeneralComponent implements OnInit {
     private fb: FormBuilder,
     private userSetingsService: UserSettingsService,
     private userService: UserService,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private msalBroadcastService: MsalBroadcastService,
     private authService: MsalService) { }
 
@@ -81,7 +81,7 @@ export class SettingsGeneralComponent implements OnInit {
 
     saveObservable.subscribe(() => {
       this.isSaving = false;
-      this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
+      this.snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
       this.completed.emit();
     });
   }

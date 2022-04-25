@@ -41,7 +41,7 @@ export class SettingsStudentComponent implements OnInit {
     private fb: FormBuilder,
     private studentSettingsService: StudentSettingsService,
     private userService: UserService,
-    private _snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar) { }
 
   get locationsCtrl() {
     return this.profileForm.get('locations') as FormControl;
@@ -65,10 +65,10 @@ export class SettingsStudentComponent implements OnInit {
     this.lessons.push(this.fb.group({
       id: [null],
       subject: [null, [Validators.required]],
-      levels: [[]],
-      languages: [[]],
-      minCost: [null],
-      maxCost: [null],
+      levels: [[], [Validators.required]],
+      languages: [[], [Validators.required]],
+      minCost: [null, [Validators.required]],
+      maxCost: [null, [Validators.required]],
       frequency: [null],
     }));
   }
@@ -119,7 +119,7 @@ export class SettingsStudentComponent implements OnInit {
 
     saveObservable.subscribe(() => {
       this.isSaving = false;
-      this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
+      this.snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
     });
   }
 }

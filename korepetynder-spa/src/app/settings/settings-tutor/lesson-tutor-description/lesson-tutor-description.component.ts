@@ -29,7 +29,7 @@ export class LessonTutorDescriptionComponent {
   isSaving = false;
 
   constructor(private tutorSettingsService: TutorSettingsService,
-    private _snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar) { }
 
   saveChanges(): void {
     if (this.lesson.invalid) {
@@ -47,7 +47,7 @@ export class LessonTutorDescriptionComponent {
 
     saveObservable.subscribe(lesson => {
       this.isSaving = false;
-      this._snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
+      this.snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
       this.lessonId = lesson.id;
     });
   }
@@ -58,7 +58,7 @@ export class LessonTutorDescriptionComponent {
       : of(null);
 
     deleteObservable.subscribe(() => {
-      this._snackBar.open("Usunięto pomyślnie.", "OK", {duration: 5000});
+      this.snackBar.open("Usunięto pomyślnie.", "OK", {duration: 5000});
       this.lessonRemove.emit();
     });
   }
