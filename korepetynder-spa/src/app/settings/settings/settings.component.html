@@ -1,13 +1,34 @@
-<mat-tab-group mat-align-tabs="center">
+<mat-tab-group mat-align-tabs="center" *ngIf="isEdit" [selectedIndex]="selectedTab">
   <mat-tab label="Podstawowe">
-    <app-settings-general></app-settings-general>
+    <app-settings-general [isEdit]="true"></app-settings-general>
   </mat-tab>
 
   <mat-tab label="Uczeń">
-    <app-settings-student></app-settings-student>
+    <app-settings-student [isEdit]="true" [languages]="languages" [levels]="levels" [locations]="locations"
+      [subjects]="subjects"></app-settings-student>
   </mat-tab>
 
   <mat-tab label="Korepetytor">
-    <app-settings-tutor></app-settings-tutor>
+    <app-settings-tutor [isEdit]="true" [languages]="languages" [levels]="levels" [locations]="locations"
+      [subjects]="subjects"></app-settings-tutor>
   </mat-tab>
 </mat-tab-group>
+
+<mat-stepper linear #stepper *ngIf="!isEdit">
+  <mat-step [completed]="generalStepCompleted" editable="false">
+    <ng-template matStepLabel>Uzupełnij podstawowe informacje</ng-template>
+    <app-settings-general [isEdit]="false" (completed)="onGeneralStepComplete()"></app-settings-general>
+  </mat-step>
+  <mat-step [completed]="studentStepCompleted" editable="false">
+    <ng-template matStepLabel>Uzupełnij informacje jako uczeń</ng-template>
+    <app-settings-student [isEdit]="false" [languages]="languages" [levels]="levels" [locations]="locations"
+      [subjects]="subjects" (statusChange)="onStudentStepStatusChange($event)">
+    </app-settings-student>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Uzupełnij informacje jako korepetytor</ng-template>
+    <app-settings-tutor [isEdit]="false" [languages]="languages" [levels]="levels" [locations]="locations"
+      [subjects]="subjects" (statusChange)="onTutorStepStatusChange($event)">
+    </app-settings-tutor>
+  </mat-step>
+</mat-stepper>

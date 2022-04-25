@@ -1,5 +1,5 @@
-using Korepetynder.Contracts.Requests.User;
-using Korepetynder.Contracts.Responses.User;
+using Korepetynder.Contracts.Requests.Users;
+using Korepetynder.Contracts.Responses.Users;
 using Korepetynder.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

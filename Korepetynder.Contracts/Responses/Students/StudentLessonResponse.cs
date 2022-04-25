@@ -1,6 +1,6 @@
-using Korepetynder.Contracts.Responses.Frequencies;
 using Korepetynder.Contracts.Responses.Languages;
 using Korepetynder.Contracts.Responses.Levels;
+using Korepetynder.Contracts.Responses.Subjects;
 using Korepetynder.Data.DbModels;
 
 namespace Korepetynder.Contracts.Responses.Students
@@ -8,15 +8,22 @@ namespace Korepetynder.Contracts.Responses.Students
     public class StudentLessonResponse
     {
         public int Id { get; set; }
-        public FrequencyResponse? Frequency { get; set; }
+        public int? Frequency { get; set; }
+        public SubjectResponse Subject { get; set; }
+
+        public int PreferredCostMinimum { get; set; }
+        public int PreferredCostMaximum { get; set; }
+
         public IEnumerable<LanguageResponse> Languages { get; set; }
         public IEnumerable<LevelResponse> Levels { get; set; }
 
         public StudentLessonResponse(StudentLesson lesson)
         {
             Id = lesson.Id;
-            if (lesson.Frequency != null)
-                Frequency = new FrequencyResponse(lesson.Frequency);
+            PreferredCostMaximum = lesson.PreferredCostMaximum;
+            PreferredCostMinimum = lesson.PreferredCostMinimum;
+            Frequency = lesson.Frequency;
+            Subject = new SubjectResponse(lesson.Subject);
             List<LanguageResponse> languages = new List<LanguageResponse>();
             foreach (var language in lesson.Languages)
             {
@@ -28,14 +35,6 @@ namespace Korepetynder.Contracts.Responses.Students
             {
                 levels.Add(new LevelResponse(level));
             }
-            Levels = levels;
-        }
-
-        public StudentLessonResponse(int id, FrequencyResponse frequency, IEnumerable<LanguageResponse> languages, IEnumerable<LevelResponse> levels)
-        {
-            Id = id;
-            Frequency = frequency;
-            Languages = languages;
             Levels = levels;
         }
     }

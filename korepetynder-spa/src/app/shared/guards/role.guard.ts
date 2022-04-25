@@ -13,7 +13,10 @@ export class RoleGuard implements CanActivate, CanLoad {
   private checkRole(expectedRole: UserType): Observable<boolean | UrlTree> {
     return this.userService.getUserType().pipe(
       map(userType => {
-        if (userType === UserType.Uninitialized && expectedRole !== UserType.Uninitialized) {
+        if (expectedRole === UserType.Uninitialized) {
+          return userType === 0;
+        }
+        if (userType === UserType.Uninitialized) {
           return this.router.parseUrl('/settings/init');
         }
         return (userType & expectedRole) !== 0;

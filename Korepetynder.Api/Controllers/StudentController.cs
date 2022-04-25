@@ -104,6 +104,26 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
+        /// Updates chosen lesson
+        /// </summary>
+        /// <param name="lessonRequest">Request containing data for updated lesson.</param>
+        [HttpPut("Lessons/{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<StudentLessonResponse>> PutLesson([FromRoute] int id, [FromBody] StudentLessonRequest lessonRequest)
+        {
+            try
+            {
+                var lesson = await _studentsService.UpdateLesson(id, lessonRequest);
+
+                return lesson;
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
+            {
+                return BadRequest();
+            }
+        }
+        /// <summary>
         /// Creates a new lesson that currently active student is looking for.
         /// </summary>
         /// <param name="lessonRequest">Request containing data for a new lesson.</param>
@@ -111,7 +131,7 @@ namespace Korepetynder.Api.Controllers
         [HttpPost("Lessons")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<StudentLessonResponse>> PostLesson([FromBody] LessonCreationRequest lessonRequest)
+        public async Task<ActionResult<StudentLessonResponse>> PostLesson([FromBody] StudentLessonRequest lessonRequest)
         {
             try
             {
@@ -151,12 +171,12 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Deletes lesson with given id, if it belongs to currently logged user
         /// </summary>
-        /// <param name="id">ID of the lesson.</param>
+        /// <returns>List of lessons.</returns>
         [HttpDelete("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> DeleteLesson([FromRoute] int id)
+        public async Task<ActionResult> GetLessons([FromRoute] int id)
         {
             try
             {
@@ -171,6 +191,27 @@ namespace Korepetynder.Api.Controllers
             catch (ArgumentException)
             {
                 return Forbid();
+            }
+        }
+        /// <summary>
+        /// Gets suggestions of teachers.
+        /// </summary>
+        /// <returns>List of teachers.</returns>
+        [HttpGet("Teachers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<TeacherDataResponse>>> GetTeachers()
+        {
+            try
+            {
+                var teachers = await _studentsService.GetSuggestedTeachers();
+
+                Response.Headers.Add("X-Total-Count", teachers.Count().ToString());
+                return teachers.ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
             }
         }
 

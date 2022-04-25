@@ -1,5 +1,5 @@
-using Korepetynder.Contracts.Requests.User;
-using Korepetynder.Contracts.Responses.User;
+using Korepetynder.Contracts.Requests.Users;
+using Korepetynder.Contracts.Responses.Users;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
 using Microsoft.AspNetCore.Http;
@@ -28,25 +28,25 @@ namespace Korepetynder.Services.Users
             {
                 throw new InvalidOperationException("User with this Guid already exists");
             }
-            var user = new User(id, request.FirstName, request.LastName, request.UserName, request.Age);
+            var user = new User(id, request.FirstName, request.LastName, request.BirthDate, request.Email, request.PhoneNumber);
             await _korepetynderDbContext.Users.AddAsync(user);
             await _korepetynderDbContext.SaveChangesAsync();
-            return new UserResponse(user.Id, user.FirstName, user.LastName, user.UserName, user.Age, false, false);
+            return new UserResponse(user.Id, user.FirstName, user.LastName, user.PhoneNumber, user.Email, user.BirthDate, false, false);
         }
         public async Task<UserResponse> UpdateUser(UserRequest request)
         {
             var id = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var user = await _korepetynderDbContext.Users.Where(user => user.Id == id).SingleAsync();
-            user.SetValues(request.FirstName, request.LastName, request.UserName, request.Age);
+            user.SetValues(request.FirstName, request.LastName, request.BirthDate, request.Email, request.PhoneNumber);
             await _korepetynderDbContext.SaveChangesAsync();
-            return new UserResponse(user.Id, user.FirstName, user.LastName, user.UserName, user.Age, user.StudentId is not null, user.TeacherId is not null);
+            return new UserResponse(user.Id, user.FirstName, user.LastName, user.PhoneNumber, user.Email, user.BirthDate, user.StudentId is not null, user.TeacherId is not null);
         }
 
         public async Task<UserResponse> GetUser()
         {
             var id = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var user = await _korepetynderDbContext.Users.Where(u => u.Id == id).SingleAsync();
-            return new UserResponse(user.Id, user.FirstName, user.LastName, user.UserName, user.Age, user.StudentId is not null, user.TeacherId is not null);
+            return new UserResponse(user.Id, user.FirstName, user.LastName, user.PhoneNumber, user.Email, user.BirthDate, user.StudentId is not null, user.TeacherId is not null);
 
         }
 

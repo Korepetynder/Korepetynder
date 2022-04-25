@@ -14,6 +14,8 @@ namespace Korepetynder.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            Seeder.SeedData(modelBuilder);
+
             modelBuilder.Entity<MultimediaFile>()
                 .Property(file => file.Type)
                 .HasConversion<int>();
@@ -23,12 +25,20 @@ namespace Korepetynder.Data
                 .HasComputedColumnSql($"[{nameof(User.FirstName)}] + ' ' + [{nameof(User.LastName)}]");
             modelBuilder.Entity<StudentLesson>()
                 .HasMany(lesson => lesson.Levels)
-                .WithMany(level => level.Lessons)
+                .WithMany(level => level.StudentLessons)
                 .UsingEntity(join => join.ToTable("LessonLevels"));
+            modelBuilder.Entity<TeacherLesson>()
+                .HasMany(lesson => lesson.Levels)
+                .WithMany(level => level.TeacherLessons)
+                .UsingEntity(join => join.ToTable("TeacherLessonLevels"));
             modelBuilder.Entity<StudentLesson>()
                 .HasMany(lesson => lesson.Languages)
-                .WithMany(language => language.Lessons)
+                .WithMany(language => language.StudentLessons)
                 .UsingEntity(join => join.ToTable("LessonLanguages"));
+            modelBuilder.Entity<TeacherLesson>()
+                .HasMany(lesson => lesson.Languages)
+                .WithMany(language => language.TeacherLessons)
+                .UsingEntity(join => join.ToTable("TeacherLessonLanguages"));
 
             modelBuilder.Entity<Student>()
                 .HasMany(student => student.PreferredLocations)
@@ -43,6 +53,10 @@ namespace Korepetynder.Data
                 .HasMany(teacher => teacher.TeachingLocations)
                 .WithMany(location => location.Teachers)
                 .UsingEntity(join => join.ToTable("TeacherTeachingLocations"));
+
+            modelBuilder.Entity<User>()
+                .Property(user => user.BirthDate)
+                .HasConversion(date => date, date => DateTime.SpecifyKind(date, DateTimeKind.Utc));
         }
 
         public DbSet<User> Users => Set<User>();
@@ -56,7 +70,6 @@ namespace Korepetynder.Data
         public DbSet<Language> Languages => Set<Language>();
         public DbSet<StudentLesson> StudentLesson => Set<StudentLesson>();
         public DbSet<TeacherLesson> TeacherLesson => Set<TeacherLesson>();
-        public DbSet<Frequency> Frequencies => Set<Frequency>();
 
     }
 }

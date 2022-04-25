@@ -5,10 +5,9 @@ namespace Korepetynder.Data.DbModels
     public class StudentLesson
     {
         public int Id { get; set; }
-
-        public int? FrequencyId { get; set; }
-        [ForeignKey(nameof(FrequencyId))]
-        public Frequency? Frequency { get; set; } = null!;
+        public int PreferredCostMinimum { get; set; }
+        public int PreferredCostMaximum { get; set; }
+        public int? Frequency { get; set; }
 
         public int SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
