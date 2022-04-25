@@ -1,4 +1,4 @@
- using Korepetynder.Contracts.Requests.Students;
+using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Services.Students;
 using Microsoft.AspNetCore.Authorization;

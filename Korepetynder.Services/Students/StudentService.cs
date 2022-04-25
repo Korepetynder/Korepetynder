@@ -45,6 +45,8 @@ namespace Korepetynder.Services.Students
             lesson.Subject = subject;
             lesson.Levels = levels;
             lesson.Languages = languages;
+            lesson.PreferredCostMinimum = request.PreferredCostMinimum;
+            lesson.PreferredCostMaximum = request.PreferredCostMaximum;
             await _korepetynderDbContext.StudentLesson.AddAsync(lesson);
             await _korepetynderDbContext.SaveChangesAsync();
 
@@ -133,7 +135,6 @@ namespace Korepetynder.Services.Students
             }
             var userLessons = _korepetynderDbContext.StudentLesson
                 .Where(lesson => lesson.StudentId == studentUser.StudentId)
-                .Include(lesson => lesson.Frequency)
                 .Include(lesson => lesson.Languages)
                 .Include(lesson => lesson.Levels)
                 .Include(lesson => lesson.Subject)

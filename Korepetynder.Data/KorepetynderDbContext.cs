@@ -14,6 +14,8 @@ namespace Korepetynder.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            Seeder.SeedData(modelBuilder);
+
             modelBuilder.Entity<MultimediaFile>()
                 .Property(file => file.Type)
                 .HasConversion<int>();
