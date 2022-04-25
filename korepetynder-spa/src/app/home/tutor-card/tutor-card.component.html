@@ -7,7 +7,7 @@
   </mat-card-header>
   <mat-divider inset></mat-divider>
   <mat-card-content>
-    <h3>Lessons :</h3>
+    <h3>Lessons:</h3>
 
     <div class="tutor-card-lessons-list">
       <div class="tutor-card-lesson-display" *ngFor="let lesson of tutor.lessons; let last = last">
@@ -20,7 +20,8 @@
           </span>
         </p>
         <p>Język:
-          <span *ngFor="let language of lesson.languages; let last = last">{{language.name}}<span *ngIf="!last">, </span>
+          <span *ngFor="let language of lesson.languages; let last = last">{{language.name}}<span *ngIf="!last">,
+            </span>
           </span>
         </p>
         <mat-divider *ngIf="!last"></mat-divider>
@@ -30,11 +31,11 @@
 
   <mat-card-actions>
     <button mat-icon-button aria-label="Icon favorite button" class="tutor-card-icon favorite-icon"
-            (click)="addToFavorites()">
+      (click)="addToFavorites()">
       <mat-icon>favorite</mat-icon>
     </button>
     <button mat-icon-button color="primary" aria-label="Icon next button" class="tutor-card-icon next-icon"
-            (click)="getNextTutor()">
+      (click)="getNextTutor()">
       <mat-icon>navigate_next</mat-icon>
     </button>
   </mat-card-actions>

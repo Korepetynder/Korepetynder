@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
 import {HomeComponent} from "./home/home.component";
+import { RoleGuard } from './shared/guards/role.guard';
+import { UserType } from './shared/models/userType';
 
 const routes: Routes = [
   {
@@ -19,7 +21,11 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [MsalGuard, RoleGuard],
+    data: {
+      expectedRole: UserType.Student
+    }
   }
 ];
 
