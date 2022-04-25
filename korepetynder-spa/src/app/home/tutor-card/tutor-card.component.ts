@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Tutor } from './tutor';
+import { TutorDetails } from './tutorDetails';
 import { MockTutors } from './mock-tutors';
 
 @Component({
@@ -9,7 +9,8 @@ import { MockTutors } from './mock-tutors';
   styleUrls: ['./tutor-card.component.scss']
 })
 export class TutorCardComponent implements OnInit {
-  tutor: Tutor = MockTutors[0];
+  tutor: TutorDetails = MockTutors[0];
+  id: number = 0;
 
   constructor() { }
 
@@ -26,10 +27,9 @@ export class TutorCardComponent implements OnInit {
       this.getFirstTutor();
     }
     else {
-      let id = this.tutor.id;
-      id = (id + 1) % 4;
+      this.id = (this.id + 1) % 4;
 
-      this.tutor = MockTutors[id];
+      this.tutor = MockTutors[this.id];
     }
   }
 

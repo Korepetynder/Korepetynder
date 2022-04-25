@@ -1,8 +1,61 @@
-import { Tutor } from './tutor';
+import { TutorDetails } from './tutorDetails';
+import { Subject } from "../../settings/models/responses/subject";
+import { Level } from "../../settings/models/responses/level";
+import { Language } from "../../settings/models/responses/language";
 
-export const MockTutors: Tutor[] = [
-  { id: 0, name: 'Mr Nice', description: "Hi I am a very good tutor!", contactInfo: "+48 456 475 486" },
-  { id: 1, name: 'Mr Evil', description: "Hi I am a good tutor!", contactInfo: "+48 111 111 111" },
-  { id: 2, name: 'Mr Sun', description: "Hi I am a very sunny tutor!", contactInfo: "+48 433 433 386" },
-  { id: 3, name: 'Mrs Marvel', description: "Hi I am an amazing tutor!", contactInfo: "+48 133 111 331" },
+export const MockTutors: TutorDetails[] = [
+  {
+    fullName: "Mr Nice",
+    email: "mrnice@gmial.com",
+    phoneNumber: "+48 345 457 569",
+    locations: [
+      {id: 1, name: "NYC", parentId: null, childrenLocations: []}
+    ],
+    lessons: [
+      {
+        id: 1, cost: 100, frequency: 2,
+        subject: {id: 1, name: "matematyka"},
+        levels: [{id: 1, name: "studia"}, {id: 2, name: "liceum"}, {id: 3, name: "szkoła podstawowa"}],
+        languages: [{id: 1, name: "polski"}, {id: 2, name: "angielski"}]
+      },
+      {
+        id: 2, cost: 100, frequency: 2,
+        subject: {id: 1, name: "matematyka"},
+        levels: [{id: 1, name: "studia"}, {id: 2, name: "liceum"}, {id: 3, name: "szkoła podstawowa"}],
+        languages: [{id: 1, name: "polski"}, {id: 2, name: "angielski"}]
+      }
+    ]
+  },
+  {
+    fullName: "Mrs Marvel",
+    email: "marvel@gmial.com",
+    phoneNumber: "+48 111 457 111",
+    locations: [
+      {id: 1, name: "NYC", parentId: null, childrenLocations: []}
+    ],
+    lessons: [
+      {
+        id: 1, cost: 100, frequency: 2,
+        subject: {id: 1, name: "matematyka"},
+        levels: [{id: 1, name: "studia"}],
+        languages: [{id: 1, name: "polski"}]
+      }
+    ]
+  },
+  {
+    fullName: "Mr Magneto",
+    email: "magneto@gmial.com",
+    phoneNumber: "+48 345 457 569",
+    locations: [
+      {id: 1, name: "NYC", parentId: null, childrenLocations: []}
+    ],
+    lessons: [
+      {
+        id: 1, cost: 100, frequency: 2,
+        subject: {id: 1, name: "matematyka"},
+        levels: [{id: 1, name: "studia"}],
+        languages: [{id: 1, name: "polski"}]
+      }
+    ]
+  }
 ];
