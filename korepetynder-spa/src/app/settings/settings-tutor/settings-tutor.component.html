@@ -1,31 +1,51 @@
-<form class="main-div" [formGroup]="profileForm">
+<form class="main-div" [formGroup]="profileForm" (ngSubmit)="saveChanges()">
   <div>
     <mat-slide-toggle class="status-slider" formControlName="isTutor">Chcę być korepetytorem.</mat-slide-toggle>
   </div>
 
   <div *ngIf="isTutor">
+    <mat-form-field appearance="outline">
+      <mat-label>Lokalizacje korepetycji</mat-label>
+      <mat-select formControlName="locations" multiple>
+        <ng-container *ngFor="let location of locations">
+          <mat-option [value]="location.id">
+            {{location.name}}
+          </mat-option>
+          <mat-optgroup *ngIf="location.childrenLocations.length > 0" [label]="'Podlokacje w: ' + location.name">
+            <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id">
+              {{childLocation.name}}
+            </mat-option>
+          </mat-optgroup>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <button mat-raised-button color="accent" type="submit">Zapisz zmiany</button>
+  </div>
+
+  <div *ngIf="isTutor">
     <p>Uzupełnij opisy oferowanych korepetycji.</p>
     <mat-accordion multi>
-      <app-lesson-tutor-description *ngFor="let lesson of lessonsControls; let i = index" [lesson]="lesson" [index]="i + 1">
+      <app-lesson-tutor-description *ngFor="let lesson of lessonsControls; let i = index" [lesson]="lesson" [index]="i + 1"
+        [subjects]="subjects" [languages]="languages" [levels]="levels" (lessonRemove)="removeLesson(i)">
       </app-lesson-tutor-description>
     </mat-accordion>
 
     <div id="add-button">
-      <button mat-fab color="accent" (click)="addLesson()">
+      <button mat-fab color="accent" type="button" (click)="addLesson()">
         <mat-icon>add</mat-icon>
       </button>
     </div>
   </div>
 
-  <div *ngIf="router.url === '/settings'" class="save-settings-button">
-    <button mat-raised-button color="accent">Zapisz zmiany</button>
-  </div>
+  <!-- <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
+    <button mat-raised-button color="accent" type="button" matStepperNext>Dalej</button>
+  </div> -->
 
-  <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
-    <button mat-raised-button color="accent" matStepperNext>Dalej</button>
-  </div>
-  <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
+  <!-- <div *ngIf="router.url === '/settings/init'" class="save-settings-button">
     <button mat-raised-button color="accent" matStepperPrevious>Wróć</button>
-  </div>
+  </div> -->
 
 </form>

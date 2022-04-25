@@ -51,6 +51,7 @@ namespace Korepetynder.Services.Teachers
             lesson.Subject = subject;
             lesson.Levels = levels;
             lesson.Languages = languages;
+            lesson.Cost = request.Cost;
             await _korepetynderDbContext.TeacherLesson.AddAsync(lesson);
             await _korepetynderDbContext.SaveChangesAsync();
 

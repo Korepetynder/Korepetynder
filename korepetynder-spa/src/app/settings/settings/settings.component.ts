@@ -22,6 +22,7 @@ export class SettingsComponent implements OnInit {
 
   generalStepCompleted = false;
   studentStepCompleted = false;
+  tutorStepCompleted = false;
 
   constructor(
     private dictionariesService: DictionariesService,
@@ -43,5 +44,9 @@ export class SettingsComponent implements OnInit {
 
   onStudentStepStatusChange(status: boolean): void {
     this.studentStepCompleted = status;
+  }
+
+  onTutorStepStatusChange(status: boolean): void {
+    this.tutorStepCompleted = status;
   }
 }

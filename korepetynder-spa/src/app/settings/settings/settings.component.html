@@ -8,7 +8,7 @@
   </mat-tab>
 
   <mat-tab label="Korepetytor">
-    <app-settings-tutor></app-settings-tutor>
+    <app-settings-tutor [languages]="languages" [levels]="levels" [locations]="locations" [subjects]="subjects"></app-settings-tutor>
   </mat-tab>
 </mat-tab-group>
 
@@ -25,6 +25,8 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Uzupełnij informacje jako korepetytor</ng-template>
-    <app-settings-tutor></app-settings-tutor>
+    <app-settings-tutor [languages]="languages" [levels]="levels" [locations]="locations" [subjects]="subjects"
+      (statusChange)="onTutorStepStatusChange($event)">
+    </app-settings-tutor>
   </mat-step>
 </mat-stepper>

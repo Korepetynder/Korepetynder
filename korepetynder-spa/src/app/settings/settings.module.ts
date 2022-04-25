@@ -19,7 +19,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
-import { SettingsInitComponent } from './settings-init/settings-init.component';
 import { LessonDescriptionComponent } from './settings-student/lesson-description/lesson-description.component';
 import { SettingsStudentComponent } from './settings-student/settings-student.component';
 import { LessonTutorDescriptionComponent } from './settings-tutor/lesson-tutor-description/lesson-tutor-description.component';
@@ -36,8 +35,7 @@ import { SettingsRoutingModule } from './settings-routing.module';
     SettingsStudentComponent,
     SettingsTutorComponent,
     LessonDescriptionComponent,
-    LessonTutorDescriptionComponent,
-    SettingsInitComponent
+    LessonTutorDescriptionComponent
   ],
   imports: [
     CommonModule,

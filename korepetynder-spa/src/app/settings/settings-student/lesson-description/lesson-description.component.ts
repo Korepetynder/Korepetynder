@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { of } from 'rxjs';
-import { StudentLessonRequest } from '../../models/requests/studentCreationRequest';
+import { StudentLessonRequest } from '../../models/requests/studentLessonRequest';
 import { Language } from '../../models/responses/language';
 import { Level } from '../../models/responses/level';
 import { Subject } from '../../models/responses/subject';
@@ -46,7 +46,6 @@ export class LessonDescriptionComponent {
     saveObservable.subscribe(lesson => {
       this.isSaving = false;
       this.lessonId = lesson.id;
-
     });
   }
 

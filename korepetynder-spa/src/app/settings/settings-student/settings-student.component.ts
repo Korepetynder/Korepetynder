@@ -40,11 +40,13 @@ export class SettingsStudentComponent implements OnInit {
     private studentSettingsService: StudentSettingsService,
     private userService: UserService) { }
 
-  get locationsCtrl() { return this.profileForm.get('locations') as FormControl; }
+  get locationsCtrl() {
+    return this.profileForm.get('locations') as FormControl;
+  }
+
   get lessons() {
     return this.profileForm.get('lessons') as FormArray;
   }
-
   get lessonsControls() {
     return this.lessons.controls as FormGroup[];
   }

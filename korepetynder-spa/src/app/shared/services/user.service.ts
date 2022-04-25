@@ -29,7 +29,7 @@ export class UserService {
       userType |= UserType.Student;
     }
     if (roles.isTeacher) {
-      userType |= UserType.Teacher;
+      userType |= UserType.Tutor;
     }
 
     return userType;
@@ -68,9 +68,9 @@ export class UserService {
     );
   }
 
-  isTeacher(): Observable<boolean> {
+  isTutor(): Observable<boolean> {
     return this.getUserType().pipe(
-      map(userType => (userType & UserType.Teacher) !== 0)
+      map(userType => (userType & UserType.Tutor) !== 0)
     );
   }
 }

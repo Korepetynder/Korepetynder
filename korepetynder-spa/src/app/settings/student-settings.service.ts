@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserService } from '../shared/services/user.service';
-import { StudentLessonRequest } from './models/requests/studentCreationRequest';
+import { StudentLessonRequest } from './models/requests/studentLessonRequest';
 import { StudentRequest } from './models/requests/studentRequest';
 import { Student } from './models/responses/student';
 import { StudentLesson } from './models/responses/studentLesson';
