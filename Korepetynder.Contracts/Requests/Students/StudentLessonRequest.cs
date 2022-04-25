@@ -1,6 +1,6 @@
 namespace Korepetynder.Contracts.Requests.Students
 {
-    public class LessonCreationRequest
+    public class StudentLessonRequest
     {
         public int? Frequency { get; set; }
         public int SubjectId { get; set; }
