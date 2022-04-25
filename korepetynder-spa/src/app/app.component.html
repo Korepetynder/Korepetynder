@@ -13,7 +13,7 @@
     </button>
 
     <mat-menu #menuLogout="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span>Wyloguj się</span>
       </button>

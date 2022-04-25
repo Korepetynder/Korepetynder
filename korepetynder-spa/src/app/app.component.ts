@@ -43,7 +43,11 @@ export class AppComponent implements OnInit {
 
   }
 
-  private checkAndSetActiveAccount() {
+  logout(): void {
+    this.authService.logout();
+  }
+
+  private checkAndSetActiveAccount(): void {
     /**
      * If no active account set but there are accounts signed in, sets first account to active account.
      * To use active account set here, subscribe to inProgress$ first in the component.
