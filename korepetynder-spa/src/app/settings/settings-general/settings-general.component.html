@@ -39,7 +39,7 @@
 
   <div class="save-settings-button">
     <button mat-raised-button color="accent" type="submit" [disabled]="isSaving">
-      {{router.url === '/settings' ? 'Zapisz zmiany' : 'Dalej'}}
+      {{isEdit ? 'Zapisz zmiany' : 'Dalej'}}
     </button>
   </div>
 
