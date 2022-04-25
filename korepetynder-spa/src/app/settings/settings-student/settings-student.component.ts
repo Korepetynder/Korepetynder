@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { StudentRequest } from '../models/requests/studentRequest';
+import { Language } from '../models/responses/language';
+import { Level } from '../models/responses/level';
+import { Location } from '../models/responses/location';
+import { Subject } from '../models/responses/subject';
+import { StudentSettingsService } from '../student-settings.service';
 
 @Component({
   selector: 'app-settings-student',
@@ -8,14 +14,25 @@ import { Router } from '@angular/router';
   styleUrls: ['./settings-student.component.scss']
 })
 export class SettingsStudentComponent implements OnInit {
-  isStudent: boolean = true;
+  @Input() isStudent: boolean = false;
+
+  @Input() languages: Language[] = [];
+  @Input() levels: Level[] = [];
+  @Input() locations: Location[] = [];
+  @Input() subjects: Subject[] = [];
+
+  @Output() completed = new EventEmitter<void>();
+
+  isSaving = false;
+
   profileForm = this.fb.group({
-    isStudent: [true],
+    locations: [[]],
     lessons: this.fb.array([])
   });
 
-  constructor(public router: Router, private fb: FormBuilder) { }
+  constructor(public router: Router, private fb: FormBuilder, private studentSettingsService: StudentSettingsService) { }
 
+  get locationsCtrl() { return this.profileForm.get('locations') as FormControl; }
   get lessons() {
     return this.profileForm.get('lessons') as FormArray;
   }
@@ -26,11 +43,13 @@ export class SettingsStudentComponent implements OnInit {
 
   addLesson(): void {
     this.lessons.push(this.fb.group({
-      course: ['',  [Validators.required]],
-      level: ['',  [Validators.required]],
+      lessonId: [null],
+      subject: ['', [Validators.required]],
+      levels: [[]],
+      languages: [[]],
       minCost: [''],
       maxCost: [''],
-      hoursWeekly: [''],
+      frequency: [''],
     }));
   }
 
@@ -38,12 +57,31 @@ export class SettingsStudentComponent implements OnInit {
     this.lessons.removeAt(id - 1);
   }
 
-  ngOnInit() {
-    this.profileForm.valueChanges.subscribe(val => {
-      if (val.isStudent === true)
-         this.isStudent = true;
-      else
-         this.isStudent = false;
+  ngOnInit(): void {
+    if (this.isStudent) {
+      this.studentSettingsService.getStudent().subscribe(student => this.profileForm.patchValue(student));
+
+      this.studentSettingsService.getLessons().subscribe(lessons => {
+
+      });
+    }
+  }
+
+  saveChanges(): void {
+    if (this.profileForm.invalid) {
+      return;
+    }
+
+    this.isSaving = true;
+    const studentRequest = new StudentRequest(this.locationsCtrl.value);
+
+    const saveObservable = this.isStudent
+      ? this.studentSettingsService.updateStudent(studentRequest)
+      : this.studentSettingsService.createStudent(studentRequest);
+
+    saveObservable.subscribe(() => {
+      this.isSaving = false;
+      this.completed.emit();
     });
   }
 }

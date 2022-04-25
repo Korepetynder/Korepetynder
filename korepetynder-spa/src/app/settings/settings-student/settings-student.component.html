@@ -1,6 +1,24 @@
 <form class="main-div" [formGroup]="profileForm">
   <div>
-    <mat-slide-toggle class="status-slider" formControlName="isStudent">Chcę być uczniem.</mat-slide-toggle>
+    <mat-slide-toggle class="status-slider" [(ngModel)]="isStudent">Chcę być uczniem.</mat-slide-toggle>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Preferowane lokalizacje</mat-label>
+      <mat-select formControlName="locations" multiple>
+        <ng-container *ngFor="let location of locations">
+          <mat-option [value]="location.id">
+            {{location.name}}
+          </mat-option>
+          <mat-optgroup *ngIf="location.childrenLocations !== []" [label]="'Podlokacje w:' + location.name">
+            <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id">
+              {{childLocation.name}}
+            </mat-option>
+          </mat-optgroup>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div *ngIf="isStudent">

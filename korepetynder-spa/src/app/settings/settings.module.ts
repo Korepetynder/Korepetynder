@@ -6,7 +6,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatLuxonDateModule, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 import { SettingsGeneralComponent } from './settings-general/settings-general.component';
 import { SettingsInitComponent } from './settings-init/settings-init.component';
@@ -53,10 +54,17 @@ import { SettingsRoutingModule } from './settings-routing.module';
     MatTabsModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    MatLuxonDateModule,
     MatAutocompleteModule,
     MatSlideToggleModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSelectModule
+  ],
+  providers: [
+    {
+      provide: MAT_LUXON_DATE_ADAPTER_OPTIONS,
+      useValue: { useUtc: true }
+    }
   ]
 })
 export class SettingsModule { }

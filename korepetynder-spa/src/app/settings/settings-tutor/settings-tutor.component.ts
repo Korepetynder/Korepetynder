@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./settings-tutor.component.scss']
 })
 export class SettingsTutorComponent implements OnInit {
+  @Input() isEdit: boolean = false;
+
   isTutor: boolean = true;
   profileForm = this.fb.group({
     isTutor: [true],
@@ -26,9 +28,9 @@ export class SettingsTutorComponent implements OnInit {
 
   addLesson(): void {
     this.lessons.push(this.fb.group({
-      course: ['',  [Validators.required]],
-      level: ['',  [Validators.required]],
-      cost: ['',  [Validators.required]],
+      course: ['', [Validators.required]],
+      level: ['', [Validators.required]],
+      cost: ['', [Validators.required]],
       hoursWeekly: [''],
     }));
   }
@@ -40,9 +42,9 @@ export class SettingsTutorComponent implements OnInit {
   ngOnInit() {
     this.profileForm.valueChanges.subscribe(val => {
       if (val.isTutor === true)
-         this.isTutor = true;
+        this.isTutor = true;
       else
-         this.isTutor = false;
+        this.isTutor = false;
     });
   }
 }

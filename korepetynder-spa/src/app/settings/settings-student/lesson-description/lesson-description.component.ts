@@ -1,46 +1,62 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { map, Observable, startWith } from 'rxjs';
-import { SettingsStudentComponent } from '../settings-student.component';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { of } from 'rxjs';
+import { StudentLessonRequest } from '../../models/requests/studentCreationRequest';
+import { Language } from '../../models/responses/language';
+import { Level } from '../../models/responses/level';
+import { Subject } from '../../models/responses/subject';
+import { StudentSettingsService } from '../../student-settings.service';
 
 @Component({
   selector: 'app-lesson-description',
   templateUrl: './lesson-description.component.html',
   styleUrls: ['./lesson-description.component.scss']
 })
-export class LessonDescriptionComponent implements OnInit {
+export class LessonDescriptionComponent {
   @Input() index: number = 0;
-  @Input() lesson: FormGroup = this.fb.group({
-    course: [''],
-    level: [''],
-    minCost: [''],
-    maxCost: [''],
-    hoursWeekly: [''],
-  });
+  @Input() lesson!: FormGroup;
 
-  optionsCourse: string[] = ['Matematyka', 'Język polski', 'Język angielski'];
-  optionsLevel: string[] = ['Szkoła podstawowa', 'Szkoła ogólnokształcąca'];
+  @Input() languages: Language[] = [];
+  @Input() levels: Level[] = [];
+  @Input() subjects: Subject[] = [];
 
-  filteredOptionsCourse!: Observable<string[]>;
-  filteredOptionsLevel!: Observable<string[]>;
+  @Output() lessonRemove = new EventEmitter<void>();
 
-  constructor(public settingsStudent: SettingsStudentComponent, private fb: FormBuilder) { }
+  get lessonId(): number | null { return this.lesson.get('lessonId')!.value; }
+  set lessonId(id: number | null) { this.lesson.get('lessonId')!.setValue(id); }
 
-  ngOnInit() {
-    this.filteredOptionsCourse = this.lesson.get('course')!.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(this.optionsCourse, value)),
-    );
+  isSaving = false;
 
-    this.filteredOptionsLevel = this.lesson.get('level')!.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(this.optionsLevel, value)),
-    );
+  constructor(private studentSettingsService: StudentSettingsService) { }
+
+  saveChanges(): void {
+    if (this.lesson.invalid) {
+      return;
+    }
+
+    this.isSaving = true;
+    const formValue = this.lesson.value;
+    const lessonRequest = new StudentLessonRequest(formValue.minCost, formValue.maxCost,
+      formValue.frequency, formValue.subject, formValue.levels, formValue.languages);
+
+    const saveObservable = this.lessonId
+      ? this.studentSettingsService.updateLesson(this.lessonId, lessonRequest)
+      : this.studentSettingsService.createLesson(lessonRequest);
+
+    saveObservable.subscribe(lesson => {
+      this.isSaving = false;
+      this.lessonId = lesson.id;
+      
+    });
   }
 
-  private _filter(options: string[], value: string): string[] {
-    const filterValue = value.toLowerCase();
+  removeLesson(): void {
+    const deleteObservable = this.lessonId
+      ? this.studentSettingsService.deleteLesson(this.lessonId)
+      : of(null);
 
-    return options.filter(option => option.toLowerCase().includes(filterValue));
+    deleteObservable.subscribe(() => {
+      this.lessonRemove.emit();
+    });
   }
 }
