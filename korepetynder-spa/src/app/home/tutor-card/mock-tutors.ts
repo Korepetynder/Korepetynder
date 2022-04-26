@@ -24,7 +24,8 @@ export const MockTutors: TutorDetails[] = [
         levels: [{id: 1, name: "studia"}, {id: 2, name: "liceum"}, {id: 3, name: "szkoła podstawowa"}],
         languages: [{id: 1, name: "polski"}, {id: 2, name: "angielski"}]
       }
-    ]
+    ],
+    isFavorite: false
   },
   {
     fullName: "Mrs Marvel",
@@ -40,7 +41,8 @@ export const MockTutors: TutorDetails[] = [
         levels: [{id: 1, name: "studia"}],
         languages: [{id: 1, name: "polski"}]
       }
-    ]
+    ],
+    isFavorite: false
   },
   {
     fullName: "Mr Magneto",
@@ -56,6 +58,7 @@ export const MockTutors: TutorDetails[] = [
         levels: [{id: 1, name: "studia"}],
         languages: [{id: 1, name: "polski"}]
       }
-    ]
+    ],
+    isFavorite: false
   }
 ];

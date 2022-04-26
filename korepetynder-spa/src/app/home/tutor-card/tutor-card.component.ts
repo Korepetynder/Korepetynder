@@ -44,8 +44,8 @@ export class TutorCardComponent implements OnInit {
     }
   }
 
-  addToFavorites(): void {
-
+  handleFavoritesButton(): void {
+    this.tutor.isFavorite = !this.tutor.isFavorite;
   }
 
   getPhotoGallery(): void {

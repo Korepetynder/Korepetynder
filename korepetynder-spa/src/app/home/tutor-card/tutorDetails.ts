@@ -8,4 +8,6 @@ export interface TutorDetails {
   phoneNumber: string | null;
   locations: Location[];
   lessons: TutorLesson[];
+
+  isFavorite: boolean;
 }

@@ -52,8 +52,9 @@
 
   <mat-card-actions>
     <button mat-icon-button aria-label="Icon favorite button" class="tutor-card-icon favorite-icon"
-            (click)="addToFavorites()">
-      <mat-icon>favorite</mat-icon>
+            (click)="handleFavoritesButton()">
+      <mat-icon *ngIf="tutor.isFavorite">favorite</mat-icon>
+      <mat-icon *ngIf="!tutor.isFavorite">favorite_border</mat-icon>
     </button>
     <button mat-icon-button color="primary" aria-label="Icon next button" class="tutor-card-icon next-icon"
             (click)="getNextTutor()">
