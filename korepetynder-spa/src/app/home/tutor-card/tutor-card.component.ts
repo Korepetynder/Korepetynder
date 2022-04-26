@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Gallery, GalleryItem, ImageItem, ThumbnailsPosition, ImageSize } from 'ng-gallery';
+import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 
 import { TutorDetails } from './tutorDetails';
 import { MockTutors } from './mock-tutors';
@@ -32,11 +32,12 @@ export class TutorCardComponent implements OnInit {
   }
 
   getNextTutor(): void {
+    this.getPhotoGallery();
     if (this.tutor == undefined) {
       this.getFirstTutor();
     }
     else {
-      this.id = (this.id + 1) % 4;
+      this.id = (this.id + 1) % 3;
 
       this.tutor = MockTutors[this.id];
     }
