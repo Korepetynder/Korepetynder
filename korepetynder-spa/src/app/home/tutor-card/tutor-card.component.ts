@@ -32,7 +32,8 @@ export class TutorCardComponent implements OnInit {
   }
 
   getNextTutor(): void {
-    this.getPhotoGallery();
+    this.reset();
+
     if (this.tutor == undefined) {
       this.getFirstTutor();
     }
@@ -49,6 +50,11 @@ export class TutorCardComponent implements OnInit {
 
   getPhotoGallery(): void {
     this.items = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
+  }
+
+  reset(): void {
+    this.getPhotoGallery();
+    this.panelOpenState = false;
   }
 }
 
