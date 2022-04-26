@@ -29,6 +29,8 @@ import { HomeComponent } from './home/home.component';
 import { MatCardModule } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
+import { MatExpansionModule } from "@angular/material/expansion";
+import { GalleryModule } from "ng-gallery";
 
 
 
@@ -52,7 +54,9 @@ import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
     MsalModule,
     LayoutModule,
     MatCardModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatExpansionModule,
+    GalleryModule
   ],
   providers: [
     {

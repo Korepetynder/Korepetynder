@@ -7,25 +7,46 @@
   </mat-card-header>
   <mat-divider inset></mat-divider>
   <mat-card-content>
-    <h3>Lessons:</h3>
+    <div class="tutor-gallery-container">
+      <gallery class="tutor-card-photo-gallery" [items]="items"
+               imageSize="cover"
+               thumbPosition="bottom"
+               thumbView="default"
+               [thumbWidth]="50"
+               [thumbHeight]="30"
+               [dots]="true"
+               [counter]="false">
+      </gallery>
+    </div>
 
     <div class="tutor-card-lessons-list">
-      <div class="tutor-card-lesson-display" *ngFor="let lesson of tutor.lessons; let last = last">
-        <p>Koszt: {{lesson.cost}} zł</p>
-        <p>Częstotliwość: {{lesson.frequency}} h/tyg</p>
-        <p>Przedmiot: {{lesson.subject.name}}
-        </p>
-        <p>Poziom:
-          <span *ngFor="let level of lesson.levels; let last = last">{{level.name}}<span *ngIf="!last">, </span>
-          </span>
-        </p>
-        <p>Język:
-          <span *ngFor="let language of lesson.languages; let last = last">{{language.name}}<span *ngIf="!last">,
+      <mat-accordion>
+        <h3>Zajęcia:</h3>
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false"
+                             *ngFor="let lesson of tutor.lessons" >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Przedmiot: {{lesson.subject.name}}
+            </mat-panel-title>
+            <mat-panel-description>
+              <span *ngIf="!panelOpenState">{{lesson.cost}} zł, {{lesson.frequency}} h/tyg</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="tutor-card-lesson-display">
+            <p>Koszt: {{lesson.cost}} zł</p>
+            <p>Częstotliwość: {{lesson.frequency}} h/tyg</p>
+            <p>Poziom:
+              <span *ngFor="let level of lesson.levels; let last = last">{{level.name}}<span *ngIf="!last">, </span>
             </span>
-          </span>
-        </p>
-        <mat-divider *ngIf="!last"></mat-divider>
-      </div>
+            </p>
+            <p>Język:
+              <span *ngFor="let language of lesson.languages; let last = last">{{language.name}}<span *ngIf="!last">, </span>
+            </span>
+            </p>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   </mat-card-content>
 
