@@ -50,25 +50,24 @@ export class TutorCardComponent implements OnInit {
   getPhotoGallery(): void {
     this.items = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
   }
-
 }
 
 
 const data = [
   {
-    srcUrl: 'https://preview.ibb.co/jrsA6R/img12.jpg',
-    previewUrl: 'https://preview.ibb.co/jrsA6R/img12.jpg'
+    srcUrl: 'https://cdn.pixabay.com/photo/2022/04/11/09/32/glacier-7125359_960_720.jpg',
+    previewUrl: 'https://cdn.pixabay.com/photo/2022/04/11/09/32/glacier-7125359_960_720.jpg'
   },
   {
-    srcUrl: 'https://preview.ibb.co/kPE1D6/clouds.jpg',
-    previewUrl: 'https://preview.ibb.co/kPE1D6/clouds.jpg'
+    srcUrl: 'https://cdn.pixabay.com/photo/2021/06/04/19/46/red-poppies-6310772_960_720.jpg',
+    previewUrl: 'https://cdn.pixabay.com/photo/2021/06/04/19/46/red-poppies-6310772_960_720.jpg'
   },
   {
-    srcUrl: 'https://preview.ibb.co/mwsA6R/img7.jpg',
-    previewUrl: 'https://preview.ibb.co/mwsA6R/img7.jpg'
+    srcUrl: 'https://cdn.pixabay.com/photo/2021/07/24/01/54/macaw-6488488_960_720.jpg',
+    previewUrl: 'https://cdn.pixabay.com/photo/2021/07/24/01/54/macaw-6488488_960_720.jpg'
   },
   {
-    srcUrl: 'https://preview.ibb.co/kZGsLm/img8.jpg',
-    previewUrl: 'https://preview.ibb.co/kZGsLm/img8.jpg'
-  }
+    srcUrl: 'https://cdn.pixabay.com/photo/2022/03/10/15/13/clouds-7060045_960_720.jpg',
+    previewUrl: 'https://cdn.pixabay.com/photo/2022/03/10/15/13/clouds-7060045_960_720.jpg'
+  },
 ];
