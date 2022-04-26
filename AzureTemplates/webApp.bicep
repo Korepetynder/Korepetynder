@@ -78,7 +78,7 @@ resource webApp 'Microsoft.Web/sites@2021-03-01' = {
   resource webAppConnectionStrings 'config' = {
     name: 'connectionstrings'
     properties: {
-      CargoRfs: {
+      Korepetynder: {
         type: 'SQLAzure'
         value: dbConnectionString
       }
