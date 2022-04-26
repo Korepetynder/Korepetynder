@@ -36,7 +36,6 @@
           <div class="tutor-card-lesson-display">
             <p>Koszt: {{lesson.cost}} zł</p>
             <p>Częstotliwość: {{lesson.frequency}} h/tyg</p>
-            <p>Przedmiot: {{lesson.subject.name}}</p>
             <p>Poziom:
               <span *ngFor="let level of lesson.levels; let last = last">{{level.name}}<span *ngIf="!last">, </span>
             </span>
