@@ -1,5 +1,4 @@
 using Korepetynder.Contracts.Requests.Teachers;
-using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Contracts.Responses.Teachers;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
@@ -8,11 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Korepetynder.Services.Teachers
 {
@@ -31,6 +25,10 @@ namespace Korepetynder.Services.Teachers
 
         public async Task<TeacherLessonResponse> AddLesson(TeacherLessonRequest request)
         {
+            if (request.LevelsIds.Count() == 0 || request.LanguagesIds.Count() == 0)
+            {
+                throw new InvalidOperationException("Wrong number of arguments");
+            }
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
             if (studentUser.TeacherId is null)
@@ -92,13 +90,13 @@ namespace Korepetynder.Services.Teachers
         public async Task<PagedData<TeacherLessonResponse>> GetLessons(SieveModel model)
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.TeacherId is null)
+            var teacherUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
+            if (teacherUser.TeacherId is null)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a teacher");
             }
             var userLessons = _korepetynderDbContext.TeacherLesson
-                .Where(lesson => lesson.TeacherId == studentUser.TeacherId)
+                .Where(lesson => lesson.TeacherId == teacherUser.TeacherId)
                 .Include(lesson => lesson.Languages)
                 .Include(lesson => lesson.Levels)
                 .Include(lesson => lesson.Subject)
@@ -114,7 +112,6 @@ namespace Korepetynder.Services.Teachers
                 .Select(lesson => new TeacherLessonResponse(lesson))
                 .ToListAsync());
         }
-
         public async Task<TeacherResponse> GetTeacherData()
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
@@ -133,6 +130,10 @@ namespace Korepetynder.Services.Teachers
 
         public async Task<TeacherResponse> InitializeTeacher(TeacherRequest request)
         {
+            if (request.Locations.Count() == 0)
+            {
+                throw new InvalidOperationException("No location selected");
+            }
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var teacherUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
             if (teacherUser.TeacherId is not null)

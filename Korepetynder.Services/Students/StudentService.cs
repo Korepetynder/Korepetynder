@@ -25,6 +25,10 @@ namespace Korepetynder.Services.Students
 
         public async Task<StudentLessonResponse> AddLesson(StudentLessonRequest request)
         {
+            if (request.LevelsIds.Count() == 0 || request.LanguagesIds.Count() == 0)
+            {
+                throw new InvalidOperationException("Wrong number of arguments");
+            }
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
             if (studentUser.StudentId is null)
@@ -69,6 +73,10 @@ namespace Korepetynder.Services.Students
 
         public async Task<StudentResponse> InitializeStudent(StudentRequest request)
         {
+            if (request.Locations.Count() == 0)
+            {
+                throw new InvalidOperationException("No location selected");
+            }
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
             if (studentUser.StudentId is not null)
@@ -110,6 +118,7 @@ namespace Korepetynder.Services.Students
             await _korepetynderDbContext.SaveChangesAsync();
             return new StudentResponse(student.Id, locations.Select(location => location.Id));
         }
+
         public async Task<StudentResponse> GetStudentData()
         {
             Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
