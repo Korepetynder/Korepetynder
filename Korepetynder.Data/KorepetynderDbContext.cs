@@ -47,7 +47,7 @@ namespace Korepetynder.Data
 
             modelBuilder.Entity<Teacher>()
                 .HasMany(teacher => teacher.Students)
-                .WithMany(student => student.Teachers)
+                .WithMany(student => student.DiscardedTeacher)
                 .UsingEntity(join => join.ToTable("TeacherStudents"));
             modelBuilder.Entity<Teacher>()
                 .HasMany(teacher => teacher.TeachingLocations)

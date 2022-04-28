@@ -248,5 +248,20 @@ namespace Korepetynder.Services.Students
 
             return new StudentLessonResponse(lesson);
         }
+        public async Task AddTeacherToIgnored(int teacherId)
+        {
+            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId)
+                .Include(user => user.Student)
+                .Include(user => user.Student.DiscardedTeacher)
+                .SingleAsync();
+            if (studentUser.Student is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
+            }
+            var teacher = await _korepetynderDbContext.Teachers.Where(teacher => teacher.Id == teacherId).SingleAsync();
+            studentUser.Student.DiscardedTeacher.Add(teacher);
+            await _korepetynderDbContext.SaveChangesAsync();
+        }
     }
 }

@@ -215,5 +215,24 @@ namespace Korepetynder.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Marks teacher as discarded.
+        /// </summary>
+        [HttpPost("Teachers/Discard/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DiscardTeacher([FromRoute] int id)
+        {
+            try
+            {
+                await _studentsService.AddTeacherToIgnored(id);
+                return Ok();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }
