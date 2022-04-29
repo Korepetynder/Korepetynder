@@ -31,6 +31,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { GalleryModule } from "ng-gallery";
+import { FavoritesComponent } from './favorites/favorites.component';
+import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favorite-tutor-card.component';
 
 
 
@@ -38,7 +40,9 @@ import { GalleryModule } from "ng-gallery";
   declarations: [
     AppComponent,
     HomeComponent,
-    TutorCardComponent
+    TutorCardComponent,
+    FavoritesComponent,
+    FavoriteTutorCardComponent
   ],
   imports: [
     BrowserModule,

@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
 import {HomeComponent} from "./home/home.component";
+import { FavoritesComponent } from "./favorites/favorites.component";
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'favorites',
     pathMatch: 'full'
   },
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent
+  },
+  {
+    path: 'favorites',
+    component: FavoritesComponent
   }
 ];
 
