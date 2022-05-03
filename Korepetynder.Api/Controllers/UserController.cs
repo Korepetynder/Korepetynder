@@ -21,7 +21,7 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Creates a new user connected to current guid.
+        /// Creates a new DB user connected to the currently logged-in AD B2C user.
         /// </summary>
         /// <param name="userRequest">Request containing data for a new user.</param>
         /// <returns>Newly created user.</returns>
@@ -42,10 +42,10 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Updates user data with provided one
+        /// Updates currently logged-in DB user with provided data.
         /// </summary>
-        /// <returns>User data.</returns>
-        [HttpPut()]
+        /// <returns>Updated user.</returns>
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserResponse>> PutUser([FromBody] UserRequest userRequest)
@@ -63,7 +63,7 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Returns currently logged user data (if he was initiated)
+        /// Returns currently logged-in user data (if they have been initiated).
         /// </summary>
         /// <returns>User data.</returns>
         [HttpGet]

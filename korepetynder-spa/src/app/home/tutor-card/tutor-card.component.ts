@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 
 import { TutorDetails } from './tutorDetails';
-import { MockTutors } from './mock-tutors';
 
 @Component({
   selector: 'app-tutor-card',
@@ -11,9 +10,11 @@ import { MockTutors } from './mock-tutors';
   styleUrls: ['./tutor-card.component.scss']
 })
 export class TutorCardComponent implements OnInit {
+  @Input() tutor!: TutorDetails;
+
+  @Output() nextTutor = new EventEmitter<void>();
+
   panelOpenState = false;
-  tutor: TutorDetails = MockTutors[0];
-  id: number = 0;
 
   // constructor() { }
   imageData = data;
@@ -23,25 +24,13 @@ export class TutorCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getFirstTutor();
     this.getPhotoGallery();
-  }
-
-  getFirstTutor(): void {
-    this.tutor = MockTutors[0];
   }
 
   getNextTutor(): void {
     this.reset();
-
-    if (this.tutor == undefined) {
-      this.getFirstTutor();
-    }
-    else {
-      this.id = (this.id + 1) % 3;
-
-      this.tutor = MockTutors[this.id];
-    }
+    this.getPhotoGallery();
+    this.nextTutor.emit();
   }
 
   handleFavoritesButton(): void {

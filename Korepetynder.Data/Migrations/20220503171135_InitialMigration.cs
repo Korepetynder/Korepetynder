@@ -69,18 +69,6 @@ namespace Korepetynder.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Subjects",
                 columns: table => new
                 {
@@ -94,50 +82,63 @@ namespace Korepetynder.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Teachers",
+                name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, computedColumnSql: "[FirstName] + ' ' + [LastName]"),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Students_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tutors",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Score = table.Column<int>(type: "int", nullable: false),
                     ProfilePictureId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Teachers", x => x.Id);
+                    table.PrimaryKey("PK_Tutors", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Teachers_ProfilePictures_ProfilePictureId",
+                        name: "FK_Tutors_ProfilePictures_ProfilePictureId",
                         column: x => x.ProfilePictureId,
                         principalTable: "ProfilePictures",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tutors_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentPreferredLocations",
-                columns: table => new
-                {
-                    PreferredLocationsId = table.Column<int>(type: "int", nullable: false),
-                    StudentsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StudentPreferredLocations", x => new { x.PreferredLocationsId, x.StudentsId });
-                    table.ForeignKey(
-                        name: "FK_StudentPreferredLocations_Locations_PreferredLocationsId",
-                        column: x => x.PreferredLocationsId,
-                        principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StudentPreferredLocations_Students_StudentsId",
-                        column: x => x.StudentsId,
-                        principalTable: "Students",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StudentLesson",
+                name: "StudentLessons",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -146,22 +147,46 @@ namespace Korepetynder.Data.Migrations
                     PreferredCostMaximum = table.Column<int>(type: "int", nullable: false),
                     Frequency = table.Column<int>(type: "int", nullable: true),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
-                    StudentId = table.Column<int>(type: "int", nullable: false)
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentLesson", x => x.Id);
+                    table.PrimaryKey("PK_StudentLessons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentLesson_Students_StudentId",
+                        name: "FK_StudentLessons_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentLesson_Subjects_SubjectId",
+                        name: "FK_StudentLessons_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentPreferredLocations",
+                columns: table => new
+                {
+                    PreferredLocationsId = table.Column<int>(type: "int", nullable: false),
+                    StudentsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentPreferredLocations", x => new { x.PreferredLocationsId, x.StudentsUserId });
+                    table.ForeignKey(
+                        name: "FK_StudentPreferredLocations_Locations_PreferredLocationsId",
+                        column: x => x.PreferredLocationsId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentPreferredLocations_Students_StudentsUserId",
+                        column: x => x.StudentsUserId,
+                        principalTable: "Students",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -174,7 +199,7 @@ namespace Korepetynder.Data.Migrations
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: true),
-                    TeacherId = table.Column<int>(type: "int", nullable: false)
+                    TutorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -185,15 +210,15 @@ namespace Korepetynder.Data.Migrations
                         principalTable: "Subjects",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_MultimediaFiles_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id",
+                        name: "FK_MultimediaFiles_Tutors_TutorId",
+                        column: x => x.TutorId,
+                        principalTable: "Tutors",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherLesson",
+                name: "TutorLessons",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -201,100 +226,72 @@ namespace Korepetynder.Data.Migrations
                     Frequency = table.Column<int>(type: "int", nullable: false),
                     Cost = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
-                    TeacherId = table.Column<int>(type: "int", nullable: false)
+                    TutorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherLesson", x => x.Id);
+                    table.PrimaryKey("PK_TutorLessons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeacherLesson_Subjects_SubjectId",
+                        name: "FK_TutorLessons_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeacherLesson_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id",
+                        name: "FK_TutorLessons_Tutors_TutorId",
+                        column: x => x.TutorId,
+                        principalTable: "Tutors",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherStudents",
+                name: "TutorStudent",
                 columns: table => new
                 {
-                    StudentsId = table.Column<int>(type: "int", nullable: false),
-                    TeachersId = table.Column<int>(type: "int", nullable: false)
+                    TutorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherStudents", x => new { x.StudentsId, x.TeachersId });
+                    table.PrimaryKey("PK_TutorStudent", x => new { x.StudentId, x.TutorId });
+                    table.CheckConstraint("CK_StudentId_TutorId", "[TutorId] != [StudentId]");
                     table.ForeignKey(
-                        name: "FK_TeacherStudents_Students_StudentsId",
-                        column: x => x.StudentsId,
+                        name: "FK_TutorStudent_Students_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "Students",
-                        principalColumn: "Id",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeacherStudents_Teachers_TeachersId",
-                        column: x => x.TeachersId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id",
+                        name: "FK_TutorStudent_Tutors_TutorId",
+                        column: x => x.TutorId,
+                        principalTable: "Tutors",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherTeachingLocations",
+                name: "TutorTeachingLocations",
                 columns: table => new
                 {
-                    TeachersId = table.Column<int>(type: "int", nullable: false),
-                    TeachingLocationsId = table.Column<int>(type: "int", nullable: false)
+                    TeachingLocationsId = table.Column<int>(type: "int", nullable: false),
+                    TutorsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherTeachingLocations", x => new { x.TeachersId, x.TeachingLocationsId });
+                    table.PrimaryKey("PK_TutorTeachingLocations", x => new { x.TeachingLocationsId, x.TutorsUserId });
                     table.ForeignKey(
-                        name: "FK_TeacherTeachingLocations_Locations_TeachingLocationsId",
+                        name: "FK_TutorTeachingLocations_Locations_TeachingLocationsId",
                         column: x => x.TeachingLocationsId,
                         principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeacherTeachingLocations_Teachers_TeachersId",
-                        column: x => x.TeachersId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id",
+                        name: "FK_TutorTeachingLocations_Tutors_TutorsUserId",
+                        column: x => x.TutorsUserId,
+                        principalTable: "Tutors",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, computedColumnSql: "[FirstName] + ' ' + [LastName]"),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TeacherId = table.Column<int>(type: "int", nullable: true),
-                    StudentId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Users_Teachers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "Teachers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -314,9 +311,9 @@ namespace Korepetynder.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LessonLanguages_StudentLesson_StudentLessonsId",
+                        name: "FK_LessonLanguages_StudentLessons_StudentLessonsId",
                         column: x => x.StudentLessonsId,
-                        principalTable: "StudentLesson",
+                        principalTable: "StudentLessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -338,57 +335,57 @@ namespace Korepetynder.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LessonLevels_StudentLesson_StudentLessonsId",
+                        name: "FK_LessonLevels_StudentLessons_StudentLessonsId",
                         column: x => x.StudentLessonsId,
-                        principalTable: "StudentLesson",
+                        principalTable: "StudentLessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherLessonLanguages",
+                name: "TutorLessonLanguages",
                 columns: table => new
                 {
                     LanguagesId = table.Column<int>(type: "int", nullable: false),
-                    TeacherLessonsId = table.Column<int>(type: "int", nullable: false)
+                    TutorLessonsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherLessonLanguages", x => new { x.LanguagesId, x.TeacherLessonsId });
+                    table.PrimaryKey("PK_TutorLessonLanguages", x => new { x.LanguagesId, x.TutorLessonsId });
                     table.ForeignKey(
-                        name: "FK_TeacherLessonLanguages_Languages_LanguagesId",
+                        name: "FK_TutorLessonLanguages_Languages_LanguagesId",
                         column: x => x.LanguagesId,
                         principalTable: "Languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeacherLessonLanguages_TeacherLesson_TeacherLessonsId",
-                        column: x => x.TeacherLessonsId,
-                        principalTable: "TeacherLesson",
+                        name: "FK_TutorLessonLanguages_TutorLessons_TutorLessonsId",
+                        column: x => x.TutorLessonsId,
+                        principalTable: "TutorLessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherLessonLevels",
+                name: "TutorLessonLevels",
                 columns: table => new
                 {
                     LevelsId = table.Column<int>(type: "int", nullable: false),
-                    TeacherLessonsId = table.Column<int>(type: "int", nullable: false)
+                    TutorLessonsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherLessonLevels", x => new { x.LevelsId, x.TeacherLessonsId });
+                    table.PrimaryKey("PK_TutorLessonLevels", x => new { x.LevelsId, x.TutorLessonsId });
                     table.ForeignKey(
-                        name: "FK_TeacherLessonLevels_Levels_LevelsId",
+                        name: "FK_TutorLessonLevels_Levels_LevelsId",
                         column: x => x.LevelsId,
                         principalTable: "Levels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeacherLessonLevels_TeacherLesson_TeacherLessonsId",
-                        column: x => x.TeacherLessonsId,
-                        principalTable: "TeacherLesson",
+                        name: "FK_TutorLessonLevels_TutorLessons_TutorLessonsId",
+                        column: x => x.TutorLessonsId,
+                        principalTable: "TutorLessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -476,24 +473,24 @@ namespace Korepetynder.Data.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MultimediaFiles_TeacherId",
+                name: "IX_MultimediaFiles_TutorId",
                 table: "MultimediaFiles",
-                column: "TeacherId");
+                column: "TutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentLesson_StudentId",
-                table: "StudentLesson",
+                name: "IX_StudentLessons_StudentId",
+                table: "StudentLessons",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentLesson_SubjectId",
-                table: "StudentLesson",
+                name: "IX_StudentLessons_SubjectId",
+                table: "StudentLessons",
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentPreferredLocations_StudentsId",
+                name: "IX_StudentPreferredLocations_StudentsUserId",
                 table: "StudentPreferredLocations",
-                column: "StudentsId");
+                column: "StudentsUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subjects_Name",
@@ -502,55 +499,41 @@ namespace Korepetynder.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherLesson_SubjectId",
-                table: "TeacherLesson",
+                name: "IX_TutorLessonLanguages_TutorLessonsId",
+                table: "TutorLessonLanguages",
+                column: "TutorLessonsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TutorLessonLevels_TutorLessonsId",
+                table: "TutorLessonLevels",
+                column: "TutorLessonsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TutorLessons_SubjectId",
+                table: "TutorLessons",
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherLesson_TeacherId",
-                table: "TeacherLesson",
-                column: "TeacherId");
+                name: "IX_TutorLessons_TutorId",
+                table: "TutorLessons",
+                column: "TutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherLessonLanguages_TeacherLessonsId",
-                table: "TeacherLessonLanguages",
-                column: "TeacherLessonsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeacherLessonLevels_TeacherLessonsId",
-                table: "TeacherLessonLevels",
-                column: "TeacherLessonsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Teachers_ProfilePictureId",
-                table: "Teachers",
+                name: "IX_Tutors_ProfilePictureId",
+                table: "Tutors",
                 column: "ProfilePictureId",
                 unique: true,
                 filter: "[ProfilePictureId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherStudents_TeachersId",
-                table: "TeacherStudents",
-                column: "TeachersId");
+                name: "IX_TutorStudent_TutorId",
+                table: "TutorStudent",
+                column: "TutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherTeachingLocations_TeachingLocationsId",
-                table: "TeacherTeachingLocations",
-                column: "TeachingLocationsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_StudentId",
-                table: "Users",
-                column: "StudentId",
-                unique: true,
-                filter: "[StudentId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_TeacherId",
-                table: "Users",
-                column: "TeacherId",
-                unique: true,
-                filter: "[TeacherId] IS NOT NULL");
+                name: "IX_TutorTeachingLocations_TutorsUserId",
+                table: "TutorTeachingLocations",
+                column: "TutorsUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -568,22 +551,19 @@ namespace Korepetynder.Data.Migrations
                 name: "StudentPreferredLocations");
 
             migrationBuilder.DropTable(
-                name: "TeacherLessonLanguages");
+                name: "TutorLessonLanguages");
 
             migrationBuilder.DropTable(
-                name: "TeacherLessonLevels");
+                name: "TutorLessonLevels");
 
             migrationBuilder.DropTable(
-                name: "TeacherStudents");
+                name: "TutorStudent");
 
             migrationBuilder.DropTable(
-                name: "TeacherTeachingLocations");
+                name: "TutorTeachingLocations");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "StudentLesson");
+                name: "StudentLessons");
 
             migrationBuilder.DropTable(
                 name: "Languages");
@@ -592,7 +572,7 @@ namespace Korepetynder.Data.Migrations
                 name: "Levels");
 
             migrationBuilder.DropTable(
-                name: "TeacherLesson");
+                name: "TutorLessons");
 
             migrationBuilder.DropTable(
                 name: "Locations");
@@ -604,10 +584,13 @@ namespace Korepetynder.Data.Migrations
                 name: "Subjects");
 
             migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "Tutors");
 
             migrationBuilder.DropTable(
                 name: "ProfilePictures");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

@@ -8,8 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwagger(builder.Configuration);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwagger(builder.Configuration);
+}
 
 builder.Services.ConfigureDatabase(builder.Configuration.GetConnectionString("Korepetynder"));
 
@@ -17,12 +20,26 @@ builder.Services.ConfigureServices();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AngularSPA", builder =>
+    if (builder.Environment.IsDevelopment())
     {
-        builder.WithOrigins("http://localhost:4200")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
+        options.AddPolicy("AngularSPA", builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    }
+
+    if (builder.Environment.IsProduction())
+    {
+        options.AddPolicy("Main", builder =>
+        {
+            builder.WithOrigins("https://korepetynder.pl")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+
+    }
 });
 
 builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration, "AzureAdB2C");
@@ -37,8 +54,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
-app.UseCors("AngularSPA");
+if (builder.Environment.IsDevelopment())
+{
+    app.UseCors("AngularSPA");
+}
+if (builder.Environment.IsProduction())
+{
+    app.UseCors("Main");
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

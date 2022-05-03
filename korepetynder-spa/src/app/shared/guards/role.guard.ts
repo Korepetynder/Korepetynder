@@ -14,14 +14,21 @@ export class RoleGuard implements CanActivate, CanLoad {
     return this.userService.getUserType().pipe(
       map(userType => {
         if (expectedRole === UserType.Uninitialized) {
-          return userType === 0;
+          return (userType === 0 ? true : this.redirectToDefaultPage(userType));
         }
-        if (userType === UserType.Uninitialized) {
-          return this.router.parseUrl('/settings/init');
-        }
-        return (userType & expectedRole) !== 0;
+        return ((userType & expectedRole) !== 0 ? true : this.redirectToDefaultPage(userType));
       })
     );
+  }
+
+  private redirectToDefaultPage(userType: UserType): UrlTree {
+    if ((userType & UserType.Student) !== 0) {
+      return this.router.parseUrl('/home');
+    } else if ((userType & UserType.Initialized) !== 0) {
+      return this.router.parseUrl('/settings');
+    } else {
+      return this.router.parseUrl('/settings/init');
+    }
   }
 
   canActivate(
@@ -34,6 +41,7 @@ export class RoleGuard implements CanActivate, CanLoad {
     let expectedRole = route.data['expectedRole'] as UserType;
     return this.checkRole(expectedRole);
   }
+
   canLoad(
     route: Route,
     segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

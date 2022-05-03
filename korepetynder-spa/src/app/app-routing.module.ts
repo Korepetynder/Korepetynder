@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
 import {HomeComponent} from "./home/home.component";
+import { RoleGuard } from './shared/guards/role.guard';
+import { UserType } from './shared/models/userType';
 import { FavoritesComponent } from "./favorites/favorites.component";
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'favorites',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
@@ -20,7 +22,11 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [MsalGuard, RoleGuard],
+    data: {
+      expectedRole: UserType.Student
+    }
   },
   {
     path: 'favorites',

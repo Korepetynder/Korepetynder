@@ -14,7 +14,7 @@ namespace Korepetynder.Data.DbModels
         public int Weight { get; set; } // the higher education level it is, the higher the level
 
         public ICollection<StudentLesson> StudentLessons { get; set; } = new List<StudentLesson>();
-        public ICollection<TeacherLesson> TeacherLessons { get; set; } = new List<TeacherLesson>();
+        public ICollection<TutorLesson> TutorLessons { get; set; } = new List<TutorLesson>();
 
         public Level(string name, int weight)
         {

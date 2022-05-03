@@ -24,6 +24,7 @@ namespace Korepetynder.Services.Languages
         {
             var languageExists = await _korepetynderDbContext.Languages
                 .AnyAsync(language => language.Name == languageRequest.Name);
+
             if (languageExists)
             {
                 throw new InvalidOperationException("Language with name " + languageRequest.Name + " already exists");
@@ -40,7 +41,7 @@ namespace Korepetynder.Services.Languages
         {
             var languages = _korepetynderDbContext.Languages
                 .OrderBy(Language => Language.Name)
-                .AsNoTracking();
+                .AsQueryable();
 
             languages = _sieveProcessor.Apply(sieveModel, languages, applyPagination: false);
 
@@ -55,7 +56,6 @@ namespace Korepetynder.Services.Languages
 
         public async Task<LanguageResponse?> GetLanguage(int id) =>
             await _korepetynderDbContext.Languages
-                .AsNoTracking()
                 .Where(x => x.Id == id)
                 .Select(language => new LanguageResponse(language.Id, language.Name))
                 .SingleOrDefaultAsync();

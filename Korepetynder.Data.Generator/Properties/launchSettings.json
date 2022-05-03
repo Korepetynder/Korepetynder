@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Korepetynder.Data.Generator": {
+      "commandName": "Project",
+      "commandLineArgs": "Server=(localdb)\\mssqllocaldb;Database=KorepetynderDb;Trusted_Connection=True;MultipleActiveResultSets=True  20 5"
+    }
+  }
+}
