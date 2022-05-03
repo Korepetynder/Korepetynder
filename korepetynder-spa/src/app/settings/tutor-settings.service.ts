@@ -12,7 +12,7 @@ import { TutorLesson } from './models/responses/tutorLesson';
   providedIn: 'root'
 })
 export class TutorSettingsService {
-  private apiUrl = environment.apiUrl + '/teacher';
+  private apiUrl = environment.apiUrl + '/tutor';
 
   constructor(private httpClient: HttpClient, private userService: UserService) { }
 

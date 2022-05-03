@@ -8,7 +8,7 @@ import { UserType } from '../models/userType';
 
 interface UserRolesResponse {
   isStudent: boolean;
-  isTeacher: boolean;
+  isTutor: boolean;
 }
 
 @Injectable({
@@ -28,7 +28,7 @@ export class UserService {
     if (roles.isStudent) {
       userType |= UserType.Student;
     }
-    if (roles.isTeacher) {
+    if (roles.isTutor) {
       userType |= UserType.Tutor;
     }
 

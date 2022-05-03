@@ -104,8 +104,9 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Updates chosen lesson
+        /// Updates the specified lesson.
         /// </summary>
+        /// <param name="id">ID of the lesson to update.</param>
         /// <param name="lessonRequest">Request containing data for updated lesson.</param>
         [HttpPut("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -146,7 +147,7 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Returns list of lessons that student is looking for
+        /// Returns list of lessons that student is looking for.
         /// </summary>
         /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
         /// <returns>List of lessons.</returns>
@@ -169,7 +170,7 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Deletes lesson with given id, if it belongs to currently logged user
+        /// Deletes lesson with the given id, if it belongs to the currently logged user.
         /// </summary>
         /// <returns>List of lessons.</returns>
         [HttpDelete("Lessons/{id}")]
@@ -194,20 +195,20 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Gets suggestions of teachers.
+        /// Gets suggestions of tutors.
         /// </summary>
-        /// <returns>List of teachers.</returns>
-        [HttpGet("Teachers")]
+        /// <returns>List of tutors.</returns>
+        [HttpGet("Tutors")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TeacherDataResponse>>> GetTeachers()
+        public async Task<ActionResult<IEnumerable<TutorDataResponse>>> GetTutors()
         {
             try
             {
-                var teachers = await _studentsService.GetSuggestedTeachers();
+                var tutors = await _studentsService.GetSuggestedTutors();
 
-                Response.Headers.Add("X-Total-Count", teachers.Count().ToString());
-                return teachers.ToList();
+                Response.Headers.Add("X-Total-Count", tutors.Count().ToString());
+                return tutors.ToList();
             }
             catch (InvalidOperationException)
             {

@@ -1,40 +1,35 @@
 using Korepetynder.Contracts.Responses.Locations;
-using Korepetynder.Contracts.Responses.Teachers;
+using Korepetynder.Contracts.Responses.Tutors;
 using Korepetynder.Data.DbModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Korepetynder.Contracts.Responses.Students
 {
-    public class TeacherDataResponse
+    public class TutorDataResponse
     {
         public string FullName { get; set; }
         public string? PhoneNumber { get; set; }
         public string Email { get; set; }
         public IEnumerable<LocationResponse> Locations { get; set; }
         public int Age { get; set; }
-        public IEnumerable<TeacherLessonResponse> Lessons { get; set; }
+        public IEnumerable<TutorLessonResponse> Lessons { get; set; }
 
-        public TeacherDataResponse(User teacher)
+        public TutorDataResponse(User tutor)
         {
-            Email = teacher.Email;
-            PhoneNumber = teacher.PhoneNumber;
-            FullName = teacher.FullName;
-            //Age = teacher.Age;
+            Email = tutor.Email;
+            PhoneNumber = tutor.PhoneNumber;
+            FullName = tutor.FullName;
+            //Age = tutor.Age;
             Age = 20;
             List<LocationResponse> locations = new List<LocationResponse>();
-            foreach (var location in teacher.Teacher!.TeachingLocations)
+            foreach (var location in tutor.Tutor!.TeachingLocations)
             {
                 locations.Add(new LocationResponse(location.Id, location.Name, location.ParentLocationId));
             }
             Locations = locations;
-            List<TeacherLessonResponse> lessons = new List<TeacherLessonResponse>();
-            foreach (var lesson in teacher.Teacher!.Lessons)
+            List<TutorLessonResponse> lessons = new List<TutorLessonResponse>();
+            foreach (var lesson in tutor.Tutor!.Lessons)
             {
-                lessons.Add(new TeacherLessonResponse(lesson));
+                lessons.Add(new TutorLessonResponse(lesson));
             }
             Lessons = lessons;
 

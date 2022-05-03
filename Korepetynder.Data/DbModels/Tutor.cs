@@ -1,14 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Korepetynder.Data.DbModels
 {
-    public class Teacher
+    public class Tutor
     {
-        public int Id { get; set; }
+        [Key]
+        public Guid UserId { get; set; }
         public int Score { get; set; } //can be calculated using comments, however it is inefficient (number between 1 and 10, 0 if no comments)
+
+        [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;
+
         public ICollection<Student> Students { get; set; } = new List<Student>();
-        public ICollection<TeacherLesson> Lessons { get; set; } = new List<TeacherLesson>();
+        public ICollection<TutorLesson> Lessons { get; set; } = new List<TutorLesson>();
 
         public ICollection<Location> TeachingLocations { get; set; } = new List<Location>();
 
@@ -22,14 +27,19 @@ namespace Korepetynder.Data.DbModels
         {
             if (obj == null)
                 return false;
-            if (obj is Teacher other && other.Id == Id)
+            if (obj is Tutor other && other.UserId == UserId)
                 return true;
             return false;
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return UserId.GetHashCode();
+        }
+
+        public Tutor(Guid userId)
+        {
+            UserId = userId;
         }
     }
 }

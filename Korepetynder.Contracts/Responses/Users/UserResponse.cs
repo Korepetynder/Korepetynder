@@ -8,9 +8,8 @@ namespace Korepetynder.Contracts.Responses.Users
         public string Email { get; set; }
         public string? PhoneNumber { get; set; }
         public DateTime BirthDate { get; set; }
-        public bool IsStudent { get; set; }
-        public bool IsTeacher { get; set; }
-        public UserResponse(Guid id, string firstName, string lastName, string? phoneNumber, string email, DateTime birthDate, bool isStudent, bool isTeacher)
+
+        public UserResponse(Guid id, string firstName, string lastName, string? phoneNumber, string email, DateTime birthDate)
         {
             Id = id;
             FirstName = firstName;
@@ -18,8 +17,6 @@ namespace Korepetynder.Contracts.Responses.Users
             PhoneNumber = phoneNumber;
             Email = email;
             BirthDate = birthDate;
-            IsStudent = isStudent;
-            IsTeacher = isTeacher;
         }
     }
 }

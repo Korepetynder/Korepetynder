@@ -27,40 +27,54 @@ namespace Korepetynder.Data
                 .HasMany(lesson => lesson.Levels)
                 .WithMany(level => level.StudentLessons)
                 .UsingEntity(join => join.ToTable("LessonLevels"));
-            modelBuilder.Entity<TeacherLesson>()
+            modelBuilder.Entity<TutorLesson>()
                 .HasMany(lesson => lesson.Levels)
-                .WithMany(level => level.TeacherLessons)
-                .UsingEntity(join => join.ToTable("TeacherLessonLevels"));
+                .WithMany(level => level.TutorLessons)
+                .UsingEntity(join => join.ToTable("TutorLessonLevels"));
             modelBuilder.Entity<StudentLesson>()
                 .HasMany(lesson => lesson.Languages)
                 .WithMany(language => language.StudentLessons)
                 .UsingEntity(join => join.ToTable("LessonLanguages"));
-            modelBuilder.Entity<TeacherLesson>()
+            modelBuilder.Entity<TutorLesson>()
                 .HasMany(lesson => lesson.Languages)
-                .WithMany(language => language.TeacherLessons)
-                .UsingEntity(join => join.ToTable("TeacherLessonLanguages"));
+                .WithMany(language => language.TutorLessons)
+                .UsingEntity(join => join.ToTable("TutorLessonLanguages"));
 
             modelBuilder.Entity<Student>()
                 .HasMany(student => student.PreferredLocations)
                 .WithMany(location => location.Students)
                 .UsingEntity(join => join.ToTable("StudentPreferredLocations"));
 
-            modelBuilder.Entity<Teacher>()
-                .HasMany(teacher => teacher.Students)
-                .WithMany(student => student.Teachers)
-                .UsingEntity(join => join.ToTable("TeacherStudents"));
-            modelBuilder.Entity<Teacher>()
-                .HasMany(teacher => teacher.TeachingLocations)
-                .WithMany(location => location.Teachers)
-                .UsingEntity(join => join.ToTable("TeacherTeachingLocations"));
+            modelBuilder.Entity<Tutor>()
+                .HasMany(tutor => tutor.Students)
+                .WithMany(student => student.Tutors)
+                .UsingEntity<TutorStudent>(
+                    join => join.HasCheckConstraint("CK_StudentId_TutorId", "[TutorId] != [StudentId]")
+                );
+            modelBuilder.Entity<Tutor>()
+                .HasMany(tutor => tutor.TeachingLocations)
+                .WithMany(location => location.Tutors)
+                .UsingEntity(join => join.ToTable("TutorTeachingLocations"));
 
             modelBuilder.Entity<User>()
                 .Property(user => user.BirthDate)
                 .HasConversion(date => date, date => DateTime.SpecifyKind(date, DateTimeKind.Utc));
+
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.Student)
+                .WithOne(student => student.User)
+                .HasForeignKey<Student>(student => student.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.Tutor)
+                .WithOne(tutor => tutor.User)
+                .HasForeignKey<Tutor>(tutor => tutor.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
 
         public DbSet<User> Users => Set<User>();
-        public DbSet<Teacher> Teachers => Set<Teacher>();
+        public DbSet<Tutor> Tutors => Set<Tutor>();
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Subject> Subjects => Set<Subject>();
         public DbSet<MultimediaFile> MultimediaFiles => Set<MultimediaFile>();
@@ -68,8 +82,8 @@ namespace Korepetynder.Data
         public DbSet<Location> Locations => Set<Location>();
         public DbSet<Level> Levels => Set<Level>();
         public DbSet<Language> Languages => Set<Language>();
-        public DbSet<StudentLesson> StudentLesson => Set<StudentLesson>();
-        public DbSet<TeacherLesson> TeacherLesson => Set<TeacherLesson>();
+        public DbSet<StudentLesson> StudentLessons => Set<StudentLesson>();
+        public DbSet<TutorLesson> TutorLessons => Set<TutorLesson>();
 
     }
 }

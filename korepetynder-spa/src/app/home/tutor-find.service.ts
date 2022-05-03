@@ -8,7 +8,7 @@ import { TutorDetails } from './tutor-card/tutorDetails';
   providedIn: 'root'
 })
 export class TutorFindService {
-  private apiUrl = environment.apiUrl + '/student/teachers';
+  private apiUrl = environment.apiUrl + '/student/tutors';
 
   constructor(private httpClient: HttpClient) { }
 
