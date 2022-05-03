@@ -40,7 +40,7 @@ namespace Korepetynder.Services.Subjects
         {
             var subjects = _korepetynderDbContext.Subjects
                 .OrderBy(subject => subject.Name)
-                .AsNoTracking();
+                .AsQueryable();
 
             subjects = _sieveProcessor.Apply(sieveModel, subjects, applyPagination: false);
 
@@ -55,7 +55,6 @@ namespace Korepetynder.Services.Subjects
 
         public async Task<SubjectResponse?> GetSubject(int id) =>
             await _korepetynderDbContext.Subjects
-                .AsNoTracking()
                 .Where(subject => subject.Id == id)
                 .Select(subject => new SubjectResponse(subject.Id, subject.Name))
                 .SingleOrDefaultAsync();

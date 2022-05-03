@@ -24,6 +24,7 @@ namespace Korepetynder.Services.Levels
         {
             var levelExists = await _korepetynderDbContext.Levels
                 .AnyAsync(level => level.Name == levelRequest.Name);
+
             if (levelExists)
             {
                 throw new InvalidOperationException("Level with name " + levelRequest.Name + " already exists");
@@ -40,7 +41,7 @@ namespace Korepetynder.Services.Levels
         {
             var levels = _korepetynderDbContext.Levels
                 .OrderBy(level => level.Weight)
-                .AsNoTracking();
+                .AsQueryable();
 
             levels = _sieveProcessor.Apply(sieveModel, levels, applyPagination: false);
 
@@ -55,9 +56,7 @@ namespace Korepetynder.Services.Levels
 
         public async Task<LevelResponse?> GetLevel(int id) =>
             await _korepetynderDbContext.Levels
-                .AsNoTracking()
                 .Where(level => level.Id == id)
-                .OrderBy(level => level.Weight)
                 .Select(level => new LevelResponse(level.Id, level.Name))
                 .SingleOrDefaultAsync();
     }

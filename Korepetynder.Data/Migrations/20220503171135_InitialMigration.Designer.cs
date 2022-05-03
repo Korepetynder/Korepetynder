@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Korepetynder.Data.Migrations
 {
     [DbContext(typeof(KorepetynderDbContext))]
-    [Migration("20220425151344_InitialMigration")]
+    [Migration("20220503171135_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,8 +169,8 @@ namespace Korepetynder.Data.Migrations
                     b.Property<int?>("SubjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TutorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -183,7 +183,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("TutorId");
 
                     b.ToTable("MultimediaFiles");
                 });
@@ -207,13 +207,10 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Student", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Students");
                 });
@@ -235,8 +232,8 @@ namespace Korepetynder.Data.Migrations
                     b.Property<int>("PreferredCostMinimum")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
@@ -247,7 +244,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("StudentLesson");
+                    b.ToTable("StudentLessons");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Subject", b =>
@@ -288,13 +285,10 @@ namespace Korepetynder.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.Teacher", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Tutor", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("ProfilePictureId")
                         .HasColumnType("int");
@@ -302,16 +296,16 @@ namespace Korepetynder.Data.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.HasIndex("ProfilePictureId")
                         .IsUnique()
                         .HasFilter("[ProfilePictureId] IS NOT NULL");
 
-                    b.ToTable("Teachers");
+                    b.ToTable("Tutors");
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.TeacherLesson", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.TutorLesson", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -328,16 +322,33 @@ namespace Korepetynder.Data.Migrations
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TutorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SubjectId");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("TutorId");
 
-                    b.ToTable("TeacherLesson");
+                    b.ToTable("TutorLessons");
+                });
+
+            modelBuilder.Entity("Korepetynder.Data.DbModels.TutorStudent", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TutorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("StudentId", "TutorId");
+
+                    b.HasIndex("TutorId");
+
+                    b.ToTable("TutorStudent");
+
+                    b.HasCheckConstraint("CK_StudentId_TutorId", "[TutorId] != [StudentId]");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.User", b =>
@@ -375,21 +386,7 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("StudentId")
-                        .IsUnique()
-                        .HasFilter("[StudentId] IS NOT NULL");
-
-                    b.HasIndex("TeacherId")
-                        .IsUnique()
-                        .HasFilter("[TeacherId] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -409,19 +406,19 @@ namespace Korepetynder.Data.Migrations
                     b.ToTable("LessonLanguages", (string)null);
                 });
 
-            modelBuilder.Entity("LanguageTeacherLesson", b =>
+            modelBuilder.Entity("LanguageTutorLesson", b =>
                 {
                     b.Property<int>("LanguagesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeacherLessonsId")
+                    b.Property<int>("TutorLessonsId")
                         .HasColumnType("int");
 
-                    b.HasKey("LanguagesId", "TeacherLessonsId");
+                    b.HasKey("LanguagesId", "TutorLessonsId");
 
-                    b.HasIndex("TeacherLessonsId");
+                    b.HasIndex("TutorLessonsId");
 
-                    b.ToTable("TeacherLessonLanguages", (string)null);
+                    b.ToTable("TutorLessonLanguages", (string)null);
                 });
 
             modelBuilder.Entity("LevelStudentLesson", b =>
@@ -439,19 +436,19 @@ namespace Korepetynder.Data.Migrations
                     b.ToTable("LessonLevels", (string)null);
                 });
 
-            modelBuilder.Entity("LevelTeacherLesson", b =>
+            modelBuilder.Entity("LevelTutorLesson", b =>
                 {
                     b.Property<int>("LevelsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeacherLessonsId")
+                    b.Property<int>("TutorLessonsId")
                         .HasColumnType("int");
 
-                    b.HasKey("LevelsId", "TeacherLessonsId");
+                    b.HasKey("LevelsId", "TutorLessonsId");
 
-                    b.HasIndex("TeacherLessonsId");
+                    b.HasIndex("TutorLessonsId");
 
-                    b.ToTable("TeacherLessonLevels", (string)null);
+                    b.ToTable("TutorLessonLevels", (string)null);
                 });
 
             modelBuilder.Entity("LocationStudent", b =>
@@ -459,44 +456,29 @@ namespace Korepetynder.Data.Migrations
                     b.Property<int>("PreferredLocationsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StudentsUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PreferredLocationsId", "StudentsId");
+                    b.HasKey("PreferredLocationsId", "StudentsUserId");
 
-                    b.HasIndex("StudentsId");
+                    b.HasIndex("StudentsUserId");
 
                     b.ToTable("StudentPreferredLocations", (string)null);
                 });
 
-            modelBuilder.Entity("LocationTeacher", b =>
+            modelBuilder.Entity("LocationTutor", b =>
                 {
-                    b.Property<int>("TeachersId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TeachingLocationsId")
                         .HasColumnType("int");
 
-                    b.HasKey("TeachersId", "TeachingLocationsId");
+                    b.Property<Guid>("TutorsUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("TeachingLocationsId");
+                    b.HasKey("TeachingLocationsId", "TutorsUserId");
 
-                    b.ToTable("TeacherTeachingLocations", (string)null);
-                });
+                    b.HasIndex("TutorsUserId");
 
-            modelBuilder.Entity("StudentTeacher", b =>
-                {
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeachersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudentsId", "TeachersId");
-
-                    b.HasIndex("TeachersId");
-
-                    b.ToTable("TeacherStudents", (string)null);
+                    b.ToTable("TutorTeachingLocations", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
@@ -514,15 +496,26 @@ namespace Korepetynder.Data.Migrations
                         .WithMany()
                         .HasForeignKey("SubjectId");
 
-                    b.HasOne("Korepetynder.Data.DbModels.Teacher", "Owner")
+                    b.HasOne("Korepetynder.Data.DbModels.Tutor", "Owner")
                         .WithMany("MultimediaFiles")
-                        .HasForeignKey("TeacherId")
+                        .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Owner");
 
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Student", b =>
+                {
+                    b.HasOne("Korepetynder.Data.DbModels.User", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("Korepetynder.Data.DbModels.Student", "UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.StudentLesson", b =>
@@ -544,47 +537,55 @@ namespace Korepetynder.Data.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.Teacher", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Tutor", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.ProfilePicture", "ProfilePicture")
                         .WithOne("Owner")
-                        .HasForeignKey("Korepetynder.Data.DbModels.Teacher", "ProfilePictureId");
+                        .HasForeignKey("Korepetynder.Data.DbModels.Tutor", "ProfilePictureId");
+
+                    b.HasOne("Korepetynder.Data.DbModels.User", "User")
+                        .WithOne("Tutor")
+                        .HasForeignKey("Korepetynder.Data.DbModels.Tutor", "UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
 
                     b.Navigation("ProfilePicture");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.TeacherLesson", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.TutorLesson", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Subject", "Subject")
-                        .WithMany("TeacherLessons")
+                        .WithMany("TutorLessons")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Korepetynder.Data.DbModels.Teacher", "Teacher")
+                    b.HasOne("Korepetynder.Data.DbModels.Tutor", "Tutor")
                         .WithMany("Lessons")
-                        .HasForeignKey("TeacherId")
+                        .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Subject");
 
-                    b.Navigation("Teacher");
+                    b.Navigation("Tutor");
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.User", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.TutorStudent", b =>
                 {
-                    b.HasOne("Korepetynder.Data.DbModels.Student", "Student")
-                        .WithOne("User")
-                        .HasForeignKey("Korepetynder.Data.DbModels.User", "StudentId");
+                    b.HasOne("Korepetynder.Data.DbModels.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Korepetynder.Data.DbModels.Teacher", "Teacher")
-                        .WithOne("User")
-                        .HasForeignKey("Korepetynder.Data.DbModels.User", "TeacherId");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Teacher");
+                    b.HasOne("Korepetynder.Data.DbModels.Tutor", null)
+                        .WithMany()
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LanguageStudentLesson", b =>
@@ -602,7 +603,7 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LanguageTeacherLesson", b =>
+            modelBuilder.Entity("LanguageTutorLesson", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Language", null)
                         .WithMany()
@@ -610,9 +611,9 @@ namespace Korepetynder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Korepetynder.Data.DbModels.TeacherLesson", null)
+                    b.HasOne("Korepetynder.Data.DbModels.TutorLesson", null)
                         .WithMany()
-                        .HasForeignKey("TeacherLessonsId")
+                        .HasForeignKey("TutorLessonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -632,7 +633,7 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LevelTeacherLesson", b =>
+            modelBuilder.Entity("LevelTutorLesson", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Level", null)
                         .WithMany()
@@ -640,9 +641,9 @@ namespace Korepetynder.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Korepetynder.Data.DbModels.TeacherLesson", null)
+                    b.HasOne("Korepetynder.Data.DbModels.TutorLesson", null)
                         .WithMany()
-                        .HasForeignKey("TeacherLessonsId")
+                        .HasForeignKey("TutorLessonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -657,37 +658,22 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasOne("Korepetynder.Data.DbModels.Student", null)
                         .WithMany()
-                        .HasForeignKey("StudentsId")
+                        .HasForeignKey("StudentsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LocationTeacher", b =>
+            modelBuilder.Entity("LocationTutor", b =>
                 {
-                    b.HasOne("Korepetynder.Data.DbModels.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Korepetynder.Data.DbModels.Location", null)
                         .WithMany()
                         .HasForeignKey("TeachingLocationsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("StudentTeacher", b =>
-                {
-                    b.HasOne("Korepetynder.Data.DbModels.Student", null)
+                    b.HasOne("Korepetynder.Data.DbModels.Tutor", null)
                         .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Korepetynder.Data.DbModels.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
+                        .HasForeignKey("TutorsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -706,26 +692,27 @@ namespace Korepetynder.Data.Migrations
             modelBuilder.Entity("Korepetynder.Data.DbModels.Student", b =>
                 {
                     b.Navigation("PreferredLessons");
-
-                    b.Navigation("User")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Subject", b =>
                 {
                     b.Navigation("StudentLessons");
 
-                    b.Navigation("TeacherLessons");
+                    b.Navigation("TutorLessons");
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.Teacher", b =>
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Tutor", b =>
                 {
                     b.Navigation("Lessons");
 
                     b.Navigation("MultimediaFiles");
+                });
 
-                    b.Navigation("User")
-                        .IsRequired();
+            modelBuilder.Entity("Korepetynder.Data.DbModels.User", b =>
+                {
+                    b.Navigation("Student");
+
+                    b.Navigation("Tutor");
                 });
 #pragma warning restore 612, 618
         }

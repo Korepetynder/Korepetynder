@@ -8,10 +8,6 @@ using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
 {
-
-    /// <summary>
-    /// Controller for languages management.
-    /// </summary>
     [Authorize]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("[controller]")]
@@ -44,8 +40,8 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Gets the specified language.
         /// </summary>
-        /// <param name="id">ID of the language.</param>
-        /// <returns>language.</returns>
+        /// <param name="id">ID of the language to get.</param>
+        /// <returns>Language.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
