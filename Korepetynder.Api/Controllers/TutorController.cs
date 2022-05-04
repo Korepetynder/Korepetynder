@@ -1,6 +1,6 @@
-using Korepetynder.Contracts.Requests.Teachers;
-using Korepetynder.Contracts.Responses.Teachers;
-using Korepetynder.Services.Teachers;
+using Korepetynder.Contracts.Requests.Tutors;
+using Korepetynder.Contracts.Responses.Tutors;
+using Korepetynder.Services.Tutors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -13,30 +13,30 @@ namespace Korepetynder.Api.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("[controller]")]
     [ApiController]
-    public class TeacherController : ControllerBase
+    public class TutorController : ControllerBase
     {
-        private readonly ITeacherService _teachersService;
+        private readonly ITutorService _tutorsService;
 
-        public TeacherController(ITeacherService teachersService)
+        public TutorController(ITutorService tutorsService)
         {
-            _teachersService = teachersService;
+            _tutorsService = tutorsService;
         }
 
         /// <summary>
-        /// Creates a new teacher connected to provided user.
+        /// Creates a new tutor connected to provided user.
         /// </summary>
-        /// <param name="teacherRequest">Request containing data for a new teacher.</param>
-        /// <returns>Newly created teacher.</returns>
+        /// <param name="tutorRequest">Request containing data for a new tutor.</param>
+        /// <returns>Newly created tutor.</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherResponse>> PostTeacher([FromBody] TeacherRequest teacherRequest)
+        public async Task<ActionResult<TutorResponse>> PostTutor([FromBody] TutorRequest tutorRequest)
         {
             try
             {
-                var teacher = await _teachersService.InitializeTeacher(teacherRequest);
+                var tutor = await _tutorsService.InitializeTutor(tutorRequest);
 
-                return teacher;
+                return tutor;
             }
             catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
             {
@@ -44,19 +44,19 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Gets teacher connected to provided user.
+        /// Gets tutor connected to provided user.
         /// </summary>
-        /// <returns> Teacher connected to current user.</returns>
+        /// <returns> Tutor connected to current user.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherResponse>> GetTeacher()
+        public async Task<ActionResult<TutorResponse>> GetTutor()
         {
             try
             {
-                var teacher = await _teachersService.GetTeacherData();
+                var tutor = await _tutorsService.GetTutorData();
 
-                return teacher;
+                return tutor;
             }
             catch (InvalidOperationException)
             {
@@ -65,19 +65,19 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Updates teacher profile connected to provided user.
+        /// Updates tutor profile connected to provided user.
         /// </summary>
-        /// <returns>Updated teacher.</returns>
+        /// <returns>Updated tutor.</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherResponse>> PutTeacher(TeacherRequest request)
+        public async Task<ActionResult<TutorResponse>> PutTutor(TutorRequest request)
         {
             try
             {
-                var teacher = await _teachersService.UpdateTeacher(request);
+                var tutor = await _tutorsService.UpdateTutor(request);
 
-                return teacher;
+                return tutor;
             }
             catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
             {
@@ -86,17 +86,18 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Updates chosen lesson
+        /// Updates chosen lesson.
         /// </summary>
+        /// <param name="id">ID of the lesson to update.</param>
         /// <param name="lessonRequest">Request containing data for updated lesson.</param>
         [HttpPut("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherLessonResponse>> PutLesson([FromRoute] int id, [FromBody] TeacherLessonRequest lessonRequest)
+        public async Task<ActionResult<TutorLessonResponse>> PutLesson([FromRoute] int id, [FromBody] TutorLessonRequest lessonRequest)
         {
             try
             {
-                var lesson = await _teachersService.UpdateLesson(id, lessonRequest);
+                var lesson = await _tutorsService.UpdateLesson(id, lessonRequest);
 
                 return lesson;
             }
@@ -106,17 +107,17 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Removes teacher connected to provided user.
+        /// Removes tutor connected to provided user.
         /// </summary>
         /// <returns>Newly created subject.</returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteTeacher()
+        public async Task<IActionResult> DeleteTutor()
         {
             try
             {
-                await _teachersService.DeleteTeacher();
+                await _tutorsService.DeleteTutor();
 
                 return NoContent();
             }
@@ -126,18 +127,18 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Creates a new lesson that currently active teacher is looking for.
+        /// Creates a new lesson that currently active tutor is looking for.
         /// </summary>
         /// <param name="lessonRequest">Request containing data for a new lesson.</param>
         /// <returns>Newly created lesson.</returns>
         [HttpPost("Lessons")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TeacherLessonResponse>> PostLesson([FromBody] TeacherLessonRequest lessonRequest)
+        public async Task<ActionResult<TutorLessonResponse>> PostLesson([FromBody] TutorLessonRequest lessonRequest)
         {
             try
             {
-                var lesson = await _teachersService.AddLesson(lessonRequest);
+                var lesson = await _tutorsService.AddLesson(lessonRequest);
 
                 return lesson;
             }
@@ -148,18 +149,18 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Returns list of lessons that teacher is looking for
+        /// Returns list of lessons that tutor is looking for
         /// </summary>
         /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
         /// <returns>List of lessons.</returns>
         [HttpGet("Lessons")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TeacherLessonResponse>>> GetLessons([FromQuery] SieveModel sieveModel)
+        public async Task<ActionResult<IEnumerable<TutorLessonResponse>>> GetLessons([FromQuery] SieveModel sieveModel)
         {
             try
             {
-                var lessons = await _teachersService.GetLessons(sieveModel);
+                var lessons = await _tutorsService.GetLessons(sieveModel);
                 Response.Headers.Add("X-Total-Count", lessons.TotalCount.ToString());
 
                 return lessons.Entities.ToList();
@@ -181,7 +182,7 @@ namespace Korepetynder.Api.Controllers
         {
             try
             {
-                await _teachersService.DeleteLesson(id);
+                await _tutorsService.DeleteLesson(id);
 
                 return NoContent();
             }

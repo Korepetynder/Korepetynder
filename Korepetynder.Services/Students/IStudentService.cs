@@ -17,9 +17,9 @@ namespace Korepetynder.Services.Students
         Task<StudentLessonResponse> AddLesson(StudentLessonRequest request);
         Task<StudentLessonResponse> UpdateLesson(int id, StudentLessonRequest request);
         Task DeleteLesson(int id);
-        Task<IEnumerable<TeacherDataResponse>> GetSuggestedTeachers();
-        Task AddFavouriteTeacher(int id);
-        Task DeleteFavouriteTeacher(int id);
-        Task<PagedData<FullTeacherInfoResponse>> GetFavouriteTeachers();
+        Task<IEnumerable<TutorDataResponse>> GetSuggestedTutors();
+        Task AddFavouriteTutor(int id);
+        Task DeleteFavouriteTutor(int id);
+        Task<PagedData<FullTeacherInfoResponse>> GetFavouriteTutors();
     }
 }

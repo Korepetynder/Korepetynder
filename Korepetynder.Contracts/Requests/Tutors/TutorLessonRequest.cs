@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Korepetynder.Contracts.Requests.Teachers
+namespace Korepetynder.Contracts.Requests.Tutors
 {
-    public class TeacherLessonRequest
+    public class TutorLessonRequest
     {
         public int Frequency { get; set; }
         public int SubjectId { get; set; }
@@ -14,7 +8,7 @@ namespace Korepetynder.Contracts.Requests.Teachers
         public IEnumerable<int> LevelsIds { get; set; }
         public IEnumerable<int> LanguagesIds { get; set; }
 
-        public TeacherLessonRequest(int frequency, int subjectId, IEnumerable<int> levelsIds, IEnumerable<int> languagesIds, int cost)
+        public TutorLessonRequest(int frequency, int subjectId, IEnumerable<int> levelsIds, IEnumerable<int> languagesIds, int cost)
         {
             Cost = cost;
             Frequency = frequency;

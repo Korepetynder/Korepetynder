@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Korepetynder.Data.DbModels
 {
-    public class TeacherLesson
+    public class TutorLesson
     {
         public int Id { get; set; }
 
@@ -19,8 +14,8 @@ namespace Korepetynder.Data.DbModels
         public ICollection<Level> Levels { get; set; } = new List<Level>();
         public ICollection<Language> Languages { get; set; } = new List<Language>();
 
-        public int TeacherId { get; set; }
-        [ForeignKey(nameof(TeacherId))]
-        public Teacher Teacher { get; set; } = null!;
+        public Guid TutorId { get; set; }
+        [ForeignKey(nameof(TutorId))]
+        public Tutor Tutor { get; set; } = null!;
     }
 }
