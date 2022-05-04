@@ -1,5 +1,6 @@
 using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
+using Korepetynder.Contracts.Responses.Teachers;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
 using Korepetynder.Services.Models;
@@ -241,6 +242,21 @@ namespace Korepetynder.Services.Students
             await _korepetynderDbContext.SaveChangesAsync();
 
             return new StudentLessonResponse(lesson);
+        }
+
+        public Task AddFavouriteTeacher(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteFavouriteTeacher(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PagedData<FullTeacherInfoResponse>> GetFavouriteTeachers()
+        {
+            throw new NotImplementedException();
         }
     }
 }

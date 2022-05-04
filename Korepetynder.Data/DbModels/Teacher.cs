@@ -7,7 +7,8 @@ namespace Korepetynder.Data.DbModels
         public int Id { get; set; }
         public int Score { get; set; } //can be calculated using comments, however it is inefficient (number between 1 and 10, 0 if no comments)
         public User User { get; set; } = null!;
-        public ICollection<Student> Students { get; set; } = new List<Student>();
+        public ICollection<Student> DiscardedByStudents { get; set; } = new List<Student>();
+        public ICollection<Student> FavouritedByStudents { get; set; } = new List<Student>();
         public ICollection<TeacherLesson> Lessons { get; set; } = new List<TeacherLesson>();
 
         public ICollection<Location> TeachingLocations { get; set; } = new List<Location>();

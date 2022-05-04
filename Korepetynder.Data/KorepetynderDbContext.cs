@@ -46,8 +46,12 @@ namespace Korepetynder.Data
                 .UsingEntity(join => join.ToTable("StudentPreferredLocations"));
 
             modelBuilder.Entity<Teacher>()
-                .HasMany(teacher => teacher.Students)
-                .WithMany(student => student.Teachers)
+                .HasMany(teacher => teacher.DiscardedByStudents)
+                .WithMany(student => student.DiscardedTeachers)
+                .UsingEntity(join => join.ToTable("TeacherStudents"));
+            modelBuilder.Entity<Teacher>()
+                .HasMany(teacher => teacher.FavouritedByStudents)
+                .WithMany(student => student.FavouriteTeachers)
                 .UsingEntity(join => join.ToTable("TeacherStudents"));
             modelBuilder.Entity<Teacher>()
                 .HasMany(teacher => teacher.TeachingLocations)
