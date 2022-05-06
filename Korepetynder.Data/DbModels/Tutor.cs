@@ -14,7 +14,7 @@ namespace Korepetynder.Data.DbModels
         public ICollection<Student> DiscardedByStudents { get; set; } = new List<Student>();
         public ICollection<Student> FavouritedByStudents { get; set; } = new List<Student>();
 
-        public ICollection<TutorLesson> Lessons { get; set; } = new List<TutorLesson>();
+        public ICollection<TutorLesson> TutorLessons { get; set; } = new List<TutorLesson>();
 
         public ICollection<Location> TeachingLocations { get; set; } = new List<Location>();
 

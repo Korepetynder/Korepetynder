@@ -1,6 +1,6 @@
 using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
-using Korepetynder.Contracts.Responses.Teachers;
+using Korepetynder.Contracts.Responses.Tutors;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
 using Korepetynder.Services.Models;
@@ -258,19 +258,54 @@ namespace Korepetynder.Services.Students
             return new StudentLessonResponse(lesson);
         }
 
-        public Task AddFavouriteTeacher(int id)
+        public async Task AddFavouriteTutor(Guid id)
         {
-            throw new NotImplementedException();
+            Guid currentId = GetCurrentUserId();
+            var student = await _korepetynderDbContext.Students.Where(student => student.UserId == currentId)
+                .Include(student => student.FavouriteTeachers)
+                .SingleAsync();
+            var teacher = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
+            student.FavouriteTeachers.Add(teacher);
+            await _korepetynderDbContext.SaveChangesAsync();
         }
 
-        public Task DeleteFavouriteTeacher(int id)
+        public async Task DeleteFavouriteTutor(Guid id)
         {
-            throw new NotImplementedException();
+            Guid currentId = GetCurrentUserId();
+            var student = await _korepetynderDbContext.Students.Where(student => student.UserId == currentId)
+                .Include(student => student.FavouriteTeachers)
+                .SingleAsync();
+            var teacher = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
+            student.FavouriteTeachers.Remove(teacher);
+            await _korepetynderDbContext.SaveChangesAsync();
         }
 
-        public Task<PagedData<FullTeacherInfoResponse>> GetFavouriteTeachers()
+        public async Task<PagedData<FullTutorInfoResponse>> GetFavouriteTutors(SieveModel model)
         {
-            throw new NotImplementedException();
+            Guid currentId = GetCurrentUserId();
+
+            var student = await _korepetynderDbContext.Students
+                .Where(student => student.UserId == currentId)
+                .SingleAsync();
+
+            var favouriteTutors = _korepetynderDbContext.Tutors
+                .Where(tutor => tutor.FavouritedByStudents.Contains(student))
+                .Include(tutor => tutor.TutorLessons)
+                .ThenInclude(lesson => lesson.Subject)
+                .Include(tutor => tutor.TutorLessons)
+                .ThenInclude(lesson => lesson.Levels)
+                .Include(tutor => tutor.TutorLessons)
+                .ThenInclude(lesson => lesson.Languages)
+                .AsNoTracking();
+            favouriteTutors = _sieveProcessor.Apply(model, favouriteTutors, applyPagination: false);
+
+            var count = await favouriteTutors.CountAsync();
+
+            favouriteTutors = _sieveProcessor.Apply(model, favouriteTutors, applyFiltering: false, applySorting: false);
+
+            return new PagedData<FullTutorInfoResponse>(count, await favouriteTutors
+                .Select(tutor => new FullTutorInfoResponse(tutor, tutor.TutorLessons))
+                .ToListAsync());
         }
     }
 }

@@ -1,6 +1,6 @@
 using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
-using Korepetynder.Contracts.Responses.Teachers;
+using Korepetynder.Contracts.Responses.Tutors;
 using Korepetynder.Services.Models;
 using Sieve.Models;
 
@@ -18,8 +18,8 @@ namespace Korepetynder.Services.Students
         Task<StudentLessonResponse> UpdateLesson(int id, StudentLessonRequest request);
         Task DeleteLesson(int id);
         Task<IEnumerable<TutorDataResponse>> GetSuggestedTutors();
-        Task AddFavouriteTutor(int id);
-        Task DeleteFavouriteTutor(int id);
-        Task<PagedData<FullTeacherInfoResponse>> GetFavouriteTutors();
+        Task AddFavouriteTutor(Guid id);
+        Task DeleteFavouriteTutor(Guid id);
+        Task<PagedData<FullTutorInfoResponse>> GetFavouriteTutors(SieveModel model);
     }
 }

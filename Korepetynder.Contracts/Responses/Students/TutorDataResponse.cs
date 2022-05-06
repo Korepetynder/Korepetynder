@@ -27,7 +27,7 @@ namespace Korepetynder.Contracts.Responses.Students
             }
             Locations = locations;
             List<TutorLessonResponse> lessons = new List<TutorLessonResponse>();
-            foreach (var lesson in tutor.Tutor!.Lessons)
+            foreach (var lesson in tutor.Tutor!.TutorLessons)
             {
                 lessons.Add(new TutorLessonResponse(lesson));
             }
