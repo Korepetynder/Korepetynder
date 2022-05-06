@@ -15,7 +15,7 @@ namespace Korepetynder.Data.DbModels
         public string Text { get; set; }
         public int Score { get; set; }  //number between 1 and 10
 
-        public Guid CommentedTutorId;
+        public Guid CommentedTutorId { get; set; }
 
         [ForeignKey(nameof(CommentedTutorId))]
         public Tutor CommentedTutor = null!;

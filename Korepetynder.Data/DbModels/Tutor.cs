@@ -7,7 +7,7 @@ namespace Korepetynder.Data.DbModels
     {
         [Key]
         public Guid UserId { get; set; }
-        public int Score { get; set; } //can be calculated using comments, however it is inefficient (number between 1 and 10, 0 if no comments)
+        public int Score { get; set; } //there should be calculated column
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;

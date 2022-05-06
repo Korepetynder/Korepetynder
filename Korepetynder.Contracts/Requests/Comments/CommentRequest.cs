@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Korepetynder.Contracts.Requests.Comments
 {
@@ -15,9 +10,9 @@ namespace Korepetynder.Contracts.Requests.Comments
         [MaxLength(300)]
         public string Comment { get; set; }
 
-        public CommentRequest(Guid teacherId, int score, string comment)
+        public CommentRequest(Guid commentedTeacherId, int score, string comment)
         {
-            CommentedTeacherId = teacherId;
+            CommentedTeacherId = commentedTeacherId;
             Score = score;
             Comment = comment;
         }
