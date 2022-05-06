@@ -84,6 +84,7 @@ namespace Korepetynder.Data
         public DbSet<Language> Languages => Set<Language>();
         public DbSet<StudentLesson> StudentLessons => Set<StudentLesson>();
         public DbSet<TutorLesson> TutorLessons => Set<TutorLesson>();
+        public DbSet<Comment> Comments => Set<Comment>();
 
     }
 }

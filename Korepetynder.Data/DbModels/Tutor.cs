@@ -16,6 +16,7 @@ namespace Korepetynder.Data.DbModels
         public ICollection<TutorLesson> Lessons { get; set; } = new List<TutorLesson>();
 
         public ICollection<Location> TeachingLocations { get; set; } = new List<Location>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public int? ProfilePictureId { get; set; }
         [ForeignKey(nameof(ProfilePictureId))]
