@@ -32,7 +32,7 @@ export class SettingsStudentComponent implements OnInit {
 
   profileForm = this.fb.group({
     isStudent: [false],
-    locations: [[]],
+    locations: [[], [Validators.required]],
     lessons: this.fb.array([])
   });
 
@@ -105,6 +105,7 @@ export class SettingsStudentComponent implements OnInit {
 
   saveChanges(): void {
     if (this.profileForm.invalid) {
+      this.snackBar.open("Wprowadź poprawne dane.", "OK", {duration: 5000});
       return;
     }
 

@@ -11,11 +11,9 @@
           <mat-option [value]="location.id">
             {{location.name}}
           </mat-option>
-          <mat-optgroup *ngIf="location.childrenLocations.length > 0" [label]="'Podlokacje w: ' + location.name">
-            <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id">
+          <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id" class="options-child">
               {{childLocation.name}}
-            </mat-option>
-          </mat-optgroup>
+          </mat-option>
         </ng-container>
       </mat-select>
     </mat-form-field>

@@ -31,7 +31,7 @@ export class SettingsTutorComponent implements OnInit {
 
   profileForm = this.fb.group({
     isTutor: [false],
-    locations: [[]],
+    locations: [[], [Validators.required]],
     lessons: this.fb.array([])
   });
 
@@ -103,6 +103,7 @@ export class SettingsTutorComponent implements OnInit {
 
   saveChanges(): void {
     if (this.profileForm.invalid) {
+      this.snackBar.open("Wprowadź poprawne dane.", "OK", {duration: 5000});
       return;
     }
 
