@@ -6,12 +6,12 @@
   <div *ngIf="isStudent">
     <mat-form-field appearance="outline">
       <mat-label>Preferowane lokalizacje</mat-label>
-      <mat-select formControlName="locations" multiple>
+      <mat-select formControlName="locations" multiple (selectionChange)="setAllLocations()">
         <ng-container *ngFor="let location of locations">
           <mat-option [value]="location.id">
             {{location.name}}
           </mat-option>
-          <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id" class="options-child">
+          <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id" class="options-child" [disabled]="checkParentLocation(location.id)">
               {{childLocation.name}}
           </mat-option>
         </ng-container>

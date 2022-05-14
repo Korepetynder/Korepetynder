@@ -60,6 +60,27 @@ export class SettingsTutorComponent implements OnInit {
     return this.isTutorCtrl.value as boolean;
   }
 
+  setAllLocations() {
+    let newLocations = this.locationsCtrl.value;
+    for (let i = 0; i < this.locations.length; i++) {
+      if (this.locations[i].childrenLocations == null) {
+        continue;
+      }
+      if (newLocations.includes(this.locations[i].id)) {
+        this.locations[i].childrenLocations.forEach(t => {
+          if (!newLocations.includes(t.id)) {
+            newLocations.push(t.id);
+          }
+        });
+      }
+    }
+    this.locationsCtrl.setValue(newLocations);
+  }
+
+  checkParentLocation(id: number): boolean {
+    return this.locationsCtrl.value.includes(id);
+  }
+
   addLesson(): void {
     this.lessons.push(this.fb.group({
       id: [null],
@@ -101,6 +122,18 @@ export class SettingsTutorComponent implements OnInit {
     this.profileForm.statusChanges.subscribe(status => this.statusChange.emit(status === 'VALID'));
   }
 
+  private addLocationsWithAllChildrenLocationsSelected(locations: number[]) {
+    for (let i = 0; i < this.locations.length; i++) {
+      if (this.locations[i].childrenLocations == null || this.locations[i].childrenLocations.length == 0) {
+        continue;
+      }
+      if (!locations.includes(this.locations[i].id) && this.locations[i].childrenLocations.every((x) => locations.includes(x.id))) {
+        locations.push(this.locations[i].id);
+      }
+    }
+    return locations;
+  }
+
   saveChanges(): void {
     if (this.profileForm.invalid) {
       this.snackBar.open("Wprowadź poprawne dane.", "OK", {duration: 5000});
@@ -108,7 +141,10 @@ export class SettingsTutorComponent implements OnInit {
     }
 
     this.isSaving = true;
-    const tutorRequest = new TutorRequest(this.locationsCtrl.value);
+    let locations: number[] = this.locationsCtrl.value;
+    this.addLocationsWithAllChildrenLocationsSelected(locations);
+
+    const tutorRequest = new TutorRequest(locations);
 
     const saveObservable = this.isTutor
       ? (this.isTutorOldValue ? this.tutorSettingsService.updateTutor(tutorRequest) : this.tutorSettingsService.createTutor(tutorRequest))
