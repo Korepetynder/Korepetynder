@@ -19,4 +19,8 @@ export class FavoriteTutorCardComponent implements OnInit {
   handleDeleteButton(): void {
 
   }
+
+  handleFavoritesButton(): void {
+    this.tutor.isFavorite = !this.tutor.isFavorite;
+  }
 }
