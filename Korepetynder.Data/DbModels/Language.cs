@@ -6,6 +6,7 @@ namespace Korepetynder.Data.DbModels
     [Index(nameof(Name), IsUnique = true)]
     public class Language
     {
+        public bool WasAccepted { get; set; }
         public int Id { get; set; }
 
         [MaxLength(30)]
@@ -17,6 +18,7 @@ namespace Korepetynder.Data.DbModels
         public Language(string name)
         {
             Name = name;
+            WasAccepted = false;
         }
         public override bool Equals(object? obj)
         {

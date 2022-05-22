@@ -48,6 +48,7 @@ namespace Korepetynder.Services.Locations
         public async Task<PagedData<LocationResponse>> GetLocations(SieveModel sieveModel)
         {
             var locations = _korepetynderDbContext.Locations
+                .Where(location => location.WasAccepted)
                 .OrderBy(location => location.Name)
                 .AsNoTracking();
 
@@ -70,5 +71,48 @@ namespace Korepetynder.Services.Locations
                 .Where(location => location.Id == id)
                 .Select(location => new LocationResponse(location.Id, location.Name, location.ParentLocationId))
                 .SingleOrDefaultAsync();
+        public async Task<PagedData<LocationResponse>> GetNewLocations(SieveModel sieveModel)
+        {
+            //TODO assert user is admin
+            var locations = _korepetynderDbContext.Locations
+                   .Where(location => !location.WasAccepted)
+                   .OrderBy(location => location.Name)
+                   .AsQueryable();
+
+            locations = _sieveProcessor.Apply(sieveModel, locations, applyPagination: false);
+
+            var count = await locations.CountAsync();
+
+            locations = _sieveProcessor.Apply(sieveModel, locations, applyFiltering: false, applySorting: false);
+
+            return new PagedData<LocationResponse>(count, await locations
+                .Select(location => new LocationResponse(location))
+                .ToListAsync());
+        }
+        public async Task<LocationResponse> AcceptLocation(int id)
+        {
+            //TODO assert user is admin
+            var location = await _korepetynderDbContext.Locations
+                .Where(location => location.Id == id).SingleAsync();
+
+            if (location.WasAccepted)
+            {
+                throw new InvalidOperationException("Location with id " + id + " was already accepted");
+            }
+            location.WasAccepted = true;
+            await _korepetynderDbContext.SaveChangesAsync();
+
+            return new LocationResponse(location);
+        }
+
+        public async Task DeleteLocation(int id)
+        {
+            //TODO assert user is admin
+            var location = await _korepetynderDbContext.Locations
+                .Where(location => location.Id == id)
+                .SingleAsync();
+            _korepetynderDbContext.Remove(location);
+            await _korepetynderDbContext.SaveChangesAsync();
+        }
     }
 }

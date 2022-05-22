@@ -40,6 +40,7 @@ namespace Korepetynder.Services.Languages
         public async Task<PagedData<LanguageResponse>> GetLanguages(SieveModel sieveModel)
         {
             var languages = _korepetynderDbContext.Languages
+                .Where(language => language.WasAccepted)
                 .OrderBy(Language => Language.Name)
                 .AsQueryable();
 
@@ -59,5 +60,48 @@ namespace Korepetynder.Services.Languages
                 .Where(x => x.Id == id)
                 .Select(language => new LanguageResponse(language.Id, language.Name))
                 .SingleOrDefaultAsync();
+        public async Task<PagedData<LanguageResponse>> GetNewLanguages(SieveModel sieveModel)
+        {
+            //TODO assert user is admin
+            var languages = _korepetynderDbContext.Languages
+                   .Where(language => !language.WasAccepted)
+                   .OrderBy(language => language.Name)
+                   .AsQueryable();
+
+            languages = _sieveProcessor.Apply(sieveModel, languages, applyPagination: false);
+
+            var count = await languages.CountAsync();
+
+            languages = _sieveProcessor.Apply(sieveModel, languages, applyFiltering: false, applySorting: false);
+
+            return new PagedData<LanguageResponse>(count, await languages
+                .Select(language => new LanguageResponse(language.Id, language.Name))
+                .ToListAsync());
+        }
+        public async Task<LanguageResponse> AcceptLanguage(int id)
+        {
+            //TODO assert user is admin
+            var language = await _korepetynderDbContext.Languages
+                .Where(language => language.Id == id).SingleAsync();
+
+            if (language.WasAccepted)
+            {
+                throw new InvalidOperationException("Language with id " + id + " was already accepted");
+            }
+            language.WasAccepted = true;
+            await _korepetynderDbContext.SaveChangesAsync();
+
+            return new LanguageResponse(language.Id, language.Name);
+        }
+
+        public async Task DeleteLanguage(int id)
+        {
+            //TODO assert user is admin
+            var language = await _korepetynderDbContext.Languages
+                .Where(language => language.Id == id)
+                .SingleAsync();
+            _korepetynderDbContext.Remove(language);
+            await _korepetynderDbContext.SaveChangesAsync();
+        }
     }
 }

@@ -39,6 +39,7 @@ namespace Korepetynder.Services.Subjects
         public async Task<PagedData<SubjectResponse>> GetSubjects(SieveModel sieveModel)
         {
             var subjects = _korepetynderDbContext.Subjects
+                .Where(subject => subject.WasAccepted)
                 .OrderBy(subject => subject.Name)
                 .AsQueryable();
 
@@ -58,5 +59,48 @@ namespace Korepetynder.Services.Subjects
                 .Where(subject => subject.Id == id)
                 .Select(subject => new SubjectResponse(subject.Id, subject.Name))
                 .SingleOrDefaultAsync();
+        public async Task<PagedData<SubjectResponse>> GetNewSubjects(SieveModel sieveModel)
+        {
+            //TODO assert user is admin
+            var subjects = _korepetynderDbContext.Subjects
+                   .Where(subject => !subject.WasAccepted)
+                   .OrderBy(subject => subject.Name)
+                   .AsQueryable();
+
+            subjects = _sieveProcessor.Apply(sieveModel, subjects, applyPagination: false);
+
+            var count = await subjects.CountAsync();
+
+            subjects = _sieveProcessor.Apply(sieveModel, subjects, applyFiltering: false, applySorting: false);
+
+            return new PagedData<SubjectResponse>(count, await subjects
+                .Select(subject => new SubjectResponse(subject.Id, subject.Name))
+                .ToListAsync());
+        }
+        public async Task<SubjectResponse> AcceptSubject(int id)
+        {
+            //TODO assert user is admin
+            var subject = await _korepetynderDbContext.Subjects
+                .Where(subject => subject.Id == id).SingleAsync();
+
+            if (subject.WasAccepted)
+            {
+                throw new InvalidOperationException("Subject with id " + id + " was already accepted");
+            }
+            subject.WasAccepted = true;
+            await _korepetynderDbContext.SaveChangesAsync();
+
+            return new SubjectResponse(subject.Id, subject.Name);
+        }
+
+        public async Task DeleteSubject(int id)
+        {
+            //TODO assert user is admin
+            var subject = await _korepetynderDbContext.Subjects
+                .Where(subject => subject.Id == id)
+                .SingleAsync();
+            _korepetynderDbContext.Remove(subject);
+            await _korepetynderDbContext.SaveChangesAsync();
+        }
     }
 }
