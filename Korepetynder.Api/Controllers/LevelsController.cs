@@ -40,7 +40,7 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Gets the specified level.
         /// </summary>
-        /// <param name="id">ID of the level.</param>
+        /// <param name="id">ID of the level to get.</param>
         /// <returns>Level.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

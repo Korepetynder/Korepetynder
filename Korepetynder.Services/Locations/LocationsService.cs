@@ -24,11 +24,14 @@ namespace Korepetynder.Services.Locations
         {
             var locationExists = await _korepetynderDbContext.Locations
                 .AnyAsync(location => location.Name == locationRequest.Name);
+
             if (locationExists)
             {
                 throw new InvalidOperationException("Location with name " + locationRequest.Name + " already exists");
             }
+
             var location = new Location(locationRequest.Name);
+
             if (locationRequest.ParentLocationId != null)
             {
                 var parent = await _korepetynderDbContext.Locations

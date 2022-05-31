@@ -10,17 +10,16 @@ using Sieve.Services;
 
 namespace Korepetynder.Services.Students
 {
-    internal class StudentService : IStudentService
+    internal class StudentService : AdBaseService, IStudentService
     {
         private readonly KorepetynderDbContext _korepetynderDbContext;
         private readonly ISieveProcessor _sieveProcessor;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public StudentService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor, IHttpContextAccessor httpContextAccessor)
+            : base(httpContextAccessor)
         {
             _korepetynderDbContext = korepetynderDbContext;
             _sieveProcessor = sieveProcessor;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<StudentLessonResponse> AddLesson(StudentLessonRequest request)
@@ -29,12 +28,15 @@ namespace Korepetynder.Services.Students
             {
                 throw new InvalidOperationException("Wrong number of arguments");
             }
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.StudentId is null)
+            Guid currentId = GetCurrentUserId();
+
+            var isStudent = await _korepetynderDbContext.Students
+                .AnyAsync(student => student.UserId == currentId);
+            if (!isStudent)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
+
             var subject = await _korepetynderDbContext.Subjects.Where(subject => subject.Id == request.SubjectId).SingleAsync();
             var levels = await _korepetynderDbContext.Levels.Where(level => request.LevelsIds.Contains(level.Id)).ToListAsync();
             var languages = await _korepetynderDbContext.Languages.Where(language => request.LanguagesIds.Contains(language.Id)).ToListAsync();
@@ -43,15 +45,18 @@ namespace Korepetynder.Services.Students
                 throw new InvalidOperationException("Provided incorrect id");
             }
 
-            var lesson = new StudentLesson();
-            lesson.StudentId = studentUser.StudentId.Value;
-            lesson.Frequency = request.Frequency;
-            lesson.Subject = subject;
-            lesson.Levels = levels;
-            lesson.Languages = languages;
-            lesson.PreferredCostMinimum = request.PreferredCostMinimum;
-            lesson.PreferredCostMaximum = request.PreferredCostMaximum;
-            await _korepetynderDbContext.StudentLesson.AddAsync(lesson);
+            var lesson = new StudentLesson
+            {
+                StudentId = currentId,
+                Frequency = request.Frequency,
+                Subject = subject,
+                Levels = levels,
+                Languages = languages,
+                PreferredCostMinimum = request.PreferredCostMinimum,
+                PreferredCostMaximum = request.PreferredCostMaximum
+            };
+
+            await _korepetynderDbContext.StudentLessons.AddAsync(lesson);
             await _korepetynderDbContext.SaveChangesAsync();
 
             return new StudentLessonResponse(lesson);
@@ -59,15 +64,16 @@ namespace Korepetynder.Services.Students
 
         public async Task DeleteLesson(int id)
         {
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var currentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            var lesson = await _korepetynderDbContext.StudentLesson.Where(lesson => lesson.Id == id).SingleAsync();
-            if (currentUser.StudentId != lesson.StudentId)
+            Guid currentId = GetCurrentUserId();
+
+            var lesson = await _korepetynderDbContext.StudentLessons
+                .SingleAsync(lesson => lesson.Id == id);
+            if (currentId != lesson.StudentId)
             {
                 throw new ArgumentException("Lesson does not belong to student");
             }
 
-            _korepetynderDbContext.StudentLesson.Remove(lesson);
+            _korepetynderDbContext.StudentLessons.Remove(lesson);
             await _korepetynderDbContext.SaveChangesAsync();
         }
 
@@ -77,73 +83,73 @@ namespace Korepetynder.Services.Students
             {
                 throw new InvalidOperationException("No location selected");
             }
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.StudentId is not null)
+            Guid currentId = GetCurrentUserId();
+
+            var isStudent = await _korepetynderDbContext.Students
+                .AnyAsync(student => student.UserId == currentId);
+            if (isStudent)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " already is a student");
             }
-            var student = new Student();
+
             var locations = await _korepetynderDbContext.Locations.Where(location => request.Locations.Contains(location.Id)).ToListAsync();
             if (locations.Count != request.Locations.Count())
             {
                 throw new ArgumentException("Location does not exists");
             }
+
+            var student = new Student(currentId);
             student.PreferredLocations = locations;
-            studentUser.Student = student;
+
             _korepetynderDbContext.Students.Add(student);
             await _korepetynderDbContext.SaveChangesAsync();
-            return new StudentResponse(student.Id,locations.Select(location => location.Id));
+            return new StudentResponse(student.UserId, locations.Select(location => location.Id));
         }
 
         public async Task<StudentResponse> UpdateStudent(StudentRequest request)
         {
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users
-                .Where(user => user.Id == currentId)
-                .Include(user => user.Student!)
-                    .ThenInclude(student => student.PreferredLocations)
-                .SingleAsync();
-            if (studentUser.StudentId is null)
-            {
-                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
-            }
-            var locations = await _korepetynderDbContext.Locations.Where(location => request.Locations.Contains(location.Id)).ToListAsync();
+            Guid currentId = GetCurrentUserId();
+
+            var student = await _korepetynderDbContext.Students
+                .Include(student => student.PreferredLocations)
+                .SingleAsync(student => student.UserId == currentId);
+
+            var locations = await _korepetynderDbContext.Locations
+                .Where(location => request.Locations.Contains(location.Id))
+                .ToListAsync();
             if (locations.Count != request.Locations.Count())
             {
                 throw new ArgumentException("Location does not exists");
             }
-            var student = studentUser.Student!;
+
             student.PreferredLocations = locations;
             await _korepetynderDbContext.SaveChangesAsync();
-            return new StudentResponse(student.Id, locations.Select(location => location.Id));
+
+            return new StudentResponse(student.UserId, locations.Select(location => location.Id));
         }
 
         public async Task<StudentResponse> GetStudentData()
         {
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users
-                .Where(user => user.Id == currentId)
-                .Include(user => user.Student)
-                .Include(user => user.Student!.PreferredLocations)
+            Guid currentId = GetCurrentUserId();
+
+            return await _korepetynderDbContext.Students
+                .Where(student => student.UserId == currentId)
+                .Select(student => new StudentResponse(student.UserId, student.PreferredLocations.Select(location => location.Id)))
                 .SingleAsync();
-            if (studentUser.Student is null)
-            {
-                throw new InvalidOperationException("User with id: " + currentId + " already is not a student");
-            }
-            var student = studentUser.Student;
-            return new StudentResponse(student.Id, student.PreferredLocations.Select(location => location.Id));
         }
         public async Task<PagedData<StudentLessonResponse>> GetLessons(SieveModel model)
         {
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.StudentId is null)
+            Guid currentId = GetCurrentUserId();
+
+            var isStudent = await _korepetynderDbContext.Students
+                .AnyAsync(student => student.UserId == currentId);
+            if (!isStudent)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
-            var userLessons = _korepetynderDbContext.StudentLesson
-                .Where(lesson => lesson.StudentId == studentUser.StudentId)
+
+            var userLessons = _korepetynderDbContext.StudentLessons
+                .Where(lesson => lesson.StudentId == currentId)
                 .Include(lesson => lesson.Languages)
                 .Include(lesson => lesson.Levels)
                 .Include(lesson => lesson.Subject)
@@ -162,25 +168,19 @@ namespace Korepetynder.Services.Students
 
         public async Task DeleteStudent()
         {
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users
-                .Where(user => user.Id == currentId)
-                .Include(user => user.Student)
-                .SingleAsync();
-            if (studentUser.Student is null)
-            {
-                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
-            }
-            _korepetynderDbContext.Students.Remove(studentUser.Student);
-            studentUser.Student = null;
-            studentUser.StudentId = null;
-            _korepetynderDbContext.SaveChanges();
+            Guid currentId = GetCurrentUserId();
 
+            var student = await _korepetynderDbContext.Students
+                .SingleAsync(student => student.UserId == currentId);
+
+            _korepetynderDbContext.Students.Remove(student);
+            _korepetynderDbContext.SaveChanges();
         }
 
-        public async Task<IEnumerable<TeacherDataResponse>> GetSuggestedTeachers()
+        public async Task<IEnumerable<TutorDataResponse>> GetSuggestedTutors()
         {
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
+            Guid currentId = GetCurrentUserId();
+
             var studentUser = await _korepetynderDbContext.Users
                 .Where(user => user.Id == currentId)
                 .Include(user => user.Student)
@@ -196,49 +196,57 @@ namespace Korepetynder.Services.Students
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
-            IEnumerable<TeacherLesson> allLessons = new LinkedList<TeacherLesson>();
-            foreach (var searchLesson in studentUser.Student.PreferredLessons) {
-                var lessons = await _korepetynderDbContext.TeacherLesson
-                .Where(lesson => lesson.Cost >= searchLesson.PreferredCostMinimum && lesson.Cost <= searchLesson.PreferredCostMaximum)
-                .Where(lesson => lesson.Subject == searchLesson.Subject)
-                .Where(lesson => searchLesson.Frequency == null || lesson.Frequency >= searchLesson.Frequency)
-                .Where(lesson => lesson.Teacher.TeachingLocations.Any(el => studentUser.Student.PreferredLocations.Contains(el)))
-                .Where(lesson => lesson.Languages.Any(el => searchLesson.Languages.Contains(el)))
-                .Where(lesson => lesson.Levels.Any(el => searchLesson.Levels.Contains(el)))
-                .Include(lesson => lesson.Teacher)
-                .Include(lesson => lesson.Languages)
-                .Include(lesson => lesson.Levels)
-                .Include(lesson => lesson.Teacher.User)
-                .Include(lesson => lesson.Teacher.TeachingLocations)
-                .OrderBy(lesson => lesson.Cost)
-                .ToListAsync();
+
+            IEnumerable<TutorLesson> allLessons = new LinkedList<TutorLesson>();
+            foreach (var searchLesson in studentUser.Student.PreferredLessons)
+            {
+                var lessons = await _korepetynderDbContext.TutorLessons
+                    .Where(lesson => lesson.Cost >= searchLesson.PreferredCostMinimum && lesson.Cost <= searchLesson.PreferredCostMaximum)
+                    .Where(lesson => lesson.Subject == searchLesson.Subject)
+                    .Where(lesson => searchLesson.Frequency == null || lesson.Frequency >= searchLesson.Frequency)
+                    .Where(lesson => lesson.Tutor.TeachingLocations.Any(el => studentUser.Student.PreferredLocations.Contains(el)))
+                    .Where(lesson => lesson.Languages.Any(el => searchLesson.Languages.Contains(el)))
+                    .Where(lesson => lesson.Levels.Any(el => searchLesson.Levels.Contains(el)))
+                    .Include(lesson => lesson.Tutor)
+                    .Include(lesson => lesson.Languages)
+                    .Include(lesson => lesson.Levels)
+                    .Include(lesson => lesson.Tutor.User)
+                    .Include(lesson => lesson.Tutor.TeachingLocations)
+                    .OrderBy(lesson => lesson.Cost)
+                    .ToListAsync();
                 allLessons = allLessons.Concat(lessons);
             }
-            var teachers = new HashSet<Teacher>();
-            foreach (var lesson in allLessons) {
-                teachers.Add(lesson.Teacher);
+
+            var tutors = new HashSet<Tutor>();
+            foreach (var lesson in allLessons)
+            {
+                tutors.Add(lesson.Tutor);
             }
-            return teachers.Select(teacher => new TeacherDataResponse(teacher.User)).ToList();
+            return tutors.Select(tutor => new TutorDataResponse(tutor.User)).ToList();
         }
 
         public async Task<StudentLessonResponse> UpdateLesson(int id, StudentLessonRequest request)
         {
-            Guid currentId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value!);
-            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            if (studentUser.StudentId is null)
+            Guid currentId = GetCurrentUserId();
+
+            var isStudent = await _korepetynderDbContext.Students
+                .AnyAsync(student => student.UserId == currentId);
+            if (!isStudent)
             {
                 throw new InvalidOperationException("User with id: " + currentId + " is not a student");
             }
-            var lesson = await _korepetynderDbContext.StudentLesson
+
+            var lesson = await _korepetynderDbContext.StudentLessons
                 .Where(lesson => lesson.Id == id)
                 .Include(lesson => lesson.Subject)
                 .Include(lesson => lesson.Levels)
                 .Include(lesson => lesson.Languages)
                 .SingleAsync();
-            if (lesson.StudentId != studentUser.StudentId)
+            if (lesson.StudentId != currentId)
             {
                 throw new ArgumentException("Lesson does not belong to current user");
             }
+
             var subject = await _korepetynderDbContext.Subjects.Where(subject => subject.Id == request.SubjectId).SingleAsync();
             var levels = await _korepetynderDbContext.Levels.Where(level => request.LevelsIds.Contains(level.Id)).ToListAsync();
             var languages = await _korepetynderDbContext.Languages.Where(language => request.LanguagesIds.Contains(language.Id)).ToListAsync();

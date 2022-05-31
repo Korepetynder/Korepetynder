@@ -14,7 +14,7 @@ namespace Korepetynder.Data.DbModels
         public Location? ParentLocation { get; set; }
         public ICollection<Location> Sublocations { get; set; } = new List<Location>();
 
-        public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
+        public ICollection<Tutor> Tutors { get; set; } = new List<Tutor>();
         public ICollection<Student> Students { get; set; } = new List<Student>();
 
         public Location(string name)

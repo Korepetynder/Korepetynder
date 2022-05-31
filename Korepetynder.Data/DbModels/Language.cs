@@ -12,7 +12,7 @@ namespace Korepetynder.Data.DbModels
         public string Name { get; set; }
 
         public ICollection<StudentLesson> StudentLessons { get; set; } = new List<StudentLesson>();
-        public ICollection<TeacherLesson> TeacherLessons { get; set; } = new List<TeacherLesson>();
+        public ICollection<TutorLesson> TutorLessons { get; set; } = new List<TutorLesson>();
 
         public Language(string name)
         {
