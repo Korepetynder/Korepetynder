@@ -24,7 +24,7 @@ namespace Korepetynder.Services.Students
 
         public async Task<StudentLessonResponse> AddLesson(StudentLessonRequest request)
         {
-            if (request.LevelsIds.Count() == 0 || request.LanguagesIds.Count() == 0)
+            if (!request.LevelsIds.Any() || !request.LanguagesIds.Any())
             {
                 throw new InvalidOperationException("Wrong number of arguments");
             }
@@ -79,7 +79,7 @@ namespace Korepetynder.Services.Students
 
         public async Task<StudentResponse> InitializeStudent(StudentRequest request)
         {
-            if (request.Locations.Count() == 0)
+            if (!request.Locations.Any())
             {
                 throw new InvalidOperationException("No location selected");
             }
