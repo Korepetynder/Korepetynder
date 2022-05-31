@@ -4,7 +4,7 @@ namespace Korepetynder.Services
 {
     internal abstract class AdBaseService
     {
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AdBaseService(IHttpContextAccessor httpContextAccessor)
         {
@@ -13,6 +13,11 @@ namespace Korepetynder.Services
 
         protected Guid GetCurrentUserId()
         {
+            if (_httpContextAccessor == null)
+            {
+                throw new InvalidOperationException("There is no active HttpContext");
+            }
+
             return new Guid(_httpContextAccessor.HttpContext
                 .User
                 .FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?

@@ -1,6 +1,7 @@
 using Korepetynder.Services.Languages;
 using Korepetynder.Services.Levels;
 using Korepetynder.Services.Locations;
+using Korepetynder.Services.Media;
 using Korepetynder.Services.Students;
 using Korepetynder.Services.Subjects;
 using Korepetynder.Services.Tutors;
@@ -23,6 +24,7 @@ namespace Korepetynder.Services
             services.AddScoped<ILanguagesService, LanguagesService>();
             services.AddScoped<ILocationsService, LocationsService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMediaService, MediaService>();
         }
     }
 }
