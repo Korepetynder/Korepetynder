@@ -24,7 +24,7 @@ namespace Korepetynder.Services.Tutors
 
         public async Task<TutorLessonResponse> AddLesson(TutorLessonRequest request)
         {
-            if (!request.LevelsIds.Any() || |request.LanguagesIds.Any())
+            if (!request.LevelsIds.Any() || !request.LanguagesIds.Any())
             {
                 throw new InvalidOperationException("Wrong number of arguments");
             }
