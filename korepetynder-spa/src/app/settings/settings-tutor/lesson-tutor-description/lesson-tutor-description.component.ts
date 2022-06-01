@@ -27,35 +27,19 @@ export class LessonTutorDescriptionComponent {
   set lessonId(id: number | null) { this.lesson.get('id')!.setValue(id); }
 
   get lessonSubject(): string {
-    let subjectId = this.lesson.get('subject')!.value;
-    for (let subject of this.subjects) {
-      if (subject.id == subjectId) {
-        return subject.name;
-      }
-    }
-    return "Nowy opis";
+    const subjectId = this.lesson.get('subject')!.value;
+
+    const subject = this.subjects.find(s => s.id == subjectId);
+
+    return subject ? subject.name : "Nowy opis";
   };
 
   get lessonLevels(): string {
-    let levelsIds = this.lesson.get('levels')!.value;
-    let levels: string[] = [];
+    const levelsIds: number[] = this.lesson.get('levels')!.value;
 
-    for (let level of this.levels) {
-      for (let id of levelsIds) {
-        if (level.id == id) {
-          levels.push(level.name);
-        }
-      }
-    }
+    const levels = levelsIds.map(id => this.levels.find(level => level.id == id)!.name);
 
-    let result: string = "";
-    for (let i = 0; i < levels.length; i++) {
-      result += levels[i];
-      if (i != levels.length - 1) {
-        result += ", ";
-      }
-    }
-    return result;
+    return levels.join(", ");
   }
 
   isSaving = false;
