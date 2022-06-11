@@ -280,7 +280,7 @@ namespace Korepetynder.Services.Students
             await _korepetynderDbContext.SaveChangesAsync();
         }
 
-        public async Task<PagedData<FullTutorInfoResponse>> GetFavouriteTutors(SieveModel model)
+        public async Task<PagedData<TutorDataResponse>> GetFavouriteTutors(SieveModel model)
         {
             Guid currentId = GetCurrentUserId();
 
@@ -288,13 +288,13 @@ namespace Korepetynder.Services.Students
                 .Where(student => student.UserId == currentId)
                 .SingleAsync();
 
-            var favouriteTutors = _korepetynderDbContext.Tutors
-                .Where(tutor => tutor.FavouritedByStudents.Contains(student))
-                .Include(tutor => tutor.TutorLessons)
+            var favouriteTutors = _korepetynderDbContext.Users
+                .Where(user => user.Tutor!.FavouritedByStudents.Contains(student))
+                .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Subject)
-                .Include(tutor => tutor.TutorLessons)
+                .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Levels)
-                .Include(tutor => tutor.TutorLessons)
+                .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Languages)
                 .AsNoTracking();
             favouriteTutors = _sieveProcessor.Apply(model, favouriteTutors, applyPagination: false);
@@ -303,8 +303,8 @@ namespace Korepetynder.Services.Students
 
             favouriteTutors = _sieveProcessor.Apply(model, favouriteTutors, applyFiltering: false, applySorting: false);
 
-            return new PagedData<FullTutorInfoResponse>(count, await favouriteTutors
-                .Select(tutor => new FullTutorInfoResponse(tutor, tutor.TutorLessons))
+            return new PagedData<TutorDataResponse>(count, await favouriteTutors
+                .Select(tutor => new TutorDataResponse(tutor))
                 .ToListAsync());
         }
     }

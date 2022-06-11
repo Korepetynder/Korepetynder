@@ -20,6 +20,6 @@ namespace Korepetynder.Services.Students
         Task<IEnumerable<TutorDataResponse>> GetSuggestedTutors();
         Task AddFavouriteTutor(Guid id);
         Task DeleteFavouriteTutor(Guid id);
-        Task<PagedData<FullTutorInfoResponse>> GetFavouriteTutors(SieveModel model);
+        Task<PagedData<TutorDataResponse>> GetFavouriteTutors(SieveModel model);
     }
 }
