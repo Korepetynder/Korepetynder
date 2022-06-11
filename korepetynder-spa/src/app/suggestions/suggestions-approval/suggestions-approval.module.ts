@@ -20,19 +20,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { SuggestionsComponent } from './suggestions.component';
-import { SuggestionsRoutingModule } from './suggestions-routing.module';
+import { SuggestionsApprovalComponent } from './suggestions-approval.component';
+import { SuggestionsApprovalRoutingModule } from './suggestions-approval-routing.module';
 
 
 @NgModule({
   declarations: [
-    SuggestionsComponent,
+    SuggestionsApprovalComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SuggestionsRoutingModule,
+    SuggestionsApprovalRoutingModule,
     MatSliderModule,
     MatIconModule,
     MatExpansionModule,
@@ -58,4 +58,4 @@ import { SuggestionsRoutingModule } from './suggestions-routing.module';
     }
   ]
 })
-export class SuggestionsModule { }
+export class SuggestionsApprovalModule { }

@@ -14,10 +14,14 @@ const routes: Routes = [
       expectedRole: UserType.Initialized
     }
   },
+  {
+    path: 'manage',
+    loadChildren: () => import('./suggestions-approval/suggestions-approval.module').then(m => m.SuggestionsApprovalModule)
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SuggestionssRoutingModule { }
+export class SuggestionsRoutingModule { }
