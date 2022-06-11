@@ -223,7 +223,7 @@ namespace Korepetynder.Api.Controllers
         [HttpGet("Favourite")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<FullTutorInfoResponse>>> GetFavouriteTutors([FromQuery] SieveModel sieveModel)
+        public async Task<ActionResult<IEnumerable<TutorDataResponse>>> GetFavouriteTutors([FromQuery] SieveModel sieveModel)
         {
             try
             {
@@ -243,7 +243,7 @@ namespace Korepetynder.Api.Controllers
         [HttpPost("Favourite/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<FullTutorInfoResponse>>> PostFavouriteTutor([FromRoute] Guid id)
+        public async Task<IActionResult> PostFavouriteTutor([FromRoute] Guid id)
         {
             try
             {
@@ -261,7 +261,7 @@ namespace Korepetynder.Api.Controllers
         [HttpDelete("Favourite/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<FullTutorInfoResponse>>> DeleteFavouriteTutors([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteFavouriteTutor([FromRoute] Guid id)
         {
             try
             {
