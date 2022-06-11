@@ -20,6 +20,7 @@ export class SuggestionsApprovalComponent implements OnInit {
   levels: Level[] = [];
   locations: Location[] = [];
   subjects: Subject[] = [];
+  parentLocations: Location[] = [];
 
   subjectForm = this.fb.group({
     subjects: [[]]
@@ -31,6 +32,10 @@ export class SuggestionsApprovalComponent implements OnInit {
 
   languageForm = this.fb.group({
     languages: [[]]
+  });
+
+  locationForm = this.fb.group({
+    locations: [[]]
   });
 
   constructor(
@@ -45,6 +50,7 @@ export class SuggestionsApprovalComponent implements OnInit {
     this.dictionariesService.getLevelsToApprove().subscribe(levels => this.levels = levels);
     this.dictionariesService.getLocationsToApprove().subscribe(locations => this.locations = locations);
     this.dictionariesService.getSubjectsToApprove().subscribe(subjects => this.subjects = subjects);
+    this.dictionariesService.getLocations().subscribe(locations => this.parentLocations = locations);
   }
 
   get subjectCtrl() {
@@ -59,8 +65,16 @@ export class SuggestionsApprovalComponent implements OnInit {
     return this.languageForm.get('languages') as FormControl;
   }
 
-  Approve() {
-    console.log(this.subjectCtrl.value);
+  get locationCtrl() {
+    return this.locationForm.get('locations') as FormControl;
+  }
+
+  parentLocation(id: number | null) {
+    const parentLocation = this.parentLocations.find(location => location.id === id);
+    return parentLocation ? `[podlokalizacja w: ${parentLocation.name}]` : '';
+  }
+
+  private ApproveAllSubjects() {
     for (let id of this.subjectCtrl.value) {
       this.suggestionsApprovalService.approveSubject(id).subscribe(
         () => {
@@ -69,7 +83,9 @@ export class SuggestionsApprovalComponent implements OnInit {
         });
     }
     this.subjects = this.subjects.filter((subject) => !this.subjectCtrl.value.includes(subject.id));
+  }
 
+  private ApproveAllLevels() {
     for (let id of this.levelCtrl.value) {
       this.suggestionsApprovalService.approveLevel(id).subscribe(
         () => {
@@ -78,7 +94,9 @@ export class SuggestionsApprovalComponent implements OnInit {
         });
     }
     this.levels = this.levels.filter((level) => !this.levelCtrl.value.includes(level.id));
+  }
 
+  private ApproveAllLanguages() {
     for (let id of this.languageCtrl.value) {
       this.suggestionsApprovalService.approveLanguage(id).subscribe(
         () => {
@@ -89,8 +107,25 @@ export class SuggestionsApprovalComponent implements OnInit {
     this.languages = this.languages.filter((language) => !this.languageCtrl.value.includes(language.id));
   }
 
-  Remove() {
-    console.log(this.subjectCtrl.value);
+  private ApproveAllLocations() {
+    for (let id of this.locationCtrl.value) {
+      this.suggestionsApprovalService.approveLocation(id).subscribe(
+        () => {
+          this.isSaving = false;
+          this.snackBar.open("Zaakceptowano pomyślnie.", "OK", {duration: 5000});
+        });
+    }
+    this.locations = this.locations.filter((location) => !this.locationCtrl.value.includes(location.id));
+  }
+
+  Approve() {
+    this.ApproveAllSubjects();
+    this.ApproveAllLevels();
+    this.ApproveAllLanguages();
+    this.ApproveAllLocations();
+  }
+
+  private RemoveAllSubjects() {
     for (let id of this.subjectCtrl.value) {
       this.suggestionsApprovalService.removeSubject(id).subscribe(
         () => {
@@ -99,7 +134,9 @@ export class SuggestionsApprovalComponent implements OnInit {
         });
     }
     this.subjects = this.subjects.filter((subject) => !this.subjectCtrl.value.includes(subject.id));
+  }
 
+  private RemoveAllLevels() {
     for (let id of this.levelCtrl.value) {
       this.suggestionsApprovalService.removeLevel(id).subscribe(
         () => {
@@ -108,7 +145,9 @@ export class SuggestionsApprovalComponent implements OnInit {
         });
     }
     this.levels = this.levels.filter((level) => !this.levelCtrl.value.includes(level.id));
+  }
 
+  private RemoveAllLanguages() {
     for (let id of this.languageCtrl.value) {
       this.suggestionsApprovalService.removeLanguage(id).subscribe(
         () => {
@@ -117,6 +156,24 @@ export class SuggestionsApprovalComponent implements OnInit {
         });
     }
     this.languages = this.languages.filter((language) => !this.languageCtrl.value.includes(language.id));
+  }
+
+  private RemoveAllLocations() {
+    for (let id of this.locationCtrl.value) {
+      this.suggestionsApprovalService.removeLocation(id).subscribe(
+        () => {
+          this.isSaving = false;
+          this.snackBar.open("Odrzucono pomyślnie.", "OK", {duration: 5000});
+        });
+    }
+    this.locations = this.locations.filter((location) => !this.locationCtrl.value.includes(location.id));
+  }
+
+  Remove() {
+    this.RemoveAllSubjects();
+    this.RemoveAllLevels();
+    this.RemoveAllLanguages();
+    this.RemoveAllLocations();
   }
 
 }

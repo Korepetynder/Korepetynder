@@ -49,6 +49,17 @@
         </mat-form-field>
       </form>
 
+      <form [formGroup]="locationForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Lokalizacje</mat-label>
+          <mat-select formControlName="locations" multiple>
+            <mat-option *ngFor="let location of locations" [value]="location.id">
+              {{location.name}} {{parentLocation(location.parentId)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+
     </mat-card-content>
   </mat-card>
 </div>

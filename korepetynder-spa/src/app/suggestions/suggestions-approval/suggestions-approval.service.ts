@@ -41,4 +41,12 @@ export class SuggestionsApprovalService {
   removeLanguage(id: number): Observable<any> {
     return this.httpClient.delete(this.apiUrl + `/languages/manage/${id}`);
   }
+
+  approveLocation(id: number): Observable<any> {
+    return this.httpClient.post(this.apiUrl + `/locations/manage/${id}`, {});
+  }
+
+  removeLocation(id: number): Observable<any> {
+    return this.httpClient.delete(this.apiUrl + `/locations/manage/${id}`);
+  }
 }
