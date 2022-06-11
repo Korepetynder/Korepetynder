@@ -1,0 +1,55 @@
+<div class="main-div">
+  <mat-card class="my-card">
+    <mat-card-title>Zaproponuj nowy przedmiot</mat-card-title>
+
+    <mat-card-content class="my-card-component">
+      <form [formGroup]="subjectForm" (ngSubmit)="sendSubject()">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Przedmiot</mat-label>
+          <input matInput formControlName="subject" placeholder="np. topologia algebraiczna" value="">
+        </mat-form-field>
+
+        <div class="save-button-div">
+          <button mat-raised-button color="accent" type="submit" [disabled]="subjectIsSending">Wyślij</button>
+          <mat-spinner *ngIf="subjectIsSending" diameter="30"></mat-spinner>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="my-card">
+    <mat-card-title>Zaproponuj nowy poziom</mat-card-title>
+
+    <mat-card-content class="my-card-component">
+      <form [formGroup]="levelForm" (ngSubmit)="sendLevel()">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Poziom</mat-label>
+          <input matInput formControlName="level" placeholder="np. szkoła policealna" value="">
+        </mat-form-field>
+
+        <div class="save-button-div">
+          <button mat-raised-button color="accent" type="submit" [disabled]="levelIsSending">Wyślij</button>
+          <mat-spinner *ngIf="levelIsSending" diameter="30"></mat-spinner>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="my-card">
+    <mat-card-title>Zaproponuj nowy język</mat-card-title>
+
+    <mat-card-content class="my-card-component">
+      <form [formGroup]="languageForm" (ngSubmit)="sendLanguage()">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Język</mat-label>
+          <input matInput formControlName="language" placeholder="np. łacina" value="">
+        </mat-form-field>
+
+        <div class="save-button-div">
+          <button mat-raised-button color="accent" type="submit" [disabled]="languageIsSending">Wyślij</button>
+          <mat-spinner *ngIf="languageIsSending" diameter="30"></mat-spinner>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

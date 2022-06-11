@@ -32,13 +32,11 @@ import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { GalleryModule } from "ng-gallery";
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TutorCardComponent
+    TutorCardComponent,
   ],
   imports: [
     BrowserModule,
