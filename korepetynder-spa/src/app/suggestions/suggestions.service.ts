@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { UserType } from '../shared/models/userType';
 import { LanguageRequest } from './models/requests/languageRequest';
 import { LevelRequest } from './models/requests/levelRequest';
+import { LocationRequest } from './models/requests/locationRequest';
 import { SubjectRequest } from "./models/requests/subjectRequest";
 import { Language } from './models/responses/language';
 import { Level } from './models/responses/level';
@@ -38,6 +39,15 @@ export class SuggestionsService {
 
   sendLanguage(languageRequest: LanguageRequest): Observable<Language> {
     return this.httpClient.post<Language>(this.apiUrl + '/languages', languageRequest)
+      .pipe(
+        catchError((err) => {
+          return throwError(() => new Error(err));
+        })
+      )
+  }
+
+  sendLocation(locationRequest: LocationRequest): Observable<Location> {
+    return this.httpClient.post<Location>(this.apiUrl + '/locations', locationRequest)
       .pipe(
         catchError((err) => {
           return throwError(() => new Error(err));
