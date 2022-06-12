@@ -2,6 +2,11 @@ namespace Korepetynder.Contracts.Requests.Media
 {
     public class MultimediaFileRequest
     {
-        public int? SubjectId { get; set; }
+        public IEnumerable<int> TutorLessons { get; set; }
+
+        public MultimediaFileRequest(IEnumerable<int> tutorLessons)
+        {
+            TutorLessons = tutorLessons;
+        }
     }
 }

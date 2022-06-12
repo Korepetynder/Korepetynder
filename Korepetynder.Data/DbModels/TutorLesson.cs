@@ -14,6 +14,8 @@ namespace Korepetynder.Data.DbModels
         public ICollection<Level> Levels { get; set; } = new List<Level>();
         public ICollection<Language> Languages { get; set; } = new List<Language>();
 
+        public ICollection<MultimediaFile> MultimediaFiles { get; set; } = new List<MultimediaFile>();
+
         public Guid TutorId { get; set; }
         [ForeignKey(nameof(TutorId))]
         public Tutor Tutor { get; set; } = null!;

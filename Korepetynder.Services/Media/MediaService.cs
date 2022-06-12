@@ -1,5 +1,6 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Korepetynder.Contracts.Requests.Media;
 using Korepetynder.Contracts.Responses.Media;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
@@ -169,14 +170,28 @@ namespace Korepetynder.Services.Media
             return mediaType.Encoding!;
         }
 
-        public async Task<MultimediaFileResponse> AddMultimediaFile(MultimediaFile multimediaFile)
+        public async Task<MultimediaFileResponse> AddMultimediaFile(MultimediaFileRequest multimediaFileRequest, string url)
         {
-            multimediaFile.TutorId = GetCurrentUserId();
+            Guid currentId = GetCurrentUserId();
 
+            var tutorLessons = await _korepetynderDbContext.TutorLessons
+                .Where(tutorLesson => multimediaFileRequest.TutorLessons.Contains(tutorLesson.Id))
+                .Where(tutorLesson => tutorLesson.TutorId == currentId)
+                .ToListAsync();
+            if (tutorLessons.Count != multimediaFileRequest.TutorLessons.Count())
+            {
+                throw new ArgumentException("At least one provided tutor lesson does not exist");
+            }
+
+            var multimediaFile = new MultimediaFile(url, currentId)
+            {
+                TutorLessons = tutorLessons
+            };
             _korepetynderDbContext.MultimediaFiles.Add(multimediaFile);
             await _korepetynderDbContext.SaveChangesAsync();
 
-            return new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url, multimediaFile.SubjectId);
+            return new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url,
+                multimediaFile.TutorLessons.Select(multimediaFile => multimediaFile.Id));
         }
 
         public async Task<IEnumerable<MultimediaFileResponse>> GetMultimediaFiles()
@@ -192,7 +207,8 @@ namespace Korepetynder.Services.Media
 
             return await _korepetynderDbContext.MultimediaFiles
                 .Where(multimediaFile => multimediaFile.TutorId == currentId)
-                .Select(multimediaFile => new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url, multimediaFile.SubjectId))
+                .Select(multimediaFile => new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url,
+                    multimediaFile.TutorLessons.Select(tutorLesson => tutorLesson.Id)))
                 .ToListAsync();
         }
 

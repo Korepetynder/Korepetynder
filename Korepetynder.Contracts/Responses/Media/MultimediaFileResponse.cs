@@ -4,13 +4,13 @@ namespace Korepetynder.Contracts.Responses.Media
     {
         public int Id { get; set; }
         public string Url { get; set; }
-        public int? SubjectId { get; set; }
+        public IEnumerable<int> Lessons { get; set; }
 
-        public MultimediaFileResponse(int id, string url, int? subjectId)
+        public MultimediaFileResponse(int id, string url, IEnumerable<int> lessons)
         {
             Id = id;
             Url = url;
-            SubjectId = subjectId;
+            Lessons = lessons;
         }
     }
 }

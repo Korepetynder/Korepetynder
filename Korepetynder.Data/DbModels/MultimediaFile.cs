@@ -14,17 +14,16 @@ namespace Korepetynder.Data.DbModels
         public string Url { get; set; }
         public MultimediaFileType Type { get; set; }
 
-        public int? SubjectId { get; set; }
-        [ForeignKey(nameof(SubjectId))]
-        public Subject? Subject { get; set; } //Some files are connected to particular subject
+        public ICollection<TutorLesson> TutorLessons { get; set; } = new List<TutorLesson>();
 
         public Guid TutorId { get; set; }
         [ForeignKey(nameof(TutorId))]
         public Tutor Owner { get; set; } = null!;
 
-        public MultimediaFile(string url)
+        public MultimediaFile(string url, Guid tutorId)
         {
             Url = url;
+            TutorId = tutorId;
         }
     }
 }

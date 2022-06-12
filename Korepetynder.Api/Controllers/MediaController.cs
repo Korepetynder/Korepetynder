@@ -42,7 +42,7 @@ namespace Korepetynder.Api.Controllers
             }
 
             // Bind form data to the model
-            var multimediaFileRequest = new MultimediaFileRequest();
+            var multimediaFileRequest = new MultimediaFileRequest(new List<int>());
             var formValueProvider = new FormValueProvider(
                 BindingSource.Form,
                 new FormCollection(fileResult.FormAccumulator.GetResults()),
@@ -59,13 +59,7 @@ namespace Korepetynder.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var multimediaFile = new MultimediaFile(fileResult.BlobUrl)
-            {
-                Type = MultimediaFileType.Picture,
-                SubjectId = multimediaFileRequest.SubjectId
-            };
-
-            var multimediaFileResponse = await _mediaService.AddMultimediaFile(multimediaFile);
+            var multimediaFileResponse = await _mediaService.AddMultimediaFile(multimediaFileRequest, fileResult.BlobUrl);
             return Created(nameof(MediaController), multimediaFileResponse);
         }
 
