@@ -1,8 +1,7 @@
 param storageAccountName string
 param storageAccountSkuName string
 
-param imagesContainerName string = 'images'
-param videosContainerName string = 'videos'
+param mediaContainerName string = 'media'
 
 param location string = resourceGroup().location
 
@@ -15,13 +14,13 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   kind: 'StorageV2'
   properties: {
     accessTier: 'Hot'
+    allowBlobPublicAccess: true
   }
 }
 
-resource imagesContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
-  name: '${storageAccount.name}/default/${imagesContainerName}'
-}
-
-resource videosContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
-  name: '${storageAccount.name}/default/${videosContainerName}'
+resource mediaContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
+  name: '${storageAccount.name}/default/${mediaContainerName}'
+  properties: {
+    publicAccess: 'Blob'
+  }
 }

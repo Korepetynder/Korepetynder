@@ -26,39 +26,31 @@ namespace Korepetynder.Services.Media
             }
         };
 
-        public static async Task<byte[]> ProcessStreamedFile(MultipartSection section,
+        public static void ProcessStreamedFile(MultipartSection section,
             ContentDispositionHeaderValue contentDisposition,
             ModelStateDictionary modelState, string[] permittedExtensions, long sizeLimit)
         {
             try
             {
-                using (var memoryStream = new MemoryStream())
+                // Check if the file is empty or exceeds the size limit.
+                // TODO: it doesn't work (length is always zero)
+                // if (section.Body.Length == 0)
+                // {
+                //     modelState.AddModelError("File", "The file is empty.");
+                // }
+                // else if (section.Body.Length > sizeLimit)
+                // {
+                //     var megabyteSizeLimit = sizeLimit / 1048576;
+                //     modelState.AddModelError("File",
+                //     $"The file exceeds {megabyteSizeLimit:N1} MB.");
+                // }
+                if (!IsValidFileExtensionAndSignature(
+                    contentDisposition.FileName.Value, section.Body,
+                    permittedExtensions))
                 {
-                    await section.Body.CopyToAsync(memoryStream);
-
-                    // Check if the file is empty or exceeds the size limit.
-                    if (memoryStream.Length == 0)
-                    {
-                        modelState.AddModelError("File", "The file is empty.");
-                    }
-                    else if (memoryStream.Length > sizeLimit)
-                    {
-                        var megabyteSizeLimit = sizeLimit / 1048576;
-                        modelState.AddModelError("File",
-                        $"The file exceeds {megabyteSizeLimit:N1} MB.");
-                    }
-                    else if (!IsValidFileExtensionAndSignature(
-                        contentDisposition.FileName.Value, memoryStream,
-                        permittedExtensions))
-                    {
-                        modelState.AddModelError("File",
-                            "The file type isn't permitted or the file's " +
-                            "signature doesn't match the file's extension.");
-                    }
-                    else
-                    {
-                        return memoryStream.ToArray();
-                    }
+                    modelState.AddModelError("File",
+                        "The file type isn't permitted or the file's " +
+                        "signature doesn't match the file's extension.");
                 }
             }
             catch (Exception ex)
@@ -66,13 +58,11 @@ namespace Korepetynder.Services.Media
                 modelState.AddModelError("File",
                     $"The upload failed. Error: {ex.HResult}");
             }
-
-            return Array.Empty<byte>();
         }
 
         private static bool IsValidFileExtensionAndSignature(string fileName, Stream data, string[] permittedExtensions)
         {
-            if (string.IsNullOrEmpty(fileName) || data == null || data.Length == 0)
+            if (string.IsNullOrEmpty(fileName))
             {
                 return false;
             }
@@ -91,13 +81,14 @@ namespace Korepetynder.Services.Media
             // With the file signatures provided in the _fileSignature
             // dictionary, the following code tests the input content's
             // file signature.
-            using var reader = new BinaryReader(data);
 
             var signatures = _fileSignature[ext];
-            var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
+            byte[] buffer = new byte[signatures.Max(m => m.Length)];
+            data.ReadAsync(buffer, 0, signatures.Max(m => m.Length));
+            data.Position = 0;
 
             return signatures.Any(signature =>
-                headerBytes.Take(signature.Length).SequenceEqual(signature));
+                buffer.Take(signature.Length).SequenceEqual(signature));
         }
     }
 }
