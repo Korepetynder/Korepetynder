@@ -1,0 +1,15 @@
+mat-dialog-content {
+  width: 40em;
+  margin-top: 1em;
+}
+
+mat-dialog-actions {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-popup {
+  float: right;
+}

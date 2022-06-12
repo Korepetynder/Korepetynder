@@ -1,0 +1,11 @@
+<div class="rating">
+  <ngb-rating [(rate)]="starRatingAverage" [max]="5" [readonly]="true">
+    <ng-template let-fill="fill">
+          <span class="star" [class.filled]="fill === 100">
+            <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+          </span>
+    </ng-template>
+  </ngb-rating>
+  <pre *ngIf="starRatingAverage != null">Ocena: <b>{{starRatingAverage}}</b></pre>
+  <pre *ngIf="starRatingAverage == null">Ocena: <b>-</b></pre>
+</div>
