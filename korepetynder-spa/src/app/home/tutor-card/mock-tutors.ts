@@ -43,7 +43,7 @@ export const MockTutors: TutorDetails[] = [
         languages: [{id: 1, name: "polski"}]
       }
     ],
-    isFavorite: false
+    isFavorite: false,
     starRatingAverage:3.5,
   },
   {
@@ -61,7 +61,7 @@ export const MockTutors: TutorDetails[] = [
         languages: [{id: 1, name: "polski"}]
       }
     ],
-    isFavorite: false
+    isFavorite: false,
     starRatingAverage:3.5,
   }
 ];

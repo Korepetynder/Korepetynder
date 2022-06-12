@@ -1,5 +1,5 @@
 .favorite-tutor-card {
-  height: 25em;
+  height: auto;
   width: 25em;
 }
 
@@ -27,6 +27,11 @@
 
 // front
 mat-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
   margin: 1em;
 
   -webkit-transform-style: preserve-3d;
@@ -36,20 +41,20 @@ mat-card {
 
 .front-tutor-card {
   display: grid;
-  grid-template-rows: 0.2fr 0.8fr 0.1fr 1fr;
+  grid-template-rows: 0.1fr 0.8fr 0.2fr 0.1fr 2fr;
   grid-template-columns: auto;
   grid-template-areas:
     "buttons"
     "header"
     "divider"
+    "rating"
     "main";
 
-  margin: 1em
+  margin: 1em;
 }
 
- mat-divider {
+mat-divider {
    grid-area: divider;
-   padding-bottom: 1em;
 }
 
 mat-card-header {
@@ -62,7 +67,12 @@ mat-card-content.front-tutor-card {
   height: auto;
   width: auto;
 
-  padding: 1em ;
+  padding: 1em;
+  margin: 1em;
+}
+
+mat-card-content {
+  margin: 1em;
 }
 
 mat-card-actions {
@@ -70,6 +80,8 @@ mat-card-actions {
 
   padding-left: 1.5em;
   padding-right: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 0;
 
   float: right;
 }
@@ -124,3 +136,20 @@ mat-card-content.back-tutor-card {
   //margin-bottom: 1em;
 }
 
+.rating {
+  grid: "rating";
+  margin-left: 1em;
+}
+
+pre {
+  display: inline;
+  margin-left: 0.5em;
+}
+
+.star {
+  font-size: 1.5rem;
+  color: #f6dfb5;
+}
+.filled {
+  color: #ffb01e;
+}

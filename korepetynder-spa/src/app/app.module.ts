@@ -45,7 +45,7 @@ import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favo
     HomeComponent,
     TutorCardComponent,
     FavoritesComponent,
-    FavoriteTutorCardComponent
+    FavoriteTutorCardComponent,
     RatingComponent,
     RatingCardComponent,
     StarRatingComponent
