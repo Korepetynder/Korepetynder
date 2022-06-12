@@ -41,6 +41,21 @@
     </div>
   </div>
 
+  <div *ngIf="isTutorOldValue && isTutor">
+    <p>Dodaj zdjęcia.</p>
+    <mat-accordion multi>
+      <app-photo *ngFor="let photo of photosControls; let i = index" [photo]="photo" [index]="i + 1"
+      [lessons]="savedLessons" (photoRemove)="removeLesson(i)">
+      </app-photo>
+    </mat-accordion>
+
+    <div id="add-button">
+      <button mat-fab color="accent" type="button" (click)="addPhoto()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
   <div *ngIf="!isEdit" class="save-settings-button">
     <button mat-raised-button color="accent" type="button" (click)="finish()">Zakończ</button>
   </div>
