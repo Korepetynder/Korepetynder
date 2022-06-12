@@ -1,0 +1,36 @@
+<form [formGroup]="photo" (ngSubmit)="saveChanges()">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Zdjęcie
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <p>TUTAJ IMG SRC XD</p>
+    <!-- <img [src]="photo.photo"> -->
+
+    <mat-form-field appearance="outline">
+      <mat-label>Pokaż przy następujących korepetycjach:</mat-label>
+      <mat-select formControlName="" multiple>
+        <mat-option *ngFor="let lesson of lessons">
+          {{lessonShortDescription(lesson.id)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="save-button">
+      <button mat-raised-button type="submit" color="accent" [disabled]="isSaving">
+        Zapisz
+      </button>
+    </div>
+    <div class="save-button" *ngIf="isSaving">
+      <mat-spinner diameter="30"></mat-spinner>
+    </div>
+
+    <div class="delete-button">
+      <button mat-fab color="accent" type="button" (click)="removePhoto()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </mat-expansion-panel>
+</form>

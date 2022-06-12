@@ -25,23 +25,16 @@ input.number-input {
 
 #add-button {
   margin: 10px;
-  // float: left;
-}
-
-.save-settings-button {
-  margin: 10px;
-  margin-top: 30px;
   float: right;
 }
 
-.save-button-div {
-  display: flex;
+.save-button {
+  margin: 10px;
+  margin-top: 15px;
+  float: left;
 }
 
-.status-slider {
-  margin: 10px;
-}
-
-p {
-  margin: 10px;
+.delete-button {
+  margin: 5px;
+  float: right;
 }

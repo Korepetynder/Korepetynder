@@ -51,4 +51,8 @@ export class TutorSettingsService {
   deleteLesson(id: number): Observable<any> {
     return this.httpClient.delete(`${this.apiUrl}/lessons/${id}`);
   }
+
+  deletePhoto(id: number): Observable<any> {
+    return this.httpClient.delete(`${this.apiUrl}/media/${id}`);
+  }
 }

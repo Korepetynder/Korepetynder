@@ -10,6 +10,8 @@ import { Level } from '../models/responses/level';
 import { Location } from '../models/responses/location';
 import { Subject } from '../models/responses/subject';
 import { TutorSettingsService } from '../tutor-settings.service';
+import { TutorLesson } from '../models/responses/tutorLesson';
+import { PhotoComponent } from './photo/photo.component';
 
 @Component({
   selector: 'app-settings-tutor',
@@ -24,6 +26,8 @@ export class SettingsTutorComponent implements OnInit {
   @Input() locations: Location[] = [];
   @Input() subjects: Subject[] = [];
 
+  savedLessons: TutorLesson[] = [];
+
   @Output() statusChange = new EventEmitter<boolean>();
 
   isSaving = false;
@@ -32,7 +36,8 @@ export class SettingsTutorComponent implements OnInit {
   profileForm = this.fb.group({
     isTutor: [false],
     locations: [[]],
-    lessons: this.fb.array([])
+    lessons: this.fb.array([]),
+    photos: this.fb.array([1, 2]),
   });
 
   constructor(
@@ -53,6 +58,13 @@ export class SettingsTutorComponent implements OnInit {
     return this.lessons.controls as FormGroup[];
   }
 
+  get photos() {
+    return this.profileForm.get('photos') as FormArray;
+  }
+  get photosControls() {
+    return this.photos.controls as FormGroup[];
+  }
+
   get isTutorCtrl() {
     return this.profileForm.get('isTutor') as FormControl;
   }
@@ -71,8 +83,20 @@ export class SettingsTutorComponent implements OnInit {
     }));
   }
 
+  addPhoto(): void { // TODO
+    this.photos.push(this.fb.group({
+      id: [null],
+      photo: [null, [Validators.required]],
+      lessons: [[], []],
+    }));
+  }
+
   removeLesson(id: number): void {
     this.lessons.removeAt(id);
+  }
+
+  removePhoto(id: number): void {
+    this.photos.removeAt(id);
   }
 
   ngOnInit() {
@@ -94,6 +118,8 @@ export class SettingsTutorComponent implements OnInit {
             frequency: lesson.frequency
           })));
           console.log(this.lessons);
+
+          this.savedLessons = lessons;
         });
       }
     });
