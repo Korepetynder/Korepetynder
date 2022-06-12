@@ -1,41 +1,7 @@
-mat-card {
-  margin: 2em;
-  padding: 2em;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.title {
-  font-size: 17px;
-}
-
-.opinion-rating {
+.main-div {
   height: auto;
-  width: 32em;
-}
-
-.written-opinion {
-  resize: none;
-}
-
-.opinion {
-  width: 100%;
-}
-
-.star-rating {
-  margin-bottom: 1em;
-}
-
-.star {
-  font-size: 1.5rem;
-  color: #f6dfb5;
-}
-.filled {
-  color: #ffb01e;
-}
-
-.send-icon {
-  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }

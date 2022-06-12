@@ -34,13 +34,17 @@ import { GalleryModule } from "ng-gallery";
 import { RatingComponent } from './rating/rating.component';
 import { MatInputModule } from "@angular/material/input";
 import { NgbRatingModule } from "@ng-bootstrap/ng-bootstrap";
+import { RatingCardComponent } from './rating/rating-card/rating-card.component';
+import { StarRatingComponent } from './rating/star-rating/star-rating.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     TutorCardComponent,
-    RatingComponent
+    RatingComponent,
+    RatingCardComponent,
+    StarRatingComponent
   ],
   imports: [
     BrowserModule,
