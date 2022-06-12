@@ -2,7 +2,7 @@
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Opis {{index}}
+        {{lessonSubject}}: {{lessonLevels}}
       </mat-panel-title>
     </mat-expansion-panel-header>
 
@@ -37,12 +37,18 @@
       <mat-label>Minimalny koszt lekcji</mat-label>
       <input matInput type="number" placeholder="0" class="number-input" formControlName="minCost">
       <span matSuffix>zł/h</span>
+      <mat-error *ngIf="minCost.hasError('minMaxInvalid')">
+        Minimum nie może być większe od maksimum!
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Maksymalny koszt lekcji</mat-label>
       <input matInput type="number" placeholder="100" class="number-input" formControlName="maxCost">
       <span matSuffix>zł/h</span>
+      <mat-error *ngIf="maxCost.hasError('minMaxInvalid')">
+        Minimum nie może być większe od maksimum!
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">

@@ -6,16 +6,14 @@
   <div *ngIf="isStudent">
     <mat-form-field appearance="outline">
       <mat-label>Preferowane lokalizacje</mat-label>
-      <mat-select formControlName="locations" multiple>
+      <mat-select formControlName="locations" multiple (selectionChange)="setAllLocations()">
         <ng-container *ngFor="let location of locations">
           <mat-option [value]="location.id">
             {{location.name}}
           </mat-option>
-          <mat-optgroup *ngIf="location.childrenLocations.length > 0" [label]="'Podlokacje w: ' + location.name">
-            <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id">
+          <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id" class="options-child" [disabled]="checkParentLocation(location.id)">
               {{childLocation.name}}
-            </mat-option>
-          </mat-optgroup>
+          </mat-option>
         </ng-container>
       </mat-select>
     </mat-form-field>

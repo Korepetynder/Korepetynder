@@ -27,7 +27,7 @@ export class SettingsGeneralComponent implements OnInit {
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    phoneNumber: [''],
+    phoneNumber: ['', [Validators.pattern('[- +()0-9]{6,}')]],
     birthDate: ['', [Validators.required]]
   });
 
@@ -67,6 +67,7 @@ export class SettingsGeneralComponent implements OnInit {
 
   saveChanges(): void {
     if (this.profileForm.invalid) {
+      this.snackBar.open("Wprowadź poprawne dane.", "OK", {duration: 5000});
       return;
     }
 

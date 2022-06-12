@@ -24,6 +24,10 @@ namespace Korepetynder.Services.Tutors
 
         public async Task<TutorLessonResponse> AddLesson(TutorLessonRequest request)
         {
+            if (!request.LevelsIds.Any() || !request.LanguagesIds.Any())
+            {
+                throw new InvalidOperationException("Wrong number of arguments");
+            }
             Guid currentId = GetCurrentUserId();
 
             var isTutor = await _korepetynderDbContext.Tutors
@@ -128,6 +132,10 @@ namespace Korepetynder.Services.Tutors
 
         public async Task<TutorResponse> InitializeTutor(TutorRequest request)
         {
+            if (!request.Locations.Any())
+            {
+                throw new InvalidOperationException("No location selected");
+            }
             Guid currentId = GetCurrentUserId();
 
             var isTutor = await _korepetynderDbContext.Tutors
