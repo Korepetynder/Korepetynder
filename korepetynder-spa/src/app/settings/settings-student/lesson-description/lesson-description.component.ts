@@ -25,6 +25,8 @@ export class LessonDescriptionComponent {
 
   get lessonId(): number | null { return this.lesson.get('id')!.value; }
   set lessonId(id: number | null) { this.lesson.get('id')!.setValue(id); }
+  get minCost() { return this.lesson.get('minCost')!; }
+  get maxCost() { return this.lesson.get('maxCost')!; }
 
   isSaving = false;
 

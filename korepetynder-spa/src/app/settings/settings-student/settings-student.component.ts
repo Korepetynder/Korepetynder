@@ -10,6 +10,7 @@ import { Level } from '../models/responses/level';
 import { Location } from '../models/responses/location';
 import { Subject } from '../models/responses/subject';
 import { StudentSettingsService } from '../student-settings.service';
+import { minMaxValidator } from './min-max-validator.directive';
 
 @Component({
   selector: 'app-settings-student',
@@ -69,7 +70,7 @@ export class SettingsStudentComponent implements OnInit {
       minCost: [null, [Validators.required]],
       maxCost: [null, [Validators.required]],
       frequency: [null],
-    }));
+    }, { validators: minMaxValidator }));
   }
 
   removeLesson(id: number): void {
