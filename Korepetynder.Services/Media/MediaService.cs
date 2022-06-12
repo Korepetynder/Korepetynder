@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System.Net;
@@ -132,7 +133,7 @@ namespace Korepetynder.Services.Media
                             return null;
                         }
 
-                        var fileName = $"{Guid.NewGuid()}.{Path.GetExtension(trustedFileNameForDisplay).ToLowerInvariant()}";
+                        var fileName = Guid.NewGuid() + Path.GetExtension(trustedFileNameForDisplay).ToLowerInvariant();
                         var containerClient = _blobServiceClient.GetBlobContainerClient("media");
                         await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
                         var blobClient = containerClient.GetBlobClient(fileName);
@@ -176,6 +177,45 @@ namespace Korepetynder.Services.Media
             await _korepetynderDbContext.SaveChangesAsync();
 
             return new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url, multimediaFile.SubjectId);
+        }
+
+        public async Task<IEnumerable<MultimediaFileResponse>> GetMultimediaFiles()
+        {
+            Guid currentId = GetCurrentUserId();
+
+            var isTutor = await _korepetynderDbContext.Tutors
+                .AnyAsync(tutor => tutor.UserId == currentId);
+            if (!isTutor)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a tutor");
+            }
+
+            return await _korepetynderDbContext.MultimediaFiles
+                .Where(multimediaFile => multimediaFile.TutorId == currentId)
+                .Select(multimediaFile => new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url, multimediaFile.SubjectId))
+                .ToListAsync();
+        }
+
+        public async Task DeleteMultimediaFile(int id)
+        {
+            Guid currentId = GetCurrentUserId();
+
+            var isTutor = await _korepetynderDbContext.Tutors
+                .AnyAsync(tutor => tutor.UserId == currentId);
+            if (!isTutor)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a tutor");
+            }
+
+            var multimediaFile = await _korepetynderDbContext.MultimediaFiles
+                .SingleAsync(multimediaFile => multimediaFile.Id == id);
+            if (currentId != multimediaFile.TutorId)
+            {
+                throw new ArgumentException("Multimedia file does not belong to tutor");
+            }
+
+            _korepetynderDbContext.MultimediaFiles.Remove(multimediaFile);
+            await _korepetynderDbContext.SaveChangesAsync();
         }
     }
 }

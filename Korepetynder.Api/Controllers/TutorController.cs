@@ -195,6 +195,5 @@ namespace Korepetynder.Api.Controllers
                 return Forbid();
             }
         }
-
     }
 }
