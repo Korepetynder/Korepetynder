@@ -4,6 +4,7 @@ import { MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
 import {HomeComponent} from "./home/home.component";
 import { RoleGuard } from './shared/guards/role.guard';
 import { UserType } from './shared/models/userType';
+import { RatingComponent } from "./rating/rating.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
     data: {
       expectedRole: UserType.Student
     }
+  },
+  {
+    path: 'rating',
+    component: RatingComponent,
   }
 ];
 

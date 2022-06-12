@@ -31,14 +31,16 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { GalleryModule } from "ng-gallery";
-
-
+import { RatingComponent } from './rating/rating.component';
+import { MatInputModule } from "@angular/material/input";
+import { NgbRatingModule } from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TutorCardComponent
+    TutorCardComponent,
+    RatingComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,9 @@ import { GalleryModule } from "ng-gallery";
     MatCardModule,
     MatFormFieldModule,
     MatExpansionModule,
-    GalleryModule
+    GalleryModule,
+    MatInputModule,
+    NgbRatingModule,
   ],
   providers: [
     {
