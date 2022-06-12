@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { of, take } from 'rxjs';
@@ -33,7 +34,7 @@ export class SettingsStudentComponent implements OnInit {
 
   profileForm = this.fb.group({
     isStudent: [false],
-    locations: [[]],
+    locations: [[], [Validators.required]],
     lessons: this.fb.array([])
   });
 
@@ -59,6 +60,27 @@ export class SettingsStudentComponent implements OnInit {
   }
   get isStudent() {
     return this.isStudentCtrl.value as boolean;
+  }
+
+  setAllLocations() {
+    let newLocations = this.locationsCtrl.value;
+    for (let i = 0; i < this.locations.length; i++) {
+      if (this.locations[i].childrenLocations == null) {
+        continue;
+      }
+      if (newLocations.includes(this.locations[i].id)) {
+        this.locations[i].childrenLocations.forEach(t => {
+          if (!newLocations.includes(t.id)) {
+            newLocations.push(t.id);
+          }
+        });
+      }
+    }
+    this.locationsCtrl.setValue(newLocations);
+  }
+
+  checkParentLocation(id: number): boolean {
+    return this.locationsCtrl.value.includes(id);
   }
 
   addLesson(): void {
@@ -104,14 +126,31 @@ export class SettingsStudentComponent implements OnInit {
     this.profileForm.statusChanges.subscribe(status => this.statusChange.emit(status === 'VALID'));
   }
 
+  private addLocationsWithAllChildrenLocationsSelected(locations: number[]) {
+    for (let i = 0; i < this.locations.length; i++) {
+      if (this.locations[i].childrenLocations == null || this.locations[i].childrenLocations.length == 0) {
+        continue;
+      }
+      if (!locations.includes(this.locations[i].id) && this.locations[i].childrenLocations.every((x) => locations.includes(x.id))) {
+        locations.push(this.locations[i].id);
+      }
+    }
+    return locations;
+  }
+
   saveChanges(): void {
     if (this.profileForm.invalid) {
+      this.snackBar.open("Wprowadź poprawne dane.", "OK", {duration: 5000});
       return;
     }
 
     this.isSaving = true;
     this.isSaved = true;
-    const studentRequest = new StudentRequest(this.locationsCtrl.value);
+
+    let locations: number[] = this.locationsCtrl.value;
+    this.addLocationsWithAllChildrenLocationsSelected(locations);
+
+    const studentRequest = new StudentRequest(locations);
 
     const saveObservable = this.isStudent
       ? (this.isStudentOldValue ? this.studentSettingsService.updateStudent(studentRequest) : this.studentSettingsService.createStudent(studentRequest))

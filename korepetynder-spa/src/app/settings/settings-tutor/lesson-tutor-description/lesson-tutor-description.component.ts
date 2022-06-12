@@ -26,6 +26,22 @@ export class LessonTutorDescriptionComponent {
   get lessonId(): number | null { return this.lesson.get('id')!.value; }
   set lessonId(id: number | null) { this.lesson.get('id')!.setValue(id); }
 
+  get lessonSubject(): string {
+    const subjectId = this.lesson.get('subject')!.value;
+
+    const subject = this.subjects.find(s => s.id == subjectId);
+
+    return subject ? subject.name : "Nowy opis";
+  };
+
+  get lessonLevels(): string {
+    const levelsIds: number[] = this.lesson.get('levels')!.value;
+
+    const levels = levelsIds.map(id => this.levels.find(level => level.id == id)!.name);
+
+    return levels.join(", ");
+  }
+
   isSaving = false;
 
   constructor(private tutorSettingsService: TutorSettingsService,
