@@ -28,7 +28,7 @@
     <p>Uzupełnij opisy oferowanych korepetycji.</p>
     <mat-accordion multi>
       <app-lesson-tutor-description *ngFor="let lesson of lessonsControls; let i = index" [lesson]="lesson" [index]="i + 1"
-        [subjects]="subjects" [languages]="languages" [levels]="levels" (lessonRemove)="removeLesson(i)">
+        [subjects]="subjects" [languages]="languages" [levels]="levels" [lessons]="savedLessons" (lessonRemove)="removeLesson(i)" (lessonArrayUpdate)="updateSavedLessons()">
       </app-lesson-tutor-description>
     </mat-accordion>
 

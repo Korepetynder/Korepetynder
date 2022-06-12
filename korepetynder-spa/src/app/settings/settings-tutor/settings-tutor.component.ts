@@ -120,6 +120,12 @@ export class SettingsTutorComponent implements OnInit {
     this.photos.removeAt(id);
   }
 
+  updateSavedLessons(): void {
+    console.log("UPDATE", this.savedLessons);
+    this.tutorSettingsService.getLessons().subscribe(lessons => this.savedLessons = lessons);
+    this.savedLessons = this.savedLessons.slice();
+  }
+
   ngOnInit() {
     this.userService.isTutor().subscribe(isTutor => {
       this.isTutorOldValue = isTutor;
