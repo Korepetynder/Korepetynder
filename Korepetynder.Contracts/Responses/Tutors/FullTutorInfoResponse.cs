@@ -9,7 +9,7 @@ namespace Korepetynder.Contracts.Responses.Tutors
 
         public FullTutorInfoResponse(Tutor tutor, ICollection<TutorLesson> lessons)
         {
-            this.Teacher = new TutorResponse(tutor.UserId, tutor.TeachingLocations.Select(location => location.Id));
+            this.Teacher = new TutorResponse(tutor.UserId, tutor.TeachingLocations.Select(location => location.Id), tutor.Score);
             this.Lessons = lessons.Select(lesson => new TutorLessonResponse(lesson)).ToList();
         }
     }
