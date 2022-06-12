@@ -31,10 +31,13 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { GalleryModule } from "ng-gallery";
+import { RatingComponent } from './rating/rating.component';
+import { MatInputModule } from "@angular/material/input";
+import { NgbRatingModule } from "@ng-bootstrap/ng-bootstrap";
+import { RatingCardComponent } from './rating/rating-card/rating-card.component';
+import { StarRatingComponent } from './rating/star-rating/star-rating.component';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favorite-tutor-card.component';
-
-
 
 @NgModule({
   declarations: [
@@ -43,6 +46,9 @@ import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favo
     TutorCardComponent,
     FavoritesComponent,
     FavoriteTutorCardComponent
+    RatingComponent,
+    RatingCardComponent,
+    StarRatingComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +66,9 @@ import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favo
     MatCardModule,
     MatFormFieldModule,
     MatExpansionModule,
-    GalleryModule
+    GalleryModule,
+    MatInputModule,
+    NgbRatingModule,
   ],
   providers: [
     {

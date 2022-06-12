@@ -45,15 +45,6 @@ mat-card-actions {
 }
 
 .tutor-card-lessons-list {
-  //height: auto;
-  //width: auto;
-  //
-  //padding: 1em 2.5em 2.5em;
-  //
-  //border-style: solid;
-  //border-radius: 5px;
-  //border-width: 0.7px;
-  //border-color: #d7d5d5;
   width: auto;
   height: auto;
 
@@ -98,3 +89,18 @@ mat-card-actions {
   transform: scale(1.5);
 }
 
+pre {
+  margin-left: 0.5em;
+}
+
+.star-rating {
+  margin-bottom: 1em;
+}
+
+.star {
+  font-size: 1.5rem;
+  color: #f6dfb5;
+}
+.filled {
+  color: #ffb01e;
+}

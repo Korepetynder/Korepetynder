@@ -25,6 +25,7 @@ export const MockTutors: TutorDetails[] = [
         languages: [{id: 1, name: "polski"}, {id: 2, name: "angielski"}]
       }
     ],
+    starRatingAverage:3.5,
     isFavorite: false
   },
   {
@@ -43,6 +44,7 @@ export const MockTutors: TutorDetails[] = [
       }
     ],
     isFavorite: false
+    starRatingAverage:3.5,
   },
   {
     fullName: "Mr Magneto",
@@ -60,5 +62,6 @@ export const MockTutors: TutorDetails[] = [
       }
     ],
     isFavorite: false
+    starRatingAverage:3.5,
   }
 ];

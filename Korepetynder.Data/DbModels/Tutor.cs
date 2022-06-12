@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,7 +8,9 @@ namespace Korepetynder.Data.DbModels
     {
         [Key]
         public Guid UserId { get; set; }
-        public int Score { get; set; } //can be calculated using comments, however it is inefficient (number between 1 and 10, 0 if no comments)
+
+        [Precision(3, 1)]
+        public decimal Score { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;
@@ -17,6 +20,7 @@ namespace Korepetynder.Data.DbModels
         public ICollection<TutorLesson> TutorLessons { get; set; } = new List<TutorLesson>();
 
         public ICollection<Location> TeachingLocations { get; set; } = new List<Location>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public int? ProfilePictureId { get; set; }
         [ForeignKey(nameof(ProfilePictureId))]

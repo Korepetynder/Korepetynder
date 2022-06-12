@@ -13,6 +13,7 @@ namespace Korepetynder.Contracts.Responses.Students
         public IEnumerable<LocationResponse> Locations { get; set; }
         public int Age { get; set; }
         public IEnumerable<TutorLessonResponse> Lessons { get; set; }
+        public decimal Score { get; set; }
 
         public TutorDataResponse(User tutor)
         {
@@ -20,6 +21,7 @@ namespace Korepetynder.Contracts.Responses.Students
             Email = tutor.Email;
             PhoneNumber = tutor.PhoneNumber;
             FullName = tutor.FullName;
+            Score = tutor.Tutor!.Score;
             //Age = tutor.Age;
             Age = 20;
             List<LocationResponse> locations = new List<LocationResponse>();

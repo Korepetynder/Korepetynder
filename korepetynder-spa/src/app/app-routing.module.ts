@@ -5,6 +5,7 @@ import {HomeComponent} from "./home/home.component";
 import { RoleGuard } from './shared/guards/role.guard';
 import { UserType } from './shared/models/userType';
 import { FavoritesComponent } from "./favorites/favorites.component";
+import { RatingComponent } from "./rating/rating.component";
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
     data: {
       expectedRole: UserType.Student
     }
+  },
+  {
+    path: 'rating',
+    component: RatingComponent,
   },
   {
     path: 'favorites',
