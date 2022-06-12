@@ -37,7 +37,7 @@ export class SettingsTutorComponent implements OnInit {
     isTutor: [false],
     locations: [[], [Validators.required]],
     lessons: this.fb.array([]),
-    photos: this.fb.array([1, 2]),
+    photos: this.fb.array([]),
   });
 
   constructor(
