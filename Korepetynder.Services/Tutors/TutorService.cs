@@ -26,20 +26,19 @@ namespace Korepetynder.Services.Tutors
 
         public async Task<CommentResponse> AddComment(CommentRequest request)
         {
-            if (request.Score < 1 || request.Score > 10)
-            {
-                throw new ArgumentException("Score beyond expected interval");
-            }
-            var isTutor = await _korepetynderDbContext.Tutors
-                  .AnyAsync(tutor => tutor.UserId == request.CommentedTeacherId);
-            if (!isTutor)
-            {
-                throw new InvalidOperationException("User with id: " + request.CommentedTeacherId + " is not a tutor");
-            }
-            var comment = new Comment(request.Score, request.Comment);
-            comment.CommentedTutorId = request.CommentedTeacherId;
+            var tutor = await _korepetynderDbContext.Tutors
+                .SingleAsync(tutor => tutor.UserId == request.CommentedTutorId);
+
+            var comment = new Comment(request.Score, request.Comment, request.CommentedTutorId);
             _korepetynderDbContext.Comments.Add(comment);
             await _korepetynderDbContext.SaveChangesAsync();
+
+            var newScore = await _korepetynderDbContext.Comments
+                .Where(comment => comment.CommentedTutorId == request.CommentedTutorId)
+                .AverageAsync(comment => (decimal)comment.Score);
+            tutor.Score = newScore;
+            await _korepetynderDbContext.SaveChangesAsync();
+
             return new CommentResponse(comment);
         }
 

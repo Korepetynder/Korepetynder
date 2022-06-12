@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,7 +8,9 @@ namespace Korepetynder.Data.DbModels
     {
         [Key]
         public Guid UserId { get; set; }
-        public int Score { get; set; } //there should be calculated column
+
+        [Precision(3, 1)]
+        public decimal Score { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;

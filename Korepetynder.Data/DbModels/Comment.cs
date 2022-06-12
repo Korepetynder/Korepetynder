@@ -19,10 +19,11 @@ namespace Korepetynder.Data.DbModels
 
         [ForeignKey(nameof(CommentedTutorId))]
         public Tutor CommentedTutor = null!;
-        public Comment(int score, string text)
+        public Comment(int score, string text, Guid commentedTutorId)
         {
             Score = score;
             Text = text;
+            CommentedTutorId = commentedTutorId;
         }
     }
 }

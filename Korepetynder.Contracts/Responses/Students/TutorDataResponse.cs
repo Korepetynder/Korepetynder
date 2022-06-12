@@ -6,16 +6,18 @@ namespace Korepetynder.Contracts.Responses.Students
 {
     public class TutorDataResponse
     {
+        public Guid Id { get; set; }
         public string FullName { get; set; }
         public string? PhoneNumber { get; set; }
         public string Email { get; set; }
         public IEnumerable<LocationResponse> Locations { get; set; }
         public int Age { get; set; }
         public IEnumerable<TutorLessonResponse> Lessons { get; set; }
-        public int Score { get; set; }
+        public decimal Score { get; set; }
 
         public TutorDataResponse(User tutor)
         {
+            Id = tutor.Id;
             Email = tutor.Email;
             PhoneNumber = tutor.PhoneNumber;
             FullName = tutor.FullName;
