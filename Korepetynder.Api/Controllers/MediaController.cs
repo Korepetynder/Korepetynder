@@ -1,5 +1,6 @@
 using Korepetynder.Api.Attributes;
 using Korepetynder.Contracts.Requests.Media;
+using Korepetynder.Contracts.Responses.Media;
 using Korepetynder.Data.DbModels;
 using Korepetynder.Services.Media;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ namespace Korepetynder.Api.Controllers
 {
     [Authorize]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MediaController : ControllerBase
     {
@@ -23,9 +24,15 @@ namespace Korepetynder.Api.Controllers
             _mediaService = mediaService;
         }
 
+        /// <summary>
+        /// Uploads a new multimedia file.
+        /// </summary>
+        /// <returns>Newly created multimedia file entry.</returns>
         [HttpPost]
         [DisableFormValueModelBinding]
-        public async Task<IActionResult> UploadFile()
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<MultimediaFileResponse>> UploadMultimediaFile()
         {
             var fileResult = await _mediaService.ProcessFile(Request, ModelState);
 
@@ -60,6 +67,51 @@ namespace Korepetynder.Api.Controllers
 
             var multimediaFileResponse = await _mediaService.AddMultimediaFile(multimediaFile);
             return Created(nameof(MediaController), multimediaFileResponse);
+        }
+
+        /// <summary>
+        /// Gets the list of multimedia files uploaded by the user.
+        /// </summary>
+        /// <returns>List of multimedia files.</returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<MultimediaFileResponse>>> GetMultimediaFiles()
+        {
+            try
+            {
+                var multimediaFiles = await _mediaService.GetMultimediaFiles();
+                return multimediaFiles.ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Deletes multimedia file with given ID.
+        /// </summary>
+        /// <param name="id">ID of the multimedia file to delete.</param>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> DeleteMultimediaFile([FromRoute] int id)
+        {
+            try
+            {
+                await _mediaService.DeleteMultimediaFile(id);
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+            catch (ArgumentException)
+            {
+                return Forbid();
+            }
         }
     }
 }
