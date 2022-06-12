@@ -75,9 +75,6 @@
               <mat-option [value]="location.id">
                 {{location.name}}
               </mat-option>
-              <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id" class="options-child">
-                  {{childLocation.name}}
-              </mat-option>
             </ng-container>
           </mat-select>
         </mat-form-field>
