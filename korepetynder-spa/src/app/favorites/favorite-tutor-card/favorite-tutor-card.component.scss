@@ -98,6 +98,11 @@ mat-card-actions {
   color: #8f8f8f;
 }
 
+.reviews-icon{
+  float: right;
+  color: #99cbdc;
+}
+
 .favorite-icon {
   float: right;
   color: crimson;
@@ -136,20 +141,3 @@ mat-card-content.back-tutor-card {
   //margin-bottom: 1em;
 }
 
-.rating {
-  grid: "rating";
-  margin-left: 1em;
-}
-
-pre {
-  display: inline;
-  margin-left: 0.5em;
-}
-
-.star {
-  font-size: 1.5rem;
-  color: #f6dfb5;
-}
-.filled {
-  color: #ffb01e;
-}

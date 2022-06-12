@@ -81,7 +81,6 @@ mat-card-actions {
 
 .favorite-icon {
   float: left;
-
   color: crimson;
 }
 
@@ -89,18 +88,11 @@ mat-card-actions {
   transform: scale(1.5);
 }
 
-pre {
-  margin-left: 0.5em;
+.reviews-icon {
+  float: right;
+  color: #99cbdc;
 }
 
-.star-rating {
-  margin-bottom: 1em;
-}
-
-.star {
-  font-size: 1.5rem;
-  color: #f6dfb5;
-}
-.filled {
-  color: #ffb01e;
+app-static-star-rating {
+  margin-left: 3em;
 }

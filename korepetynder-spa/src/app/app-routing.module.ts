@@ -6,6 +6,7 @@ import { RoleGuard } from './shared/guards/role.guard';
 import { UserType } from './shared/models/userType';
 import { FavoritesComponent } from "./favorites/favorites.component";
 import { RatingComponent } from "./rating/rating.component";
+import { OpinionPopupComponent } from "./opinion-popup/opinion-popup.component";
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'favorites',
     component: FavoritesComponent
+  },
+  {
+    path: 'opinion-popup',
+    component: OpinionPopupComponent
   }
 ];
 

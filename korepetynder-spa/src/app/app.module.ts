@@ -38,6 +38,10 @@ import { RatingCardComponent } from './rating/rating-card/rating-card.component'
 import { StarRatingComponent } from './rating/star-rating/star-rating.component';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favorite-tutor-card.component';
+import { OpinionPopupComponent } from './opinion-popup/opinion-popup.component';
+import { MatDialogModule } from "@angular/material/dialog";
+import { OpinionCardComponent } from './opinion-popup/opinion-card/opinion-card.component';
+import { StaticStarRatingComponent } from './rating/static-star-rating/static-star-rating.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +52,10 @@ import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favo
     FavoriteTutorCardComponent,
     RatingComponent,
     RatingCardComponent,
-    StarRatingComponent
+    StarRatingComponent,
+    OpinionPopupComponent,
+    OpinionCardComponent,
+    StaticStarRatingComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +76,7 @@ import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favo
     GalleryModule,
     MatInputModule,
     NgbRatingModule,
+    MatDialogModule,
   ],
   providers: [
     {

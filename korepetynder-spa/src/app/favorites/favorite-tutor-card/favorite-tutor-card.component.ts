@@ -3,6 +3,8 @@ import { TutorDetails } from "../../home/tutor-card/tutorDetails";
 import { MockTutors } from '../../home/tutor-card/mock-tutors';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { GalleryItem, ImageItem } from "ng-gallery";
+import { MatDialog } from "@angular/material/dialog";
+import { OpinionPopupComponent } from "../../opinion-popup/opinion-popup.component";
 
 @Component({
   selector: 'app-favorite-tutor-card',
@@ -27,7 +29,19 @@ export class FavoriteTutorCardComponent implements OnInit {
   imageData = data;
   items: GalleryItem[] = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
 
-  constructor() { }
+  constructor(public dialog: MatDialog) {}
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(OpinionPopupComponent, {
+      width: '40em',
+      // data: {name: this.name, animal: this.animal},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
+  }
 
   ngOnInit(): void {
   }

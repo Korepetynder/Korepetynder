@@ -4,13 +4,11 @@
     <mat-card-title>{{tutor.fullName}}</mat-card-title>
     <mat-card-subtitle>Email: {{tutor.email}}</mat-card-subtitle>
     <mat-card-subtitle>Telefon: {{tutor.phoneNumber}}</mat-card-subtitle>
-    <ngb-rating [(rate)]="tutor.starRatingAverage" [max]="5" [readonly]="true">
-      <ng-template let-fill="fill">
-        <span class="star" [class.filled]="fill === 100">&#9733;</span>
-      </ng-template>
-    </ngb-rating>
-    <pre *ngIf="tutor.starRatingAverage != null">Ocena: <b>{{tutor.starRatingAverage}}</b></pre>
-    <pre *ngIf="tutor.starRatingAverage == null">Ocena: <b>-</b></pre>
+    <app-static-star-rating></app-static-star-rating>
+    <button mat-icon-button aria-label="Icon see reviews button" class="reviews-icon"
+            (click)="openDialog()" (click)="$event.stopPropagation()">
+      <mat-icon>reviews</mat-icon>
+    </button>
   </mat-card-header>
   <mat-divider inset></mat-divider>
   <mat-card-content>
