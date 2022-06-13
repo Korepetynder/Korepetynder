@@ -9,6 +9,9 @@ namespace Korepetynder.Services.Locations
     {
         Task<PagedData<LocationResponse>> GetLocations(SieveModel sieveModel);
         Task<LocationResponse?> GetLocation(int id);
+        Task<PagedData<LocationResponse>> GetNewLocations(SieveModel sieveModel);
+        Task<LocationResponse> AcceptLocation(int id);
+        Task DeleteLocation(int id);
         Task<LocationResponse> AddLocation(LocationRequest subjectRequest);
     }
 }

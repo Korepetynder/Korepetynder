@@ -30,4 +30,20 @@ export class DictionariesService {
   getSubjects(): Observable<Subject[]> {
     return this.httpClient.get<Subject[]>(this.apiUrl + '/subjects');
   }
+
+  getLanguagesToApprove(): Observable<Language[]> {
+    return this.httpClient.get<Language[]>(this.apiUrl + '/languages/manage');
+  }
+
+  getLevelsToApprove(): Observable<Level[]> {
+    return this.httpClient.get<Level[]>(this.apiUrl + '/levels/manage');
+  }
+
+  getLocationsToApprove(): Observable<Location[]> {
+    return this.httpClient.get<Location[]>(this.apiUrl + '/locations/manage');
+  }
+
+  getSubjectsToApprove(): Observable<Subject[]> {
+    return this.httpClient.get<Subject[]>(this.apiUrl + '/subjects/manage');
+  }
 }

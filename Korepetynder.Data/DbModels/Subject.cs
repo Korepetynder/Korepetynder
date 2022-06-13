@@ -7,6 +7,7 @@ namespace Korepetynder.Data.DbModels
     [Index(nameof(Name), IsUnique = true)]
     public class Subject
     {
+        public bool WasAccepted { get; set; }
         public int Id { get; set; }
 
         [MaxLength(100)]
@@ -19,6 +20,7 @@ namespace Korepetynder.Data.DbModels
         public Subject(string name)
         {
             Name = name;
+            WasAccepted = false;
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Korepetynder.Services.Users
 
             return await _korepetynderDbContext.Users
                 .Where(u => u.Id == id)
-                .Select(user => new UserRolesResponse(user.Student != null, user.Tutor != null))
+                .Select(user => new UserRolesResponse(user.Student != null, user.Tutor != null, user.IsAdmin))
                 .SingleAsync();
         }
     }

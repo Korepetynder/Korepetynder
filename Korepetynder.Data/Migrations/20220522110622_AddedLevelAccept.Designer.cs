@@ -4,6 +4,7 @@ using Korepetynder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Korepetynder.Data.Migrations
 {
     [DbContext(typeof(KorepetynderDbContext))]
-    partial class KorepetynderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220522110622_AddedLevelAccept")]
+    partial class AddedLevelAccept
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -184,6 +186,9 @@ namespace Korepetynder.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("SubjectId")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("TutorId")
                         .HasColumnType("uniqueidentifier");
 
@@ -195,6 +200,8 @@ namespace Korepetynder.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("TutorId");
 
@@ -396,9 +403,6 @@ namespace Korepetynder.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -503,21 +507,6 @@ namespace Korepetynder.Data.Migrations
                     b.ToTable("TutorTeachingLocations", (string)null);
                 });
 
-            modelBuilder.Entity("TutorLessonMultimediaFiles", b =>
-                {
-                    b.Property<int>("MultimediaFileId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TutorLessonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MultimediaFileId", "TutorLessonId");
-
-                    b.HasIndex("TutorLessonId");
-
-                    b.ToTable("TutorLessonMultimediaFiles");
-                });
-
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Location", "ParentLocation")
@@ -529,6 +518,10 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.MultimediaFile", b =>
                 {
+                    b.HasOne("Korepetynder.Data.DbModels.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId");
+
                     b.HasOne("Korepetynder.Data.DbModels.Tutor", "Owner")
                         .WithMany("MultimediaFiles")
                         .HasForeignKey("TutorId")
@@ -536,6 +529,8 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Student", b =>
@@ -706,21 +701,6 @@ namespace Korepetynder.Data.Migrations
                         .WithMany()
                         .HasForeignKey("TutorsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TutorLessonMultimediaFiles", b =>
-                {
-                    b.HasOne("Korepetynder.Data.DbModels.MultimediaFile", null)
-                        .WithMany()
-                        .HasForeignKey("MultimediaFileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Korepetynder.Data.DbModels.TutorLesson", null)
-                        .WithMany()
-                        .HasForeignKey("TutorLessonId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
