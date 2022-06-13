@@ -27,7 +27,7 @@ import { LessonTutorDescriptionComponent } from './settings-tutor/lesson-tutor-d
 import { SettingsTutorComponent } from './settings-tutor/settings-tutor.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsRoutingModule } from './settings-routing.module';
-
+import { PhotoComponent } from './settings-tutor/photo/photo.component';
 
 
 @NgModule({
@@ -37,7 +37,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
     SettingsStudentComponent,
     SettingsTutorComponent,
     LessonDescriptionComponent,
-    LessonTutorDescriptionComponent
+    LessonTutorDescriptionComponent,
+    PhotoComponent,
   ],
   imports: [
     CommonModule,

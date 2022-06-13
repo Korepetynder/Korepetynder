@@ -7,6 +7,7 @@ import { Language } from '../../models/responses/language';
 import { Level } from '../../models/responses/level';
 import { Subject } from '../../models/responses/subject';
 import { TutorSettingsService } from '../../tutor-settings.service';
+import { TutorLesson } from '../../models/responses/tutorLesson'
 
 @Component({
   selector: 'app-lesson-tutor-description',
@@ -20,8 +21,10 @@ export class LessonTutorDescriptionComponent {
   @Input() languages: Language[] = [];
   @Input() levels: Level[] = [];
   @Input() subjects: Subject[] = [];
+  @Input() lessons: TutorLesson[] = [];
 
   @Output() lessonRemove = new EventEmitter<void>();
+  @Output() lessonArrayUpdate = new EventEmitter<void>();
 
   get lessonId(): number | null { return this.lesson.get('id')!.value; }
   set lessonId(id: number | null) { this.lesson.get('id')!.setValue(id); }
@@ -65,6 +68,7 @@ export class LessonTutorDescriptionComponent {
       this.isSaving = false;
       this.snackBar.open("Zapisano pomyślnie.", "OK", {duration: 5000});
       this.lessonId = lesson.id;
+      this.lessonArrayUpdate.emit();
     });
   }
 
@@ -76,6 +80,7 @@ export class LessonTutorDescriptionComponent {
     deleteObservable.subscribe(() => {
       this.snackBar.open("Usunięto pomyślnie.", "OK", {duration: 5000});
       this.lessonRemove.emit();
+      this.lessonArrayUpdate.emit();
     });
   }
 }

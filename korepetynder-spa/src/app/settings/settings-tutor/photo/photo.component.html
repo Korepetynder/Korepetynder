@@ -1,0 +1,43 @@
+<form [formGroup]="photo" (ngSubmit)="saveChanges()">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Zdjęcie
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <img [src]="url" *ngIf="url" style="width: 100%; object-fit: contain">
+
+    <ng-container *ngIf="!photoId">
+      <input #photoInput hidden="true" type="file" (change)="fileChange($event)" accept=".jpg,.jpeg,.png,.gif"
+        onclick="this.value = null">
+      <div class="select-photo-button">
+        <button type="button" mat-flat-button color="accent" (click)="photoInput.click()">Wybierz zdjęcie</button>
+      </div>
+    </ng-container>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Pokaż przy następujących korepetycjach:</mat-label>
+      <mat-select formControlName="lessons" multiple>
+        <mat-option *ngFor="let lesson of lessons" [value]="lesson.id">
+          {{lessonShortDescription(lesson.id)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="save-button" *ngIf="!photoId">
+      <button mat-raised-button type="submit" color="accent" [disabled]="isSaving">
+        Zapisz
+      </button>
+    </div>
+    <div class="save-button" *ngIf="isSaving">
+      <mat-progress-spinner diameter="30" color="accent" [value]="progress"></mat-progress-spinner>
+    </div>
+
+    <div class="delete-button">
+      <button mat-fab color="accent" type="button" (click)="removePhoto()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </mat-expansion-panel>
+</form>

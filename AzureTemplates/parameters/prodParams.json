@@ -25,6 +25,9 @@
     },
     "staticWebAppApiLocation": {
       "value": "westeurope"
+    },
+    "storageAccountSkuName": {
+      "value": "Standard_LRS"
     }
   }
 }

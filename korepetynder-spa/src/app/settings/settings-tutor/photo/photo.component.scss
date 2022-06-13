@@ -25,27 +25,20 @@ input.number-input {
 
 #add-button {
   margin: 10px;
-  // float: left;
-}
-
-.save-settings-button {
-  margin: 10px;
-  margin-top: 30px;
   float: right;
 }
 
-.save-button-div {
-  display: flex;
-}
-
-.status-slider {
+.save-button {
   margin: 10px;
+  margin-top: 15px;
+  float: left;
 }
 
-p {
-  margin: 10px;
+.select-photo-button {
+  margin: 10px 15px;
 }
 
-.options-child {
-  padding-left: 35px;
+.delete-button {
+  margin: 5px;
+  float: right;
 }

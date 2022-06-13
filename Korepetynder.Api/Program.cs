@@ -16,7 +16,7 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services.ConfigureDatabase(builder.Configuration.GetConnectionString("Korepetynder"));
 
-builder.Services.ConfigureServices();
+builder.Services.ConfigureServices(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
