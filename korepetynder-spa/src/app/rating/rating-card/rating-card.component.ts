@@ -22,7 +22,7 @@ export class RatingCardComponent {
   });
 
   get score(): FormControl { return this.ratingForm.get('score')! as FormControl; }
-  get comment() { return this.ratingForm.get('comment')!; }
+  get comment(): FormControl { return this.ratingForm.get('comment')! as FormControl; }
 
   handleSendRating(): void {
     console.log(this.tutor);
