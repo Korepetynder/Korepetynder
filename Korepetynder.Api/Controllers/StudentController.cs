@@ -279,7 +279,7 @@ namespace Korepetynder.Api.Controllers
         [HttpPost("Tutors/Discard/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DiscardTutor([FromRoute] int id)
+        public async Task<IActionResult> DiscardTutor([FromRoute] Guid id)
         {
             try
             {

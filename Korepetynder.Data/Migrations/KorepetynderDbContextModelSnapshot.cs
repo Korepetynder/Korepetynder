@@ -79,19 +79,19 @@ namespace Korepetynder.Data.Migrations
                         {
                             Id = 1,
                             Name = "Polski",
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 2,
                             Name = "Angielski",
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 3,
                             Name = "Niemiecki",
-                            WasAccepted = false
+                            WasAccepted = true
                         });
                 });
 
@@ -126,21 +126,21 @@ namespace Korepetynder.Data.Migrations
                         {
                             Id = 1,
                             Name = "Szkoła podstawowa",
-                            WasAccepted = false,
+                            WasAccepted = true,
                             Weight = 1
                         },
                         new
                         {
                             Id = 2,
                             Name = "Liceum",
-                            WasAccepted = false,
+                            WasAccepted = true,
                             Weight = 2
                         },
                         new
                         {
                             Id = 3,
                             Name = "Studia wyższe",
-                            WasAccepted = false,
+                            WasAccepted = true,
                             Weight = 3
                         });
                 });
@@ -175,33 +175,33 @@ namespace Korepetynder.Data.Migrations
                         {
                             Id = 1,
                             Name = "Warszawa",
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 2,
                             Name = "Wilanów",
                             ParentLocationId = 1,
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 3,
                             Name = "Śródmieście",
                             ParentLocationId = 1,
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 4,
                             Name = "Łódź",
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 5,
                             Name = "Kraków",
-                            WasAccepted = false
+                            WasAccepted = true
                         });
                 });
 
@@ -317,19 +317,19 @@ namespace Korepetynder.Data.Migrations
                         {
                             Id = 1,
                             Name = "Matematyka",
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 2,
                             Name = "Informatyka",
-                            WasAccepted = false
+                            WasAccepted = true
                         },
                         new
                         {
                             Id = 3,
                             Name = "Chemia",
-                            WasAccepted = false
+                            WasAccepted = true
                         });
                 });
 
@@ -546,13 +546,6 @@ namespace Korepetynder.Data.Migrations
                     b.ToTable("FavoriteTutorStudents", (string)null);
                 });
 
-            modelBuilder.Entity("Korepetynder.Data.DbModels.Comment", b =>
-                {
-                    b.HasOne("Korepetynder.Data.DbModels.Tutor", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("TutorUserId");
-                });
-
             modelBuilder.Entity("TutorLessonMultimediaFiles", b =>
                 {
                     b.Property<int>("MultimediaFileId")
@@ -566,6 +559,13 @@ namespace Korepetynder.Data.Migrations
                     b.HasIndex("TutorLessonId");
 
                     b.ToTable("TutorLessonMultimediaFiles");
+                });
+
+            modelBuilder.Entity("Korepetynder.Data.DbModels.Comment", b =>
+                {
+                    b.HasOne("Korepetynder.Data.DbModels.Tutor", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("TutorUserId");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
@@ -744,24 +744,9 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TutorLessonMultimediaFiles", b =>
-                {
-                    b.HasOne("Korepetynder.Data.DbModels.MultimediaFile", null)
-                        .WithMany()
-                        .HasForeignKey("MultimediaFileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Korepetynder.Data.DbModels.TutorLesson", null)
-                        .WithMany()
-                        .HasForeignKey("TutorLessonId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("StudentTutor", b =>
                 {
-                    b.HasOne("Korepetynder.Data.DbModels.Teacher", null)
+                    b.HasOne("Korepetynder.Data.DbModels.Student", null)
                         .WithMany()
                         .HasForeignKey("DiscardedByStudentsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -786,6 +771,21 @@ namespace Korepetynder.Data.Migrations
                         .WithMany()
                         .HasForeignKey("FavoritedByStudentsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TutorLessonMultimediaFiles", b =>
+                {
+                    b.HasOne("Korepetynder.Data.DbModels.MultimediaFile", null)
+                        .WithMany()
+                        .HasForeignKey("MultimediaFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Korepetynder.Data.DbModels.TutorLesson", null)
+                        .WithMany()
+                        .HasForeignKey("TutorLessonId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
@@ -815,6 +815,8 @@ namespace Korepetynder.Data.Migrations
             modelBuilder.Entity("Korepetynder.Data.DbModels.Tutor", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("MultimediaFiles");
 
                     b.Navigation("TutorLessons");
                 });
