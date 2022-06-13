@@ -16,7 +16,7 @@
       </div>
     </ng-container>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="lessons-form-field">
       <mat-label>Pokaż przy następujących korepetycjach:</mat-label>
       <mat-select formControlName="lessons" multiple>
         <mat-option *ngFor="let lesson of lessons" [value]="lesson.id">
