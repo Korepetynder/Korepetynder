@@ -240,7 +240,14 @@ namespace Korepetynder.Services.Media
 
             var multimediaFile = await _korepetynderDbContext.MultimediaFiles
                 .SingleAsync(multimediaFile => multimediaFile.Id == id);
-            if (currentId != multimediaFile.TutorId)
+
+            bool isOwner = multimediaFile.TutorId != null
+                ? currentId == multimediaFile.TutorId
+                : await _korepetynderDbContext.MultimediaFiles
+                    .Where(multimediaFile => multimediaFile.Id == id)
+                    .Select(multimediaFile => multimediaFile.TutorLessons.Any(tutorLesson => tutorLesson.TutorId == currentId))
+                    .SingleAsync();
+            if (!isOwner)
             {
                 throw new ArgumentException("Multimedia file does not belong to tutor");
             }
