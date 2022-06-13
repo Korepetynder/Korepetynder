@@ -8,7 +8,7 @@
     <a mat-icon-button routerLink="home">
       <mat-icon>home</mat-icon>
     </a>
-    <button mat-icon-button>
+    <button mat-icon-button routerLink="favorites">
       <mat-icon>favorite</mat-icon>
     </button>
     <button mat-icon-button [matMenuTriggerFor]="menuLogout">
@@ -31,6 +31,9 @@
         <a mat-list-item (click)="navigateToSettings(0); snav.close()">Podstawowe</a>
         <a mat-list-item (click)="navigateToSettings(1); snav.close()">Ucznia</a>
         <a mat-list-item (click)="navigateToSettings(2); snav.close()">Korepetytora</a>
+      </mat-nav-list>
+      <mat-nav-list>
+        <a mat-list-item (click)="navigateToSuggestions(); snav.close()">Zaproponuj nowe opcje!</a>
       </mat-nav-list>
     </mat-sidenav>
 

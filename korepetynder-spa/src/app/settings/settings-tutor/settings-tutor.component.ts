@@ -10,6 +10,8 @@ import { Level } from '../models/responses/level';
 import { Location } from '../models/responses/location';
 import { Subject } from '../models/responses/subject';
 import { TutorSettingsService } from '../tutor-settings.service';
+import { TutorLesson } from '../models/responses/tutorLesson';
+import { PhotoComponent } from './photo/photo.component';
 
 @Component({
   selector: 'app-settings-tutor',
@@ -24,6 +26,8 @@ export class SettingsTutorComponent implements OnInit {
   @Input() locations: Location[] = [];
   @Input() subjects: Subject[] = [];
 
+  savedLessons: TutorLesson[] = [];
+
   @Output() statusChange = new EventEmitter<boolean>();
 
   isSaving = false;
@@ -31,8 +35,9 @@ export class SettingsTutorComponent implements OnInit {
 
   profileForm = this.fb.group({
     isTutor: [false],
-    locations: [[]],
-    lessons: this.fb.array([])
+    locations: [[], [Validators.required]],
+    lessons: this.fb.array([]),
+    photos: this.fb.array([]),
   });
 
   constructor(
@@ -53,11 +58,39 @@ export class SettingsTutorComponent implements OnInit {
     return this.lessons.controls as FormGroup[];
   }
 
+  get photos() {
+    return this.profileForm.get('photos') as FormArray;
+  }
+  get photosControls() {
+    return this.photos.controls as FormGroup[];
+  }
+
   get isTutorCtrl() {
     return this.profileForm.get('isTutor') as FormControl;
   }
   get isTutor() {
     return this.isTutorCtrl.value as boolean;
+  }
+
+  setAllLocations() {
+    let newLocations = this.locationsCtrl.value;
+    for (let i = 0; i < this.locations.length; i++) {
+      if (this.locations[i].childrenLocations == null) {
+        continue;
+      }
+      if (newLocations.includes(this.locations[i].id)) {
+        this.locations[i].childrenLocations.forEach(t => {
+          if (!newLocations.includes(t.id)) {
+            newLocations.push(t.id);
+          }
+        });
+      }
+    }
+    this.locationsCtrl.setValue(newLocations);
+  }
+
+  checkParentLocation(id: number): boolean {
+    return this.locationsCtrl.value.includes(id);
   }
 
   addLesson(): void {
@@ -71,8 +104,26 @@ export class SettingsTutorComponent implements OnInit {
     }));
   }
 
+  addPhoto(): void { // TODO
+    this.photos.push(this.fb.group({
+      id: [null],
+      url: [{ value: null, disabled: true }],
+      lessons: [[], []],
+    }));
+  }
+
   removeLesson(id: number): void {
     this.lessons.removeAt(id);
+  }
+
+  removePhoto(id: number): void {
+    this.photos.removeAt(id);
+  }
+
+  updateSavedLessons(): void {
+    console.log("UPDATE", this.savedLessons);
+    this.tutorSettingsService.getLessons().subscribe(lessons => this.savedLessons = lessons);
+    this.savedLessons = this.savedLessons.slice();
   }
 
   ngOnInit() {
@@ -94,20 +145,44 @@ export class SettingsTutorComponent implements OnInit {
             frequency: lesson.frequency
           })));
           console.log(this.lessons);
+
+          this.savedLessons = lessons;
         });
+
+        this.tutorSettingsService.getPhotos().subscribe(photos => {
+          console.log(photos);
+          photos.forEach(() => this.addPhoto());
+          this.photos.patchValue(photos);
+        })
       }
     });
 
     this.profileForm.statusChanges.subscribe(status => this.statusChange.emit(status === 'VALID'));
   }
 
+  private addLocationsWithAllChildrenLocationsSelected(locations: number[]) {
+    for (let i = 0; i < this.locations.length; i++) {
+      if (this.locations[i].childrenLocations == null || this.locations[i].childrenLocations.length == 0) {
+        continue;
+      }
+      if (!locations.includes(this.locations[i].id) && this.locations[i].childrenLocations.every((x) => locations.includes(x.id))) {
+        locations.push(this.locations[i].id);
+      }
+    }
+    return locations;
+  }
+
   saveChanges(): void {
     if (this.profileForm.invalid) {
+      this.snackBar.open("Wprowadź poprawne dane.", "OK", {duration: 5000});
       return;
     }
 
     this.isSaving = true;
-    const tutorRequest = new TutorRequest(this.locationsCtrl.value);
+    let locations: number[] = this.locationsCtrl.value;
+    this.addLocationsWithAllChildrenLocationsSelected(locations);
+
+    const tutorRequest = new TutorRequest(locations);
 
     const saveObservable = this.isTutor
       ? (this.isTutorOldValue ? this.tutorSettingsService.updateTutor(tutorRequest) : this.tutorSettingsService.createTutor(tutorRequest))

@@ -15,7 +15,7 @@ namespace Korepetynder.Data.DbModels
         public ICollection<Level> Levels { get; set; } = new List<Level>();
         public ICollection<Language> Languages { get; set; } = new List<Language>();
 
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]
         public Student Student { get; set; } = null!;
     }

@@ -16,6 +16,8 @@ param branchName string
 param repositoryUrl string
 param repositoryToken string
 
+param storageAccountSkuName string
+
 var logWorkspaceName = 'log-korepetynder-${nameSuffix}'
 var webAppName = 'app-korepetynder-${nameSuffix}'
 var appServicePlanName = 'plan-korepetynder-${nameSuffix}'
@@ -23,6 +25,7 @@ var sqlServerName = 'sql-korepetynder-${nameSuffix}'
 var dbName = 'sqldb-korepetynder-${nameSuffix}'
 var webAppInsightsName = 'appi-app-korepetynder-${nameSuffix}'
 var staticWebAppName = 'stapp-korepetynder-${nameSuffix}'
+var storageAccountName = 'stkorepetynder${nameSuffix}'
 
 
 module loggingModule 'logging.bicep' = {
@@ -71,6 +74,15 @@ module databaseModule 'database.bicep' = {
     sqlServerAdLogin: sqlServerAdLogin
     sqlServerAdSid: sqlServerAdSid
     sqlServerAdTenantId: sqlServerAdTenantId
+  }
+}
+
+module storageModule 'storage.bicep' = {
+  name: 'storageDeploy'
+  params: {
+    location: location
+    storageAccountName: storageAccountName
+    storageAccountSkuName: storageAccountSkuName
   }
 }
 

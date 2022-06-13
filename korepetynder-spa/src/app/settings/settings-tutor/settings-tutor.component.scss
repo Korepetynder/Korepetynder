@@ -25,7 +25,7 @@ input.number-input {
 
 #add-button {
   margin: 10px;
-  float: left;
+  // float: left;
 }
 
 .save-settings-button {
@@ -44,4 +44,8 @@ input.number-input {
 
 p {
   margin: 10px;
+}
+
+.options-child {
+  padding-left: 35px;
 }

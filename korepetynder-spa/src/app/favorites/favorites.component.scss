@@ -1,0 +1,15 @@
+.main-div {
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  //align-content: flex-start;
+  justify-content: center;
+  gap: 0;
+
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+app-favorite-tutor-card {
+  display: block;
+}

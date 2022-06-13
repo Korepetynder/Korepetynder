@@ -5,6 +5,4 @@ export interface UserResponse {
   email: string;
   phoneNumber: string | null;
   birthDate: string;
-  isStudent: boolean;
-  isTeacher: boolean;
 }

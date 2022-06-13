@@ -2,11 +2,11 @@ namespace Korepetynder.Contracts.Responses.Students
 {
     public class StudentResponse
     {
-        public int StudentId { get; set; }
+        public Guid UserId { get; set; }
         public IEnumerable<int> Locations { get; set; }
-        public StudentResponse(int id, IEnumerable<int> locations)
+        public StudentResponse(Guid id, IEnumerable<int> locations)
         {
-            StudentId = id;
+            UserId = id;
             Locations = locations;
         }
     }

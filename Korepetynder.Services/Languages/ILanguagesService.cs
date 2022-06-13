@@ -9,6 +9,9 @@ namespace Korepetynder.Services.Languages
     {
         Task<PagedData<LanguageResponse>> GetLanguages(SieveModel sieveModel);
         Task<LanguageResponse?> GetLanguage(int id);
+        Task<PagedData<LanguageResponse>> GetNewLanguages(SieveModel sieveModel);
+        Task<LanguageResponse> AcceptLanguage(int id);
+        Task DeleteLanguage(int id);
         Task<LanguageResponse> AddLanguage(LanguageRequest subjectRequest);
     }
 }

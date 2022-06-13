@@ -8,7 +8,8 @@ import { UserType } from '../models/userType';
 
 interface UserRolesResponse {
   isStudent: boolean;
-  isTeacher: boolean;
+  isTutor: boolean;
+  isAdmin: boolean;
 }
 
 @Injectable({
@@ -28,8 +29,11 @@ export class UserService {
     if (roles.isStudent) {
       userType |= UserType.Student;
     }
-    if (roles.isTeacher) {
+    if (roles.isTutor) {
       userType |= UserType.Tutor;
+    }
+    if (roles.isAdmin) {
+      userType |= UserType.Admin;
     }
 
     return userType;
@@ -71,6 +75,12 @@ export class UserService {
   isTutor(): Observable<boolean> {
     return this.getUserType().pipe(
       map(userType => (userType & UserType.Tutor) !== 0)
+    );
+  }
+
+  isAdmin(): Observable<boolean> {
+    return this.getUserType().pipe(
+      map(userType => (userType & UserType.Admin) !== 0)
     );
   }
 }

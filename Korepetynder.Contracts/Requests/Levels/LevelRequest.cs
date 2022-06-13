@@ -6,12 +6,11 @@ namespace Korepetynder.Contracts.Requests.Levels
     {
         [MaxLength(100)]
         public string Name { get; set; }
-        public int Weight { get; set; }
+        public int? Weight { get; set; }
 
-        public LevelRequest(string name, int weight)
+        public LevelRequest(string name)
         {
             Name = name;
-            Weight = weight;
         }
     }
 }

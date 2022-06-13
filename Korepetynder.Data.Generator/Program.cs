@@ -23,12 +23,12 @@ ICollection<T> RandomValues<T>(IList<T> values)
     return result;
 }
 
-ICollection<TeacherLesson> GenerateLessons(int numberOfLessons, IList<Subject> subjects, IList<Level> levels, IList<Language> languages)
+ICollection<TutorLesson> GenerateLessons(int numberOfLessons, IList<Subject> subjects, IList<Level> levels, IList<Language> languages)
 {
-    var result = new List<TeacherLesson>();
+    var result = new List<TutorLesson>();
     for (int i = 0; i < numberOfLessons; i++)
     {
-        result.Add(new TeacherLesson
+        result.Add(new TutorLesson
         {
             Cost = random.Next(20, 101),
             Frequency = random.Next(1, 11),
@@ -64,12 +64,13 @@ var languages = await context.Languages.ToListAsync();
 var users = new List<User>(numberOfTutors);
 for (int tutorNumber = 0; tutorNumber < numberOfTutors; tutorNumber++)
 {
-    var user = new User(Guid.NewGuid(), "Tutor", tutorNumber.ToString(), DateTime.UtcNow.AddYears(-(random.Next(18, 60))), "user@example.com", "+48123456789")
+    var userId = Guid.NewGuid();
+    var user = new User(userId, "Tutor", tutorNumber.ToString(), DateTime.UtcNow.AddYears(-(random.Next(18, 60))), "user@example.com", "+48123456789")
     {
-        Teacher = new Teacher
+        Tutor = new Tutor(userId)
         {
             TeachingLocations = RandomValues(locations),
-            Lessons = GenerateLessons(numberOfLessonsPerTutor, subjects, levels, languages)
+            TutorLessons = GenerateLessons(numberOfLessonsPerTutor, subjects, levels, languages)
         }
     };
     users.Add(user);

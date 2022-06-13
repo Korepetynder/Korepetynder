@@ -5,6 +5,7 @@ namespace Korepetynder.Data.DbModels
 {
     public class Location
     {
+        public bool WasAccepted { get; set; }
         public int Id { get; set; }
         [MaxLength(100)]
         public string Name { get; set; }
@@ -14,12 +15,13 @@ namespace Korepetynder.Data.DbModels
         public Location? ParentLocation { get; set; }
         public ICollection<Location> Sublocations { get; set; } = new List<Location>();
 
-        public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
+        public ICollection<Tutor> Tutors { get; set; } = new List<Tutor>();
         public ICollection<Student> Students { get; set; } = new List<Student>();
 
         public Location(string name)
         {
             Name = name;
+            WasAccepted = false;
         }
 
         public override bool Equals(object? obj)

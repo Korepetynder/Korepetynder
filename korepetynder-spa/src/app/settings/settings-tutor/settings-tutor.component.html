@@ -6,16 +6,14 @@
   <div *ngIf="isTutor">
     <mat-form-field appearance="outline">
       <mat-label>Lokalizacje korepetycji</mat-label>
-      <mat-select formControlName="locations" multiple>
+      <mat-select formControlName="locations" multiple (selectionChange)="setAllLocations()">
         <ng-container *ngFor="let location of locations">
           <mat-option [value]="location.id">
             {{location.name}}
           </mat-option>
-          <mat-optgroup *ngIf="location.childrenLocations.length > 0" [label]="'Podlokacje w: ' + location.name">
-            <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id">
+          <mat-option *ngFor="let childLocation of location.childrenLocations" [value]="childLocation.id" class="options-child" [disabled]="checkParentLocation(location.id)">
               {{childLocation.name}}
-            </mat-option>
-          </mat-optgroup>
+          </mat-option>
         </ng-container>
       </mat-select>
     </mat-form-field>
@@ -30,12 +28,27 @@
     <p>Uzupełnij opisy oferowanych korepetycji.</p>
     <mat-accordion multi>
       <app-lesson-tutor-description *ngFor="let lesson of lessonsControls; let i = index" [lesson]="lesson" [index]="i + 1"
-        [subjects]="subjects" [languages]="languages" [levels]="levels" (lessonRemove)="removeLesson(i)">
+        [subjects]="subjects" [languages]="languages" [levels]="levels" [lessons]="savedLessons" (lessonRemove)="removeLesson(i)" (lessonArrayUpdate)="updateSavedLessons()">
       </app-lesson-tutor-description>
     </mat-accordion>
 
     <div id="add-button">
       <button mat-fab color="accent" type="button" (click)="addLesson()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isTutorOldValue && isTutor">
+    <p>Dodaj zdjęcia.</p>
+    <mat-accordion multi>
+      <app-photo *ngFor="let photo of photosControls; let i = index" [photo]="photo" [index]="i + 1"
+      [lessons]="savedLessons" (photoRemove)="removePhoto(i)">
+      </app-photo>
+    </mat-accordion>
+
+    <div id="add-button">
+      <button mat-fab color="accent" type="button" (click)="addPhoto()">
         <mat-icon>add</mat-icon>
       </button>
     </div>

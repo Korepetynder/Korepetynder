@@ -8,10 +8,6 @@ using Sieve.Models;
 
 namespace Korepetynder.Api.Controllers
 {
-
-    /// <summary>
-    /// Controller for languages management.
-    /// </summary>
     [Authorize]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("[controller]")]
@@ -44,8 +40,8 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Gets the specified language.
         /// </summary>
-        /// <param name="id">ID of the language.</param>
-        /// <returns>language.</returns>
+        /// <param name="id">ID of the language to get.</param>
+        /// <returns>Language.</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -81,6 +77,71 @@ namespace Korepetynder.Api.Controllers
             catch (InvalidOperationException)
             {
                 return Conflict();
+            }
+        }
+        /// <summary>
+        /// Returns list of all languages that are to be accepted.
+        /// </summary>
+        /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
+        /// <returns>List of languages.</returns>
+        [HttpGet("manage")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult<IEnumerable<LanguageResponse>>> GetNewLanguages([FromQuery] SieveModel sieveModel)
+        {
+            try
+            {
+
+                var languages = await _languagesService.GetNewLanguages(sieveModel);
+
+                Response.Headers.Add("X-Total-Count", languages.TotalCount.ToString());
+
+                return languages.Entities.ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return Conflict();
+            }
+        }
+        /// <summary>
+        /// Approves language with given id
+        /// </summary>
+        /// <param name="id">ID of the language to approve.</param>
+        /// <returns>Approved language.</returns>
+        [HttpPost("manage/{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult<LanguageResponse>> PostAcceptedLanguage([FromRoute] int id)
+        {
+            try
+            {
+                var language = await _languagesService.AcceptLanguage(id);
+
+                return CreatedAtAction(nameof(GetLanguage), new { id = language.Id }, language);
+            }
+            catch (InvalidOperationException)
+            {
+                return Conflict();
+            }
+        }
+        /// <summary>
+        /// Removes language with given id
+        /// </summary>
+        /// <param name="id">ID of the language to approve.</param>
+        [HttpDelete("manage/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteLanguage([FromRoute] int id)
+        {
+            try
+            {
+                await _languagesService.DeleteLanguage(id);
+
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
             }
         }
     }

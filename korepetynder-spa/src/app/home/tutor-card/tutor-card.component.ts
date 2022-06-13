@@ -3,6 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 
 import { TutorDetails } from './tutorDetails';
+import { OpinionPopupComponent } from "../../opinion-popup/opinion-popup.component";
+import { MatDialog } from "@angular/material/dialog";
+import { TutorFindService } from '../tutor-find.service';
+import { FavoritesService } from 'src/app/favorites/favorites.service';
 
 @Component({
   selector: 'app-tutor-card',
@@ -15,29 +19,62 @@ export class TutorCardComponent implements OnInit {
   @Output() nextTutor = new EventEmitter<void>();
 
   panelOpenState = false;
+  isFavorite = false;
 
   // constructor() { }
   imageData = data;
   items: GalleryItem[] = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
 
-  constructor(public gallery: Gallery) {
+  constructor(
+    public gallery: Gallery,
+    public dialog: MatDialog,
+    private favoritesService: FavoritesService) {
   }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(OpinionPopupComponent, {
+      width: '40em',
+      data: {
+        tutorId: this.tutor.id
+      }
+      // data: {name: this.name, animal: this.animal},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
+  }
+
 
   ngOnInit(): void {
     this.getPhotoGallery();
   }
 
   getNextTutor(): void {
+    this.reset();
     this.getPhotoGallery();
     this.nextTutor.emit();
   }
 
-  addToFavorites(): void {
+  handleFavoritesButton(): void {
+    const favoriteObservable = this.isFavorite
+      ? this.favoritesService.removeFromFavorites(this.tutor.id)
+      : this.favoritesService.addToFavorites(this.tutor.id);
+    this.isFavorite = !this.isFavorite;
 
+    favoriteObservable.subscribe(() => {
+      console.log('Handled favorite add/remove');
+    });
   }
 
   getPhotoGallery(): void {
     this.items = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
+  }
+
+  reset(): void {
+    this.getPhotoGallery();
+    this.panelOpenState = false;
   }
 }
 

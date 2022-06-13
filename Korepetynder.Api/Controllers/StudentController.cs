@@ -1,5 +1,6 @@
 using Korepetynder.Contracts.Requests.Students;
 using Korepetynder.Contracts.Responses.Students;
+using Korepetynder.Contracts.Responses.Tutors;
 using Korepetynder.Services.Students;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -104,8 +105,9 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Updates chosen lesson
+        /// Updates the specified lesson.
         /// </summary>
+        /// <param name="id">ID of the lesson to update.</param>
         /// <param name="lessonRequest">Request containing data for updated lesson.</param>
         [HttpPut("Lessons/{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -146,7 +148,7 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Returns list of lessons that student is looking for
+        /// Returns list of lessons that student is looking for.
         /// </summary>
         /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
         /// <returns>List of lessons.</returns>
@@ -169,7 +171,7 @@ namespace Korepetynder.Api.Controllers
         }
 
         /// <summary>
-        /// Deletes lesson with given id, if it belongs to currently logged user
+        /// Deletes lesson with the given id, if it belongs to the currently logged user.
         /// </summary>
         /// <returns>List of lessons.</returns>
         [HttpDelete("Lessons/{id}")]
@@ -194,38 +196,94 @@ namespace Korepetynder.Api.Controllers
             }
         }
         /// <summary>
-        /// Gets suggestions of teachers.
+        /// Gets suggestions of tutors.
         /// </summary>
-        /// <returns>List of teachers.</returns>
-        [HttpGet("Teachers")]
+        /// <returns>List of tutors.</returns>
+        [HttpGet("Tutors")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<TeacherDataResponse>>> GetTeachers()
+        public async Task<ActionResult<IEnumerable<TutorDataResponse>>> GetSuggestedTutors()
         {
             try
             {
-                var teachers = await _studentsService.GetSuggestedTeachers();
+                var tutors = await _studentsService.GetSuggestedTutors();
 
-                Response.Headers.Add("X-Total-Count", teachers.Count().ToString());
-                return teachers.ToList();
+                Response.Headers.Add("X-Total-Count", tutors.Count().ToString());
+                return tutors.ToList();
             }
             catch (InvalidOperationException)
             {
                 return BadRequest();
             }
         }
-
         /// <summary>
-        /// Marks teacher as discarded.
+        /// Gets list of favorite tutors.
         /// </summary>
-        [HttpPost("Teachers/Discard/{id}")]
+        /// <returns>List of favorite tutors.</returns>
+        [HttpGet("Favorite")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DiscardTeacher([FromRoute] int id)
+        public async Task<ActionResult<IEnumerable<TutorDataResponse>>> GetFavoriteTutors([FromQuery] SieveModel sieveModel)
         {
             try
             {
-                await _studentsService.AddTeacherToIgnored(id);
+                var tutors = await _studentsService.GetFavoriteTutors(sieveModel);
+
+                Response.Headers.Add("X-Total-Count", tutors.TotalCount.ToString());
+                return tutors.Entities.ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Adds tutor to favorite
+        /// </summary>
+        [HttpPost("Favorite/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PostFavoriteTutor([FromRoute] Guid id)
+        {
+            try
+            {
+                await _studentsService.AddFavoriteTutor(id);
+                return Ok();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Removes tutor from favorite.
+        /// </summary>
+        [HttpDelete("Favorite/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteFavoriteTutor([FromRoute] Guid id)
+        {
+            try
+            {
+                await _studentsService.DeleteFavoriteTutor(id);
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Marks tutor as discarded.
+        /// </summary>
+        [HttpPost("Tutors/Discard/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DiscardTutor([FromRoute] int id)
+        {
+            try
+            {
+                await _studentsService.AddTutorToIgnored(id);
                 return Ok();
             }
             catch (InvalidOperationException)
