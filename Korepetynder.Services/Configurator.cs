@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Korepetynder.Services.Languages;
 using Korepetynder.Services.Levels;
@@ -15,11 +16,20 @@ namespace Korepetynder.Services
 {
     public static class Configurator
     {
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, bool isProduction)
         {
             services.AddScoped<ISieveProcessor, SieveProcessor>();
-            services.AddSingleton(new BlobServiceClient(
-                configuration.GetValue<string>("BlobStorageConnectionString")));
+
+            if (isProduction)
+            {
+                var blobEndpoint = $"https://{configuration.GetValue<string>("BlobStorageName")}.blob.core.windows.net";
+                services.AddSingleton(new BlobServiceClient(new Uri(blobEndpoint), new DefaultAzureCredential()));
+            }
+            else
+            {
+                services.AddSingleton(new BlobServiceClient(
+                    configuration.GetValue<string>("BlobStorageConnectionString")));
+            }
 
             services.AddScoped<ISubjectsService, SubjectsService>();
             services.AddScoped<IStudentService, StudentService>();
