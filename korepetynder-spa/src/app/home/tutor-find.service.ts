@@ -15,4 +15,8 @@ export class TutorFindService {
   getTutors(): Observable<TutorDetails[]> {
     return this.httpClient.get<TutorDetails[]>(this.apiUrl);
   }
+
+  discardTutor(id: string): Observable<any> {
+    return this.httpClient.post(`${this.apiUrl}/discard/${id}`, null);
+  }
 }
