@@ -70,7 +70,7 @@ for (int tutorNumber = 0; tutorNumber < numberOfTutors; tutorNumber++)
         Tutor = new Tutor(userId)
         {
             TeachingLocations = RandomValues(locations),
-            Lessons = GenerateLessons(numberOfLessonsPerTutor, subjects, levels, languages)
+            TutorLessons = GenerateLessons(numberOfLessonsPerTutor, subjects, levels, languages)
         }
     };
     users.Add(user);

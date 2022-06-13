@@ -1,0 +1,8 @@
+<mat-dialog-actions>
+  <button class="close-popup" mat-icon-button (click)="dialogRef.close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-dialog-actions>
+<mat-dialog-content class="main-div">
+  <app-rating-card [tutor]="data.tutor" (ratingSent)="dialogRef.close()"></app-rating-card>
+</mat-dialog-content>

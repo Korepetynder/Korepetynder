@@ -1,4 +1,6 @@
+using Korepetynder.Contracts.Requests.Comments;
 using Korepetynder.Contracts.Requests.Tutors;
+using Korepetynder.Contracts.Responses.Comments;
 using Korepetynder.Contracts.Responses.Tutors;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
@@ -20,6 +22,24 @@ namespace Korepetynder.Services.Tutors
         {
             _korepetynderDbContext = korepetynderDbContext;
             _sieveProcessor = sieveProcessor;
+        }
+
+        public async Task<CommentResponse> AddComment(Guid tutorId, CommentRequest request)
+        {
+            var tutor = await _korepetynderDbContext.Tutors
+                .SingleAsync(tutor => tutor.UserId == tutorId);
+
+            var comment = new Comment(request.Score, request.Comment, tutorId);
+            _korepetynderDbContext.Comments.Add(comment);
+            await _korepetynderDbContext.SaveChangesAsync();
+
+            var newScore = await _korepetynderDbContext.Comments
+                .Where(comment => comment.CommentedTutorId == tutorId)
+                .AverageAsync(comment => (decimal)comment.Score);
+            tutor.Score = newScore;
+            await _korepetynderDbContext.SaveChangesAsync();
+
+            return new CommentResponse(comment);
         }
 
         public async Task<TutorLessonResponse> AddLesson(TutorLessonRequest request)
@@ -90,6 +110,25 @@ namespace Korepetynder.Services.Tutors
             await _korepetynderDbContext.SaveChangesAsync();
         }
 
+        public async Task<PagedData<CommentResponse>> GetComments(Guid tutorId, SieveModel model)
+        {
+
+            var comments = _korepetynderDbContext.Comments
+                .Where(comment => comment.CommentedTutorId == tutorId)
+                .Where(comment => comment.Text != "")
+                .AsQueryable();
+
+            comments = _sieveProcessor.Apply(model, comments, applyPagination: false);
+
+            var count = await comments.CountAsync();
+
+            comments = _sieveProcessor.Apply(model, comments, applyFiltering: false, applySorting: false);
+
+            return new PagedData<CommentResponse>(count, await comments
+                .Select(comment => new CommentResponse(comment))
+                .ToListAsync());
+        }
+
         public async Task<PagedData<TutorLessonResponse>> GetLessons(SieveModel model)
         {
             Guid currentId = GetCurrentUserId();
@@ -126,7 +165,7 @@ namespace Korepetynder.Services.Tutors
 
             return await _korepetynderDbContext.Tutors
                 .Where(tutor => tutor.UserId == currentId)
-                .Select(tutor => new TutorResponse(tutor.UserId, tutor.TeachingLocations.Select(location => location.Id)))
+                .Select(tutor => new TutorResponse(tutor.UserId, tutor.TeachingLocations.Select(location => location.Id), tutor.Score))
                 .SingleAsync();
         }
 
@@ -157,7 +196,7 @@ namespace Korepetynder.Services.Tutors
             _korepetynderDbContext.Tutors.Add(tutor);
             await _korepetynderDbContext.SaveChangesAsync();
 
-            return new TutorResponse(tutor.UserId, locations.Select(location => location.Id));
+            return new TutorResponse(tutor.UserId, locations.Select(location => location.Id), tutor.Score);
         }
 
         public async Task<TutorLessonResponse> UpdateLesson(int id, TutorLessonRequest request)
@@ -218,7 +257,7 @@ namespace Korepetynder.Services.Tutors
             tutor.TeachingLocations = locations;
             await _korepetynderDbContext.SaveChangesAsync();
 
-            return new TutorResponse(tutor.UserId, locations.Select(location => location.Id));
+            return new TutorResponse(tutor.UserId, locations.Select(location => location.Id), tutor.Score);
         }
     }
 }

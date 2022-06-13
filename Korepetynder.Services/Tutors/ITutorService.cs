@@ -1,4 +1,6 @@
+using Korepetynder.Contracts.Requests.Comments;
 using Korepetynder.Contracts.Requests.Tutors;
+using Korepetynder.Contracts.Responses.Comments;
 using Korepetynder.Contracts.Responses.Students;
 using Korepetynder.Contracts.Responses.Tutors;
 using Korepetynder.Services.Models;
@@ -22,5 +24,7 @@ namespace Korepetynder.Services.Tutors
         Task<TutorLessonResponse> AddLesson(TutorLessonRequest request);
         Task<TutorLessonResponse> UpdateLesson(int id, TutorLessonRequest request);
         Task DeleteLesson(int id);
+        Task<PagedData<CommentResponse>> GetComments(Guid tutorId, SieveModel model);
+        Task<CommentResponse> AddComment(Guid tutorId, CommentRequest request);
     }
 }

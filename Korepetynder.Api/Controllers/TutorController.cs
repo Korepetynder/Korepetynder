@@ -1,4 +1,6 @@
+using Korepetynder.Contracts.Requests.Comments;
 using Korepetynder.Contracts.Requests.Tutors;
+using Korepetynder.Contracts.Responses.Comments;
 using Korepetynder.Contracts.Responses.Tutors;
 using Korepetynder.Services.Tutors;
 using Microsoft.AspNetCore.Authorization;
@@ -193,6 +195,51 @@ namespace Korepetynder.Api.Controllers
             catch (ArgumentException)
             {
                 return Forbid();
+            }
+        }
+        /// <summary>
+        /// Returns list of comments of specified tutor
+        /// </summary>
+        /// <param name="id">ID of the tutor.</param>
+        /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
+        /// <returns>List of comments.</returns>
+        [HttpGet("{id}/comments")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<CommentResponse>>> GetComments([FromRoute] Guid id, [FromQuery] SieveModel sieveModel)
+        {
+            try
+            {
+                var comments = await _tutorsService.GetComments(id, sieveModel);
+                Response.Headers.Add("X-Total-Count", comments.TotalCount.ToString());
+
+                return comments.Entities.ToList();
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
+            {
+                return BadRequest();
+            }
+        }
+        /// <summary>
+        /// Creates a comment for specified tutor
+        /// </summary>
+        /// <param name="id">ID of the tutor.</param>
+        /// <param name="commentRequest">Request containing data for comment creation.</param>
+        /// <returns>Newly created comment.</returns>
+        [HttpPost("{id}/comments")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CommentResponse>> PostComment([FromRoute] Guid id, [FromBody] CommentRequest commentRequest)
+        {
+            try
+            {
+                var comment = await _tutorsService.AddComment(id, commentRequest);
+
+                return comment;
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
+            {
+                return BadRequest();
             }
         }
     }

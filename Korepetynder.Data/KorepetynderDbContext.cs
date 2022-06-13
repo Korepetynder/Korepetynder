@@ -46,11 +46,13 @@ namespace Korepetynder.Data
                 .UsingEntity(join => join.ToTable("StudentPreferredLocations"));
 
             modelBuilder.Entity<Tutor>()
-                .HasMany(tutor => tutor.Students)
-                .WithMany(student => student.Tutors)
-                .UsingEntity<TutorStudent>(
-                    join => join.HasCheckConstraint("CK_StudentId_TutorId", "[TutorId] != [StudentId]")
-                );
+                .HasMany(tutor => tutor.DiscardedByStudents)
+                .WithMany(student => student.DiscardedTutors)
+                .UsingEntity(join => join.ToTable("DiscardedTutorStudents"));
+            modelBuilder.Entity<Tutor>()
+                .HasMany(tutor => tutor.FavoritedByStudents)
+                .WithMany(student => student.FavoriteTutors)
+                .UsingEntity(join => join.ToTable("FavoriteTutorStudents"));
             modelBuilder.Entity<Tutor>()
                 .HasMany(tutor => tutor.TeachingLocations)
                 .WithMany(location => location.Tutors)
@@ -100,6 +102,7 @@ namespace Korepetynder.Data
         public DbSet<Language> Languages => Set<Language>();
         public DbSet<StudentLesson> StudentLessons => Set<StudentLesson>();
         public DbSet<TutorLesson> TutorLessons => Set<TutorLesson>();
+        public DbSet<Comment> Comments => Set<Comment>();
 
     }
 }

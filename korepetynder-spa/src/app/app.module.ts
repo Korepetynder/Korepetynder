@@ -31,12 +31,32 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { GalleryModule } from "ng-gallery";
+import { RatingComponent } from './rating/rating.component';
+import { MatInputModule } from "@angular/material/input";
+import { NgbRatingModule } from "@ng-bootstrap/ng-bootstrap";
+import { RatingCardComponent } from './rating/rating-card/rating-card.component';
+import { StarRatingComponent } from './rating/star-rating/star-rating.component';
+import { FavoritesComponent } from './favorites/favorites.component';
+import { FavoriteTutorCardComponent } from './favorites/favorite-tutor-card/favorite-tutor-card.component';
+import { OpinionPopupComponent } from './opinion-popup/opinion-popup.component';
+import { MatDialogModule } from "@angular/material/dialog";
+import { OpinionCardComponent } from './opinion-popup/opinion-card/opinion-card.component';
+import { StaticStarRatingComponent } from './rating/static-star-rating/static-star-rating.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     TutorCardComponent,
+    FavoritesComponent,
+    FavoriteTutorCardComponent,
+    RatingComponent,
+    RatingCardComponent,
+    StarRatingComponent,
+    OpinionPopupComponent,
+    OpinionCardComponent,
+    StaticStarRatingComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +74,11 @@ import { GalleryModule } from "ng-gallery";
     MatCardModule,
     MatFormFieldModule,
     MatExpansionModule,
-    GalleryModule
+    GalleryModule,
+    MatInputModule,
+    NgbRatingModule,
+    MatDialogModule,
+    ReactiveFormsModule
   ],
   providers: [
     {
