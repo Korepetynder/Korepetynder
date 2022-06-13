@@ -1,21 +1,19 @@
-<mat-card class="opinion-rating">
+<form [formGroup]="ratingForm" (ngSubmit)="handleSendRating()" class="opinion-rating">
   <p class="title">
-    Oceń korepetyrora: {{tutor.fullName}}
+    Oceń korepetytora: {{tutor.fullName}}
   </p>
 
   <app-star-rating [ratingCtrl]="score"></app-star-rating>
 
   <mat-form-field class="opinion" appearance="fill">
     <mat-label>Zostaw opinię</mat-label>
-    <textarea class="written-opinion" matInput #message maxlength="300" rows="8"></textarea>
+    <textarea class="written-opinion" matInput #message maxlength="300" rows="8" [formControl]="comment"></textarea>
     <mat-hint align="start"><strong>Dodanie opinii jest opcjonalne</strong> </mat-hint>
     <mat-hint align="end">{{message.value.length}} / 300</mat-hint>
   </mat-form-field>
 
   <div class="actions">
-    <button mat-icon-button aria-label="Icon send button" class="send-icon"
-            (click)="handleSendRating()">
+    <button mat-icon-button aria-label="Icon send button" class="send-icon" type="submit">
       <mat-icon color="primary">send</mat-icon>
     </button>
   </div>
-</mat-card>
