@@ -184,10 +184,14 @@ namespace Korepetynder.Services.Media
                 throw new ArgumentException("At least one provided tutor lesson does not exist");
             }
 
-            var multimediaFile = new MultimediaFile(url, currentId)
+            var multimediaFile = new MultimediaFile(url)
             {
                 TutorLessons = tutorLessons
             };
+            if (tutorLessons.Count == 0)
+            {
+                multimediaFile.TutorId = currentId;
+            }
             _korepetynderDbContext.MultimediaFiles.Add(multimediaFile);
             await _korepetynderDbContext.SaveChangesAsync();
 
@@ -206,8 +210,18 @@ namespace Korepetynder.Services.Media
                 throw new InvalidOperationException("User with id: " + currentId + " is not a tutor");
             }
 
+            // Maybe it's faster?
+            // var multimediaFiles = await _korepetynderDbContext.TutorLessons
+            //     .Where(tutorLesson => tutorLesson.TutorId == currentId)
+            //     .Select(tutorLesson => tutorLesson.MultimediaFiles
+            //         .Select(multimediaFile => new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url,
+            //             multimediaFile.TutorLessons.Select(tutorLesson => tutorLesson.Id))))
+            //     .SelectMany(x => x)
+            //     .ToListAsync();
+
             return await _korepetynderDbContext.MultimediaFiles
-                .Where(multimediaFile => multimediaFile.TutorId == currentId)
+                .Where(multimediaFile => multimediaFile.TutorId == currentId
+                    || multimediaFile.TutorLessons.Any(tutorLesson => tutorLesson.TutorId == currentId))
                 .Select(multimediaFile => new MultimediaFileResponse(multimediaFile.Id, multimediaFile.Url,
                     multimediaFile.TutorLessons.Select(tutorLesson => tutorLesson.Id)))
                 .ToListAsync();

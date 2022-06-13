@@ -72,15 +72,8 @@ namespace Korepetynder.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<MultimediaFileResponse>>> GetMultimediaFiles()
         {
-            try
-            {
-                var multimediaFiles = await _mediaService.GetMultimediaFiles();
-                return multimediaFiles.ToList();
-            }
-            catch (InvalidOperationException)
-            {
-                return BadRequest();
-            }
+            var multimediaFiles = await _mediaService.GetMultimediaFiles();
+            return multimediaFiles.ToList();
         }
 
         /// <summary>

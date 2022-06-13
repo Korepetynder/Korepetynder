@@ -185,6 +185,8 @@ namespace Korepetynder.Services.Students
             var studentUser = await _korepetynderDbContext.Users
                 .Where(user => user.Id == currentId)
                 .Include(user => user.Student)
+                .Include(user => user.Student!.DiscardedTutors)
+                .Include(user => user.Student!.FavoriteTutors)
                 .Include(user => user.Student!.PreferredLocations)
                 .Include(user => user.Student!.PreferredLessons)
                 .ThenInclude(lesson => lesson.Subject)
@@ -192,6 +194,7 @@ namespace Korepetynder.Services.Students
                 .ThenInclude(lesson => lesson.Languages)
                 .Include(user => user.Student!.PreferredLessons)
                 .ThenInclude(lesson => lesson.Levels)
+                .AsNoTracking()
                 .SingleAsync();
             if (studentUser.Student is null)
             {
@@ -208,12 +211,19 @@ namespace Korepetynder.Services.Students
                     .Where(lesson => lesson.Tutor.TeachingLocations.Any(el => studentUser.Student.PreferredLocations.Contains(el)))
                     .Where(lesson => lesson.Languages.Any(el => searchLesson.Languages.Contains(el)))
                     .Where(lesson => lesson.Levels.Any(el => searchLesson.Levels.Contains(el)))
+                    .Where(lesson => !studentUser.Student.FavoriteTutors.Contains(lesson.Tutor))
                     .Include(lesson => lesson.Tutor)
+                    .ThenInclude(tutor => tutor.MultimediaFiles)
                     .Include(lesson => lesson.Languages)
                     .Include(lesson => lesson.Levels)
+                    .Include(lesson => lesson.Subject)
                     .Include(lesson => lesson.Tutor.User)
                     .Include(lesson => lesson.Tutor.TeachingLocations)
-                    .OrderBy(lesson => lesson.Cost)
+                    .Include(lesson => lesson.MultimediaFiles)
+                    .OrderBy(lesson => studentUser.Student.DiscardedTutors.Contains(lesson.Tutor))
+                    .ThenBy(lesson => lesson.Tutor.Score)
+                    .ThenBy(lesson => lesson.Cost)
+                    .AsNoTracking()
                     .ToListAsync();
                 allLessons = allLessons.Concat(lessons);
             }
@@ -299,12 +309,15 @@ namespace Korepetynder.Services.Students
 
             var favoriteTutors = _korepetynderDbContext.Users
                 .Where(user => user.Tutor!.FavoritedByStudents.Contains(student))
+                .Include(user => user.Tutor!.MultimediaFiles)
                 .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Subject)
                 .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Levels)
                 .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Languages)
+                .Include(user => user.Tutor!.TutorLessons)
+                .ThenInclude(lesson => lesson.MultimediaFiles)
                 .AsNoTracking();
             favoriteTutors = _sieveProcessor.Apply(model, favoriteTutors, applyPagination: false);
 
@@ -322,7 +335,7 @@ namespace Korepetynder.Services.Students
 
             var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId)
                 .Include(user => user.Student)
-                .Include(user => user.Student.DiscardedTutors)
+                .Include(user => user.Student!.DiscardedTutors)
                 .SingleAsync();
             if (studentUser.Student is null)
             {

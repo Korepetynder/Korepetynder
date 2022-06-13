@@ -53,7 +53,7 @@
   <div class="back-tutor-card flip-card">
     <mat-card-content>
       <div class="tutor-gallery-container" (click)="$event.stopPropagation()">
-        <gallery class="tutor-card-photo-gallery" [items]="items"
+        <gallery [gallerize]="'gallerize-' + tutor.id" [id]="'gallery-' + tutor.id" class="tutor-card-photo-gallery" [items]="images"
                  imageSize="cover"
                  thumbPosition="bottom"
                  thumbView="default"
