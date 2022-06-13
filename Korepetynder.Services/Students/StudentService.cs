@@ -25,6 +25,10 @@ namespace Korepetynder.Services.Students
 
         public async Task<StudentLessonResponse> AddLesson(StudentLessonRequest request)
         {
+            if (!request.LevelsIds.Any() || !request.LanguagesIds.Any())
+            {
+                throw new InvalidOperationException("Wrong number of arguments");
+            }
             Guid currentId = GetCurrentUserId();
 
             var isStudent = await _korepetynderDbContext.Students
@@ -76,6 +80,10 @@ namespace Korepetynder.Services.Students
 
         public async Task<StudentResponse> InitializeStudent(StudentRequest request)
         {
+            if (!request.Locations.Any())
+            {
+                throw new InvalidOperationException("No location selected");
+            }
             Guid currentId = GetCurrentUserId();
 
             var isStudent = await _korepetynderDbContext.Students
@@ -120,6 +128,7 @@ namespace Korepetynder.Services.Students
 
             return new StudentResponse(student.UserId, locations.Select(location => location.Id));
         }
+
         public async Task<StudentResponse> GetStudentData()
         {
             Guid currentId = GetCurrentUserId();
