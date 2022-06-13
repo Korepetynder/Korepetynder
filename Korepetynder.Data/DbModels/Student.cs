@@ -12,8 +12,8 @@ namespace Korepetynder.Data.DbModels
         public User User { get; set; } = null!;
         public ICollection<Location> PreferredLocations { get; set; } = new List<Location>();
         public ICollection<StudentLesson> PreferredLessons { get; set; } = new List<StudentLesson>();
-        public ICollection<Tutor> DiscardedTeachers { get; set; } = new List<Tutor>();
-        public ICollection<Tutor> FavouriteTeachers { get; set; } = new List<Tutor>();
+        public ICollection<Tutor> DiscardedTutors { get; set; } = new List<Tutor>();
+        public ICollection<Tutor> FavouriteTutors { get; set; } = new List<Tutor>();
         public Student(Guid userId)
         {
             UserId = userId;

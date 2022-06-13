@@ -271,10 +271,10 @@ namespace Korepetynder.Services.Students
         {
             Guid currentId = GetCurrentUserId();
             var student = await _korepetynderDbContext.Students.Where(student => student.UserId == currentId)
-                .Include(student => student.FavouriteTeachers)
+                .Include(student => student.FavouriteTutors)
                 .SingleAsync();
-            var teacher = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
-            student.FavouriteTeachers.Add(teacher);
+            var tutor = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
+            student.FavouriteTutors.Add(tutor);
             await _korepetynderDbContext.SaveChangesAsync();
         }
 
@@ -282,10 +282,10 @@ namespace Korepetynder.Services.Students
         {
             Guid currentId = GetCurrentUserId();
             var student = await _korepetynderDbContext.Students.Where(student => student.UserId == currentId)
-                .Include(student => student.FavouriteTeachers)
+                .Include(student => student.FavouriteTutors)
                 .SingleAsync();
-            var teacher = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
-            student.FavouriteTeachers.Remove(teacher);
+            var tutor = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
+            student.FavouriteTutors.Remove(tutor);
             await _korepetynderDbContext.SaveChangesAsync();
         }
 

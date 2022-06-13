@@ -9,7 +9,7 @@ namespace Korepetynder.Contracts.Responses.Comments
 {
     public class CommentResponse
     {
-        public Guid TeacherId { get; set; }
+        public Guid TutorId { get; set; }
         public int Score { get; set; }
         public string Text { get; set; }
 
@@ -17,7 +17,7 @@ namespace Korepetynder.Contracts.Responses.Comments
         {
             Score = comment.Score;
             Text = comment.Text;
-            TeacherId = comment.CommentedTutorId;
+            TutorId = comment.CommentedTutorId;
         }
     }
 }

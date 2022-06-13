@@ -469,25 +469,25 @@ namespace Korepetynder.Data.Migrations
                     b.Property<Guid>("DiscardedByStudentsUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DiscardedTeachersUserId")
+                    b.Property<Guid>("DiscardedTutorsUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("DiscardedByStudentsUserId", "DiscardedTeachersUserId");
+                    b.HasKey("DiscardedByStudentsUserId", "DiscardedTutorsUserId");
 
-                    b.HasIndex("DiscardedTeachersUserId");
+                    b.HasIndex("DiscardedTutorsUserId");
 
                     b.ToTable("DiscardedTutorStudents", (string)null);
                 });
 
             modelBuilder.Entity("StudentTutor1", b =>
                 {
-                    b.Property<Guid>("FavouriteTeachersUserId")
+                    b.Property<Guid>("FavouriteTutorsUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FavouritedByStudentsUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FavouriteTeachersUserId", "FavouritedByStudentsUserId");
+                    b.HasKey("FavouriteTutorsUserId", "FavouritedByStudentsUserId");
 
                     b.HasIndex("FavouritedByStudentsUserId");
 
@@ -686,7 +686,7 @@ namespace Korepetynder.Data.Migrations
 
                     b.HasOne("Korepetynder.Data.DbModels.Tutor", null)
                         .WithMany()
-                        .HasForeignKey("DiscardedTeachersUserId")
+                        .HasForeignKey("DiscardedTutorsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -695,7 +695,7 @@ namespace Korepetynder.Data.Migrations
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Tutor", null)
                         .WithMany()
-                        .HasForeignKey("FavouriteTeachersUserId")
+                        .HasForeignKey("FavouriteTutorsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

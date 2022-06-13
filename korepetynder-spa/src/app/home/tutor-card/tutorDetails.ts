@@ -10,6 +10,6 @@ export interface TutorDetails {
   lessons: TutorLesson[];
 
   isFavorite: boolean;
-  
-  starRatingAverage: number;
+
+  score: number;
 }

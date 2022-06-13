@@ -47,11 +47,11 @@ namespace Korepetynder.Data
 
             modelBuilder.Entity<Tutor>()
                 .HasMany(tutor => tutor.DiscardedByStudents)
-                .WithMany(student => student.DiscardedTeachers)
+                .WithMany(student => student.DiscardedTutors)
                 .UsingEntity(join => join.ToTable("DiscardedTutorStudents"));
             modelBuilder.Entity<Tutor>()
                 .HasMany(tutor => tutor.FavouritedByStudents)
-                .WithMany(student => student.FavouriteTeachers)
+                .WithMany(student => student.FavouriteTutors)
                 .UsingEntity(join => join.ToTable("FavouriteTutorStudents"));
             modelBuilder.Entity<Tutor>()
                 .HasMany(tutor => tutor.TeachingLocations)

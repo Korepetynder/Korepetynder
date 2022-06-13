@@ -17,11 +17,11 @@ namespace Korepetynder.Data.Migrations
                 columns: table => new
                 {
                     DiscardedByStudentsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DiscardedTeachersUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DiscardedTutorsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DiscardedTutorStudents", x => new { x.DiscardedByStudentsUserId, x.DiscardedTeachersUserId });
+                    table.PrimaryKey("PK_DiscardedTutorStudents", x => new { x.DiscardedByStudentsUserId, x.DiscardedTutorsUserId });
                     table.ForeignKey(
                         name: "FK_DiscardedTutorStudents_Students_DiscardedByStudentsUserId",
                         column: x => x.DiscardedByStudentsUserId,
@@ -29,8 +29,8 @@ namespace Korepetynder.Data.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DiscardedTutorStudents_Tutors_DiscardedTeachersUserId",
-                        column: x => x.DiscardedTeachersUserId,
+                        name: "FK_DiscardedTutorStudents_Tutors_DiscardedTutorsUserId",
+                        column: x => x.DiscardedTutorsUserId,
                         principalTable: "Tutors",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
@@ -40,12 +40,12 @@ namespace Korepetynder.Data.Migrations
                 name: "FavouriteTutorStudents",
                 columns: table => new
                 {
-                    FavouriteTeachersUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FavouriteTutorsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FavouritedByStudentsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FavouriteTutorStudents", x => new { x.FavouriteTeachersUserId, x.FavouritedByStudentsUserId });
+                    table.PrimaryKey("PK_FavouriteTutorStudents", x => new { x.FavouriteTutorsUserId, x.FavouritedByStudentsUserId });
                     table.ForeignKey(
                         name: "FK_FavouriteTutorStudents_Students_FavouritedByStudentsUserId",
                         column: x => x.FavouritedByStudentsUserId,
@@ -53,17 +53,17 @@ namespace Korepetynder.Data.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FavouriteTutorStudents_Tutors_FavouriteTeachersUserId",
-                        column: x => x.FavouriteTeachersUserId,
+                        name: "FK_FavouriteTutorStudents_Tutors_FavouriteTutorsUserId",
+                        column: x => x.FavouriteTutorsUserId,
                         principalTable: "Tutors",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DiscardedTutorStudents_DiscardedTeachersUserId",
+                name: "IX_DiscardedTutorStudents_DiscardedTutorsUserId",
                 table: "DiscardedTutorStudents",
-                column: "DiscardedTeachersUserId");
+                column: "DiscardedTutorsUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FavouriteTutorStudents_FavouritedByStudentsUserId",
