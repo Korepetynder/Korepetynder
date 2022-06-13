@@ -4,6 +4,7 @@ import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
 import { filter, map, Observable, shareReplay } from 'rxjs';
 import { Router } from '@angular/router';
+import { ColorSchemeService } from './shared/color-scheme.service';
 
 @Component({
   selector: 'app-root',
@@ -24,9 +25,10 @@ export class AppComponent implements OnInit {
     private msalBroadcastService: MsalBroadcastService,
     private authService: MsalService,
     private breakpointObserver: BreakpointObserver,
-    private router: Router
+    private router: Router,
+    public colorSchemeService: ColorSchemeService
   ) {
-
+    this.colorSchemeService.load();
   }
 
   ngOnInit(): void {
@@ -39,6 +41,8 @@ export class AppComponent implements OnInit {
       .subscribe(() => {
         this.checkAndSetActiveAccount();
       })
+
+    console.log(this.colorSchemeService.currentActive());
   }
 
   navigateToSettings(tabId: number): void {
@@ -68,5 +72,9 @@ export class AppComponent implements OnInit {
       let accounts = this.authService.instance.getAllAccounts();
       this.authService.instance.setActiveAccount(accounts[0]);
     }
+  }
+
+  changeTheme(): void {
+    this.colorSchemeService.update(this.colorSchemeService.currentActive() === 'light' ? 'dark' : 'light');
   }
 }
