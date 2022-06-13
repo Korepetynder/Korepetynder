@@ -24,17 +24,17 @@ namespace Korepetynder.Services.Tutors
             _sieveProcessor = sieveProcessor;
         }
 
-        public async Task<CommentResponse> AddComment(CommentRequest request)
+        public async Task<CommentResponse> AddComment(Guid tutorId, CommentRequest request)
         {
             var tutor = await _korepetynderDbContext.Tutors
-                .SingleAsync(tutor => tutor.UserId == request.CommentedTutorId);
+                .SingleAsync(tutor => tutor.UserId == tutorId);
 
-            var comment = new Comment(request.Score, request.Comment, request.CommentedTutorId);
+            var comment = new Comment(request.Score, request.Comment, tutorId);
             _korepetynderDbContext.Comments.Add(comment);
             await _korepetynderDbContext.SaveChangesAsync();
 
             var newScore = await _korepetynderDbContext.Comments
-                .Where(comment => comment.CommentedTutorId == request.CommentedTutorId)
+                .Where(comment => comment.CommentedTutorId == tutorId)
                 .AverageAsync(comment => (decimal)comment.Score);
             tutor.Score = newScore;
             await _korepetynderDbContext.SaveChangesAsync();
@@ -113,7 +113,7 @@ namespace Korepetynder.Services.Tutors
             var comments = _korepetynderDbContext.Comments
                 .Where(comment => comment.CommentedTutorId == tutorId)
                 .Where(comment => comment.Text != "")
-                 .AsQueryable();
+                .AsQueryable();
 
             comments = _sieveProcessor.Apply(model, comments, applyPagination: false);
 

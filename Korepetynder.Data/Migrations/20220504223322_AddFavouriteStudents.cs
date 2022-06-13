@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Korepetynder.Data.Migrations
 {
-    public partial class AddFavouriteStudents : Migration
+    public partial class AddFavoriteStudents : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,24 +37,24 @@ namespace Korepetynder.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FavouriteTutorStudents",
+                name: "FavoriteTutorStudents",
                 columns: table => new
                 {
-                    FavouriteTutorsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FavouritedByStudentsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FavoriteTutorsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FavoritedByStudentsUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FavouriteTutorStudents", x => new { x.FavouriteTutorsUserId, x.FavouritedByStudentsUserId });
+                    table.PrimaryKey("PK_FavoriteTutorStudents", x => new { x.FavoriteTutorsUserId, x.FavoritedByStudentsUserId });
                     table.ForeignKey(
-                        name: "FK_FavouriteTutorStudents_Students_FavouritedByStudentsUserId",
-                        column: x => x.FavouritedByStudentsUserId,
+                        name: "FK_FavoriteTutorStudents_Students_FavoritedByStudentsUserId",
+                        column: x => x.FavoritedByStudentsUserId,
                         principalTable: "Students",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FavouriteTutorStudents_Tutors_FavouriteTutorsUserId",
-                        column: x => x.FavouriteTutorsUserId,
+                        name: "FK_FavoriteTutorStudents_Tutors_FavoriteTutorsUserId",
+                        column: x => x.FavoriteTutorsUserId,
                         principalTable: "Tutors",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
@@ -66,9 +66,9 @@ namespace Korepetynder.Data.Migrations
                 column: "DiscardedTutorsUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FavouriteTutorStudents_FavouritedByStudentsUserId",
-                table: "FavouriteTutorStudents",
-                column: "FavouritedByStudentsUserId");
+                name: "IX_FavoriteTutorStudents_FavoritedByStudentsUserId",
+                table: "FavoriteTutorStudents",
+                column: "FavoritedByStudentsUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -77,7 +77,7 @@ namespace Korepetynder.Data.Migrations
                 name: "DiscardedTutorStudents");
 
             migrationBuilder.DropTable(
-                name: "FavouriteTutorStudents");
+                name: "FavoriteTutorStudents");
 
             migrationBuilder.CreateTable(
                 name: "TutorStudent",

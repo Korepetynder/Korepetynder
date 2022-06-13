@@ -5,6 +5,7 @@ import { Language } from "../../settings/models/responses/language";
 
 export const MockTutors: TutorDetails[] = [
   {
+    id: '111',
     fullName: "Mr Nice",
     email: "mrnice@gmial.com",
     phoneNumber: "+48 345 457 569",
@@ -25,10 +26,10 @@ export const MockTutors: TutorDetails[] = [
         languages: [{ id: 1, name: "polski" }, { id: 2, name: "angielski" }]
       }
     ],
-    score: 3.5,
-    isFavorite: false
+    score: 3.5
   },
   {
+    id: '111',
     fullName: "Mrs Marvel",
     email: "marvel@gmial.com",
     phoneNumber: "+48 111 457 111",
@@ -43,10 +44,10 @@ export const MockTutors: TutorDetails[] = [
         languages: [{ id: 1, name: "polski" }]
       }
     ],
-    isFavorite: false,
     score: 3.5,
   },
   {
+    id: '111',
     fullName: "Mr Magneto",
     email: "magneto@gmial.com",
     phoneNumber: "+48 345 457 569",
@@ -61,7 +62,6 @@ export const MockTutors: TutorDetails[] = [
         languages: [{ id: 1, name: "polski" }]
       }
     ],
-    isFavorite: false,
     score: 3.5,
   }
 ];

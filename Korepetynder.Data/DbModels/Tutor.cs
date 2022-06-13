@@ -15,7 +15,7 @@ namespace Korepetynder.Data.DbModels
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;
         public ICollection<Student> DiscardedByStudents { get; set; } = new List<Student>();
-        public ICollection<Student> FavouritedByStudents { get; set; } = new List<Student>();
+        public ICollection<Student> FavoritedByStudents { get; set; } = new List<Student>();
 
         public ICollection<TutorLesson> TutorLessons { get; set; } = new List<TutorLesson>();
 

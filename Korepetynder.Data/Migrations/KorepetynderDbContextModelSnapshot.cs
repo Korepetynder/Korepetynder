@@ -509,17 +509,17 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("StudentTutor1", b =>
                 {
-                    b.Property<Guid>("FavouriteTutorsUserId")
+                    b.Property<Guid>("FavoriteTutorsUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FavouritedByStudentsUserId")
+                    b.Property<Guid>("FavoritedByStudentsUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FavouriteTutorsUserId", "FavouritedByStudentsUserId");
+                    b.HasKey("FavoriteTutorsUserId", "FavoritedByStudentsUserId");
 
-                    b.HasIndex("FavouritedByStudentsUserId");
+                    b.HasIndex("FavoritedByStudentsUserId");
 
-                    b.ToTable("FavouriteTutorStudents", (string)null);
+                    b.ToTable("FavoriteTutorStudents", (string)null);
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Comment", b =>
@@ -730,13 +730,13 @@ namespace Korepetynder.Data.Migrations
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Tutor", null)
                         .WithMany()
-                        .HasForeignKey("FavouriteTutorsUserId")
+                        .HasForeignKey("FavoriteTutorsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Korepetynder.Data.DbModels.Student", null)
                         .WithMany()
-                        .HasForeignKey("FavouritedByStudentsUserId")
+                        .HasForeignKey("FavoritedByStudentsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

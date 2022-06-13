@@ -25,6 +25,6 @@ namespace Korepetynder.Services.Tutors
         Task<TutorLessonResponse> UpdateLesson(int id, TutorLessonRequest request);
         Task DeleteLesson(int id);
         Task<PagedData<CommentResponse>> GetComments(Guid tutorId, SieveModel model);
-        Task<CommentResponse> AddComment(CommentRequest request);
+        Task<CommentResponse> AddComment(Guid tutorId, CommentRequest request);
     }
 }

@@ -1,16 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-static-star-rating',
   templateUrl: './static-star-rating.component.html',
   styleUrls: ['./static-star-rating.component.scss']
 })
-export class StaticStarRatingComponent implements OnInit {
-  starRatingAverage = 1.4;
+export class StaticStarRatingComponent {
+  @Input() starRatingAverage!: number;
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

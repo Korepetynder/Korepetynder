@@ -1,9 +1,9 @@
 <mat-card>
   <mat-card-header>
-    <app-static-star-rating></app-static-star-rating>
+    <app-static-star-rating [starRatingAverage]="rating.score"></app-static-star-rating>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>
-    {{opinion}}
+    {{rating.text}}
   </mat-card-content>
 </mat-card>

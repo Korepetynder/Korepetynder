@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TutorDetails } from "../../home/tutor-card/tutorDetails";
-import { MockTutors } from '../../home/tutor-card/mock-tutors';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { GalleryItem, ImageItem } from "ng-gallery";
 import { MatDialog } from "@angular/material/dialog";
 import { OpinionPopupComponent } from "../../opinion-popup/opinion-popup.component";
+import { FavoritesService } from '../favorites.service';
+import { RatingComponent } from 'src/app/rating/rating.component';
 
 @Component({
   selector: 'app-favorite-tutor-card',
@@ -23,18 +24,22 @@ import { OpinionPopupComponent } from "../../opinion-popup/opinion-popup.compone
     ])
   ]
 })
-export class FavoriteTutorCardComponent implements OnInit {
-  tutor: TutorDetails = MockTutors[0];
+export class FavoriteTutorCardComponent {
+  @Input() tutor!: TutorDetails;
+
+  isFavorite = true;
   visibleSide: string = 'front';
   imageData = data;
   items: GalleryItem[] = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private favoritesService: FavoritesService) {}
 
   openDialog(): void {
     const dialogRef = this.dialog.open(OpinionPopupComponent, {
       width: '40em',
-      // data: {name: this.name, animal: this.animal},
+      data: {
+        tutorId: this.tutor.id
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -43,15 +48,28 @@ export class FavoriteTutorCardComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
-
   handleAddReviewButton(): void {
+    const dialogRef = this.dialog.open(RatingComponent, {
+      data: {
+        tutor: this.tutor
+      }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
   }
 
   handleFavoritesButton(): void {
-    this.tutor.isFavorite = !this.tutor.isFavorite;
+    const favoriteObservable = this.isFavorite
+      ? this.favoritesService.removeFromFavorites(this.tutor.id)
+      : this.favoritesService.addToFavorites(this.tutor.id);
+    this.isFavorite = !this.isFavorite;
+
+    favoriteObservable.subscribe(() => {
+      console.log('Handled favorite add/remove');
+    });
   }
 
   toggleFlip() {

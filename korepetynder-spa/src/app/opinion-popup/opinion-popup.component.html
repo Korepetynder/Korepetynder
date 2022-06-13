@@ -1,9 +1,10 @@
 <mat-dialog-actions>
-  <button class="close-popup" mat-icon-button (click)="closeOnClick()"><mat-icon>close</mat-icon></button>
+  <button class="close-popup" mat-icon-button (click)="closeOnClick()">
+    <mat-icon>close</mat-icon>
+  </button>
 </mat-dialog-actions>
 <mat-dialog-content>
-  <div *ngFor="let opinion of [1,2,3,4,5,6,7]">
-      <app-opinion-card></app-opinion-card>
+  <div *ngFor="let rating of ratings">
+    <app-opinion-card [rating]="rating"></app-opinion-card>
   </div>
 </mat-dialog-content>
-

@@ -200,12 +200,13 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Returns list of comments of specified tutor
         /// </summary>
+        /// <param name="id">ID of the tutor.</param>
         /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
         /// <returns>List of comments.</returns>
-        [HttpGet("Comments/{id}")]
+        [HttpGet("{id}/comments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<CommentResponse>>> GetLessons([FromRoute] Guid id, [FromQuery] SieveModel sieveModel)
+        public async Task<ActionResult<IEnumerable<CommentResponse>>> GetComments([FromRoute] Guid id, [FromQuery] SieveModel sieveModel)
         {
             try
             {
@@ -222,16 +223,17 @@ namespace Korepetynder.Api.Controllers
         /// <summary>
         /// Creates a comment for specified tutor
         /// </summary>
-        /// <param name="lessonRequest">Request containing data for comment creation.</param>
+        /// <param name="id">ID of the tutor.</param>
+        /// <param name="commentRequest">Request containing data for comment creation.</param>
         /// <returns>Newly created comment.</returns>
-        [HttpPost("Comments")]
+        [HttpPost("{id}/comments")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CommentResponse>> PostComment([FromBody] CommentRequest commentRequest)
+        public async Task<ActionResult<CommentResponse>> PostComment([FromRoute] Guid id, [FromBody] CommentRequest commentRequest)
         {
             try
             {
-                var comment = await _tutorsService.AddComment(commentRequest);
+                var comment = await _tutorsService.AddComment(id, commentRequest);
 
                 return comment;
             }

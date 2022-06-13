@@ -1,6 +1,6 @@
 <div class="main-div">
-    <div class="favorites-list" *ngFor="let tutor of [1,2,3,4,5,6,7]">
-      <app-favorite-tutor-card></app-favorite-tutor-card>
+    <div class="favorites-list" *ngFor="let tutor of favorites">
+      <app-favorite-tutor-card [tutor]="tutor"></app-favorite-tutor-card>
     </div>
 </div>
 

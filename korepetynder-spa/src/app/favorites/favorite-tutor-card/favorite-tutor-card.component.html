@@ -6,7 +6,7 @@
       <mat-card-subtitle>Email: {{tutor.email}}</mat-card-subtitle>
       <mat-card-subtitle>Telefon: {{tutor.phoneNumber}}</mat-card-subtitle>
     </mat-card-header>
-    <app-static-star-rating></app-static-star-rating>
+    <app-static-star-rating [starRatingAverage]="tutor.score"></app-static-star-rating>
     <mat-divider inset></mat-divider>
 
     <mat-card-content>
@@ -44,8 +44,8 @@
       </button>
       <button mat-icon-button aria-label="Icon favorite button" class="tutor-card-icon favorite-icon"
               (click)="handleFavoritesButton()" (click)="$event.stopPropagation()">
-        <mat-icon *ngIf="tutor.isFavorite">favorite</mat-icon>
-        <mat-icon *ngIf="!tutor.isFavorite">favorite_border</mat-icon>
+        <mat-icon *ngIf="isFavorite">favorite</mat-icon>
+        <mat-icon *ngIf="!isFavorite">favorite_border</mat-icon>
       </button>
     </mat-card-actions>
   </div>

@@ -1,21 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { RatingRequest } from 'src/app/shared/models/ratingRequest';
+import { RatingService } from 'src/app/shared/services/rating.service';
 import { TutorDetails } from "../../home/tutor-card/tutorDetails";
-import { MockTutors } from "../../home/tutor-card/mock-tutors";
 
 @Component({
   selector: 'app-rating-card',
   templateUrl: './rating-card.component.html',
   styleUrls: ['./rating-card.component.scss']
 })
-export class RatingCardComponent implements OnInit {
-  tutor: TutorDetails = MockTutors[0];
+export class RatingCardComponent {
+  @Input() tutor!: TutorDetails;
 
-  constructor() { }
+  @Output() ratingSent = new EventEmitter<void>();
 
-  ngOnInit(): void {
-  }
+  constructor(private ratingService: RatingService, private formBuilder: FormBuilder) { }
 
-  handleSendReview() {
+  ratingForm = this.formBuilder.group({
+    score: [null, Validators.required],
+    comment: ['']
+  });
 
+  get score(): FormControl { return this.ratingForm.get('score')! as FormControl; }
+  get comment() { return this.ratingForm.get('comment')!; }
+
+  handleSendRating(): void {
+    console.log(this.tutor);
+    const ratingRequest = new RatingRequest(this.score.value, this.comment.value);
+    this.ratingService.createRating(this.tutor.id, ratingRequest).subscribe(() => {
+      this.ratingSent.emit();
+    });
   }
 }

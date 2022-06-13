@@ -3,7 +3,7 @@
     Oceń korepetyrora: {{tutor.fullName}}
   </p>
 
-  <app-star-rating></app-star-rating>
+  <app-star-rating [ratingCtrl]="score"></app-star-rating>
 
   <mat-form-field class="opinion" appearance="fill">
     <mat-label>Zostaw opinię</mat-label>
@@ -14,7 +14,7 @@
 
   <div class="actions">
     <button mat-icon-button aria-label="Icon send button" class="send-icon"
-            (click)="handleSendReview()">
+            (click)="handleSendRating()">
       <mat-icon color="primary">send</mat-icon>
     </button>
   </div>

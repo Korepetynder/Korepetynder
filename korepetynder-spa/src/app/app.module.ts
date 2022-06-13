@@ -42,6 +42,7 @@ import { OpinionPopupComponent } from './opinion-popup/opinion-popup.component';
 import { MatDialogModule } from "@angular/material/dialog";
 import { OpinionCardComponent } from './opinion-popup/opinion-card/opinion-card.component';
 import { StaticStarRatingComponent } from './rating/static-star-rating/static-star-rating.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { StaticStarRatingComponent } from './rating/static-star-rating/static-st
     MatInputModule,
     NgbRatingModule,
     MatDialogModule,
+    ReactiveFormsModule
   ],
   providers: [
     {

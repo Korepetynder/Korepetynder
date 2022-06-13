@@ -267,29 +267,29 @@ namespace Korepetynder.Services.Students
             return new StudentLessonResponse(lesson);
         }
 
-        public async Task AddFavouriteTutor(Guid id)
+        public async Task AddFavoriteTutor(Guid id)
         {
             Guid currentId = GetCurrentUserId();
             var student = await _korepetynderDbContext.Students.Where(student => student.UserId == currentId)
-                .Include(student => student.FavouriteTutors)
+                .Include(student => student.FavoriteTutors)
                 .SingleAsync();
             var tutor = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
-            student.FavouriteTutors.Add(tutor);
+            student.FavoriteTutors.Add(tutor);
             await _korepetynderDbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteFavouriteTutor(Guid id)
+        public async Task DeleteFavoriteTutor(Guid id)
         {
             Guid currentId = GetCurrentUserId();
             var student = await _korepetynderDbContext.Students.Where(student => student.UserId == currentId)
-                .Include(student => student.FavouriteTutors)
+                .Include(student => student.FavoriteTutors)
                 .SingleAsync();
             var tutor = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == id).SingleAsync();
-            student.FavouriteTutors.Remove(tutor);
+            student.FavoriteTutors.Remove(tutor);
             await _korepetynderDbContext.SaveChangesAsync();
         }
 
-        public async Task<PagedData<TutorDataResponse>> GetFavouriteTutors(SieveModel model)
+        public async Task<PagedData<TutorDataResponse>> GetFavoriteTutors(SieveModel model)
         {
             Guid currentId = GetCurrentUserId();
 
@@ -297,8 +297,8 @@ namespace Korepetynder.Services.Students
                 .Where(student => student.UserId == currentId)
                 .SingleAsync();
 
-            var favouriteTutors = _korepetynderDbContext.Users
-                .Where(user => user.Tutor!.FavouritedByStudents.Contains(student))
+            var favoriteTutors = _korepetynderDbContext.Users
+                .Where(user => user.Tutor!.FavoritedByStudents.Contains(student))
                 .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Subject)
                 .Include(user => user.Tutor!.TutorLessons)
@@ -306,13 +306,13 @@ namespace Korepetynder.Services.Students
                 .Include(user => user.Tutor!.TutorLessons)
                 .ThenInclude(lesson => lesson.Languages)
                 .AsNoTracking();
-            favouriteTutors = _sieveProcessor.Apply(model, favouriteTutors, applyPagination: false);
+            favoriteTutors = _sieveProcessor.Apply(model, favoriteTutors, applyPagination: false);
 
-            var count = await favouriteTutors.CountAsync();
+            var count = await favoriteTutors.CountAsync();
 
-            favouriteTutors = _sieveProcessor.Apply(model, favouriteTutors, applyFiltering: false, applySorting: false);
+            favoriteTutors = _sieveProcessor.Apply(model, favoriteTutors, applyFiltering: false, applySorting: false);
 
-            return new PagedData<TutorDataResponse>(count, await favouriteTutors
+            return new PagedData<TutorDataResponse>(count, await favoriteTutors
                 .Select(tutor => new TutorDataResponse(tutor))
                 .ToListAsync());
         }

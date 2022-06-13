@@ -5,6 +5,8 @@ import { Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 import { TutorDetails } from './tutorDetails';
 import { OpinionPopupComponent } from "../../opinion-popup/opinion-popup.component";
 import { MatDialog } from "@angular/material/dialog";
+import { TutorFindService } from '../tutor-find.service';
+import { FavoritesService } from 'src/app/favorites/favorites.service';
 
 @Component({
   selector: 'app-tutor-card',
@@ -17,17 +19,24 @@ export class TutorCardComponent implements OnInit {
   @Output() nextTutor = new EventEmitter<void>();
 
   panelOpenState = false;
+  isFavorite = false;
 
   // constructor() { }
   imageData = data;
   items: GalleryItem[] = this.imageData.map(item => new ImageItem({ src: item.srcUrl, thumb: item.previewUrl }));
 
-  constructor(public gallery: Gallery, public dialog: MatDialog) {
+  constructor(
+    public gallery: Gallery,
+    public dialog: MatDialog,
+    private favoritesService: FavoritesService) {
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(OpinionPopupComponent, {
       width: '40em',
+      data: {
+        tutorId: this.tutor.id
+      }
       // data: {name: this.name, animal: this.animal},
     });
 
@@ -49,7 +58,14 @@ export class TutorCardComponent implements OnInit {
   }
 
   handleFavoritesButton(): void {
-    this.tutor.isFavorite = !this.tutor.isFavorite;
+    const favoriteObservable = this.isFavorite
+      ? this.favoritesService.removeFromFavorites(this.tutor.id)
+      : this.favoritesService.addToFavorites(this.tutor.id);
+    this.isFavorite = !this.isFavorite;
+
+    favoriteObservable.subscribe(() => {
+      console.log('Handled favorite add/remove');
+    });
   }
 
   getPhotoGallery(): void {

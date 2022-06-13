@@ -1,5 +1,5 @@
 <div class="star-rating">
-  <ngb-rating [(rate)]="score" [max]="5">
+  <ngb-rating [formControl]="ratingCtrl" [max]="5">
     <ng-template let-fill="fill">
       <span class="star" [class.filled]="fill === 100">&#9733;</span>
     </ng-template>

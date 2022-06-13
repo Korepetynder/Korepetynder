@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { MockTutors } from '../home/tutor-card/mock-tutors';
 import { TutorDetails } from "../home/tutor-card/tutorDetails";
+import { FavoritesService } from './favorites.service';
 
 @Component({
   selector: 'app-favorites',
@@ -10,10 +11,14 @@ import { TutorDetails } from "../home/tutor-card/tutorDetails";
 })
 export class FavoritesComponent implements OnInit {
   tutorsList : TutorDetails[] = MockTutors;
+  favorites: TutorDetails[] = [];
 
-  constructor() { }
+  constructor(private favoritesService: FavoritesService) { }
 
   ngOnInit(): void {
+    this.favoritesService.getFavorites().subscribe(favorites => {
+      this.favorites = favorites;
+      console.log(favorites);
+    });
   }
-
 }
