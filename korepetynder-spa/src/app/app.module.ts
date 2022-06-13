@@ -31,6 +31,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { TutorCardComponent } from './home/tutor-card/tutor-card.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { GalleryModule } from "ng-gallery";
+import { LightboxModule } from 'ng-gallery/lightbox';
 import { RatingComponent } from './rating/rating.component';
 import { MatInputModule } from "@angular/material/input";
 import { NgbRatingModule } from "@ng-bootstrap/ng-bootstrap";
@@ -77,6 +78,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatFormFieldModule,
     MatExpansionModule,
     GalleryModule,
+    LightboxModule,
     MatInputModule,
     NgbRatingModule,
     MatDialogModule,

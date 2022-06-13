@@ -16,14 +16,13 @@ namespace Korepetynder.Data.DbModels
 
         public ICollection<TutorLesson> TutorLessons { get; set; } = new List<TutorLesson>();
 
-        public Guid TutorId { get; set; }
+        public Guid? TutorId { get; set; }
         [ForeignKey(nameof(TutorId))]
-        public Tutor Owner { get; set; } = null!;
+        public Tutor? Owner { get; set; }
 
-        public MultimediaFile(string url, Guid tutorId)
+        public MultimediaFile(string url)
         {
             Url = url;
-            TutorId = tutorId;
         }
     }
 }
