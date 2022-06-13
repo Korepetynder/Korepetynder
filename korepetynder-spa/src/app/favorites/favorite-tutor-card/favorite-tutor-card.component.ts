@@ -6,6 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { OpinionPopupComponent } from "../../opinion-popup/opinion-popup.component";
 import { FavoritesService } from '../favorites.service';
 import { RatingComponent } from 'src/app/rating/rating.component';
+import { TutorLesson } from 'src/app/settings/models/responses/tutorLesson';
 
 @Component({
   selector: 'app-favorite-tutor-card',
@@ -32,6 +33,11 @@ export class FavoriteTutorCardComponent {
   visibleSide: string = 'front';
 
   constructor(public dialog: MatDialog, private favoritesService: FavoritesService) {}
+
+  lessonDescription(lesson: TutorLesson) {
+    return lesson.subject.name + ` (${lesson.cost} zł/h, ${lesson.frequency} h/tydz.): `
+      + lesson.levels.map(l => l.name).join(", ") + " (" + lesson.languages.map(l => l.name).join(", ") + ")";
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(OpinionPopupComponent, {
