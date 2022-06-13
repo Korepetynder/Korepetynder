@@ -125,9 +125,10 @@ namespace Korepetynder.Services.Media
                         var trustedFileNameForDisplay = WebUtility.HtmlEncode(
                                 contentDisposition!.FileName.Value);
 
-                        FileHelpers.ProcessStreamedFile(
-                            section, contentDisposition, modelState,
-                            _permittedExtensions, _fileSizeLimit);
+                        // Temporarily disabled since it breaks the file upload
+                        //FileHelpers.ProcessStreamedFile(
+                        //    section, contentDisposition, modelState,
+                        //    _permittedExtensions, _fileSizeLimit);
 
                         if (!modelState.IsValid)
                         {

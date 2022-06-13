@@ -107,7 +107,7 @@ export class SettingsTutorComponent implements OnInit {
   addPhoto(): void { // TODO
     this.photos.push(this.fb.group({
       id: [null],
-      photo: [null, [Validators.required]],
+      url: [{ value: null, disabled: true }],
       lessons: [[], []],
     }));
   }
@@ -148,6 +148,12 @@ export class SettingsTutorComponent implements OnInit {
 
           this.savedLessons = lessons;
         });
+
+        this.tutorSettingsService.getPhotos().subscribe(photos => {
+          console.log(photos);
+          photos.forEach(() => this.addPhoto());
+          this.photos.patchValue(photos);
+        })
       }
     });
 

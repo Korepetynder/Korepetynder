@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserService } from '../shared/services/user.service';
 import { TutorLessonRequest } from './models/requests/tutorLessonRequest';
 import { TutorRequest } from './models/requests/tutorRequest';
+import { MultimediaFile } from './models/responses/multimediaFile';
 import { Tutor } from './models/responses/tutor';
 import { TutorLesson } from './models/responses/tutorLesson';
 
@@ -13,6 +14,7 @@ import { TutorLesson } from './models/responses/tutorLesson';
 })
 export class TutorSettingsService {
   private apiUrl = environment.apiUrl + '/tutor';
+  private mediaApiUrl = environment.apiUrl + '/media';
 
   constructor(private httpClient: HttpClient, private userService: UserService) { }
 
@@ -52,7 +54,24 @@ export class TutorSettingsService {
     return this.httpClient.delete(`${this.apiUrl}/lessons/${id}`);
   }
 
+  getPhotos(): Observable<MultimediaFile[]> {
+    return this.httpClient.get<MultimediaFile[]>(this.mediaApiUrl);
+  }
+
+  uploadPhoto(file: File, lessons: number[]): Observable<HttpEvent<MultimediaFile>> {
+    let formData = new FormData();
+    lessons.forEach((lesson, index) => {
+      formData.append(`tutorLessons[${index}]`, lesson.toString());
+    });
+    formData.append('file', file);
+
+    return this.httpClient.post<MultimediaFile>(this.mediaApiUrl, formData, {
+      reportProgress: true,
+      observe: 'events'
+    });
+  }
+
   deletePhoto(id: number): Observable<any> {
-    return this.httpClient.delete(`${this.apiUrl}/media/${id}`);
+    return this.httpClient.delete(`${this.mediaApiUrl}/${id}`);
   }
 }
