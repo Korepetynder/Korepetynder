@@ -28,7 +28,8 @@ export class TutorCardComponent implements OnInit {
   constructor(
     public gallery: Gallery,
     public dialog: MatDialog,
-    private favoritesService: FavoritesService) {
+    private favoritesService: FavoritesService,
+    private tutorFindService: TutorFindService) {
   }
 
   openDialog(): void {
@@ -52,6 +53,9 @@ export class TutorCardComponent implements OnInit {
   }
 
   getNextTutor(): void {
+    if (!this.isFavorite) {
+      this.tutorFindService.discardTutor(this.tutor.id).subscribe(() => console.log('Discarded'));
+    }
     this.reset();
     this.getPhotoGallery();
     this.nextTutor.emit();
@@ -75,6 +79,7 @@ export class TutorCardComponent implements OnInit {
   reset(): void {
     this.getPhotoGallery();
     this.panelOpenState = false;
+    this.isFavorite = false;
   }
 }
 

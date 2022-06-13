@@ -21,5 +21,6 @@ namespace Korepetynder.Services.Students
         Task AddFavoriteTutor(Guid id);
         Task DeleteFavoriteTutor(Guid id);
         Task<PagedData<TutorDataResponse>> GetFavoriteTutors(SieveModel model);
+        Task AddTutorToIgnored(Guid tutorId);
     }
 }

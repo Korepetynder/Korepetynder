@@ -316,5 +316,21 @@ namespace Korepetynder.Services.Students
                 .Select(tutor => new TutorDataResponse(tutor))
                 .ToListAsync());
         }
+        public async Task AddTutorToIgnored(Guid tutorId)
+        {
+            Guid currentId = GetCurrentUserId();
+
+            var studentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId)
+                .Include(user => user.Student)
+                .Include(user => user.Student.DiscardedTutors)
+                .SingleAsync();
+            if (studentUser.Student is null)
+            {
+                throw new InvalidOperationException("User with id: " + currentId + " is not a student");
+            }
+            var tutor = await _korepetynderDbContext.Tutors.Where(tutor => tutor.UserId == tutorId).SingleAsync();
+            studentUser.Student.DiscardedTutors.Add(tutor);
+            await _korepetynderDbContext.SaveChangesAsync();
+        }
     }
 }
