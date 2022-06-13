@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
   },
   {
+    path: 'suggestions',
+    loadChildren: () => import('./suggestions/suggestions.module').then(m => m.SuggestionsModule)
+  },
+  {
     path: 'auth',
     component: MsalRedirectComponent
   },

@@ -58,6 +58,22 @@ namespace Korepetynder.Data
                 .WithMany(location => location.Tutors)
                 .UsingEntity(join => join.ToTable("TutorTeachingLocations"));
 
+            modelBuilder.Entity<TutorLesson>()
+                .HasMany(tutorLesson => tutorLesson.MultimediaFiles)
+                .WithMany(multimediaFile => multimediaFile.TutorLessons)
+                .UsingEntity<Dictionary<string, object>>(
+                    "TutorLessonMultimediaFiles",
+                    j => j
+                        .HasOne<MultimediaFile>()
+                        .WithMany()
+                        .HasForeignKey("MultimediaFileId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<TutorLesson>()
+                        .WithMany()
+                        .HasForeignKey("TutorLessonId")
+                        .OnDelete(DeleteBehavior.ClientCascade));
+
             modelBuilder.Entity<User>()
                 .Property(user => user.BirthDate)
                 .HasConversion(date => date, date => DateTime.SpecifyKind(date, DateTimeKind.Utc));

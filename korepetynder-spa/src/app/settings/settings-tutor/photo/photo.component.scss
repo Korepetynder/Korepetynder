@@ -1,0 +1,44 @@
+.main-div {
+  max-width: 40em;
+  margin: 2em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.small-mat-forms {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+input.money-input::-webkit-outer-spin-button,
+input.money-input::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.number-input {
+  -moz-appearance: textfield;
+}
+
+#add-button {
+  margin: 10px;
+  float: right;
+}
+
+.save-button {
+  margin: 10px;
+  margin-top: 15px;
+  float: left;
+}
+
+.select-photo-button {
+  margin: 10px 15px;
+}
+
+.delete-button {
+  margin: 5px;
+  float: right;
+}

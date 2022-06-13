@@ -5,6 +5,7 @@ namespace Korepetynder.Data.DbModels
 {
     public class Location
     {
+        public bool WasAccepted { get; set; }
         public int Id { get; set; }
         [MaxLength(100)]
         public string Name { get; set; }
@@ -20,6 +21,7 @@ namespace Korepetynder.Data.DbModels
         public Location(string name)
         {
             Name = name;
+            WasAccepted = false;
         }
 
         public override bool Equals(object? obj)

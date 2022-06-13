@@ -17,7 +17,7 @@ namespace Korepetynder.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -64,6 +64,9 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<bool>("WasAccepted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
@@ -75,17 +78,20 @@ namespace Korepetynder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Polski"
+                            Name = "Polski",
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Angielski"
+                            Name = "Angielski",
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Niemiecki"
+                            Name = "Niemiecki",
+                            WasAccepted = false
                         });
                 });
 
@@ -102,7 +108,10 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("Weight")
+                    b.Property<bool>("WasAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -117,18 +126,21 @@ namespace Korepetynder.Data.Migrations
                         {
                             Id = 1,
                             Name = "Szkoła podstawowa",
+                            WasAccepted = false,
                             Weight = 1
                         },
                         new
                         {
                             Id = 2,
                             Name = "Liceum",
+                            WasAccepted = false,
                             Weight = 2
                         },
                         new
                         {
                             Id = 3,
                             Name = "Studia wyższe",
+                            WasAccepted = false,
                             Weight = 3
                         });
                 });
@@ -149,6 +161,9 @@ namespace Korepetynder.Data.Migrations
                     b.Property<int?>("ParentLocationId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("WasAccepted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ParentLocationId");
@@ -159,29 +174,34 @@ namespace Korepetynder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Warszawa"
+                            Name = "Warszawa",
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 2,
                             Name = "Wilanów",
-                            ParentLocationId = 1
+                            ParentLocationId = 1,
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 3,
                             Name = "Śródmieście",
-                            ParentLocationId = 1
+                            ParentLocationId = 1,
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Łódź"
+                            Name = "Łódź",
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Kraków"
+                            Name = "Kraków",
+                            WasAccepted = false
                         });
                 });
 
@@ -192,9 +212,6 @@ namespace Korepetynder.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("TutorId")
                         .HasColumnType("uniqueidentifier");
@@ -207,8 +224,6 @@ namespace Korepetynder.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SubjectId");
 
                     b.HasIndex("TutorId");
 
@@ -287,6 +302,9 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("WasAccepted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
@@ -298,17 +316,20 @@ namespace Korepetynder.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Matematyka"
+                            Name = "Matematyka",
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Informatyka"
+                            Name = "Informatyka",
+                            WasAccepted = false
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Chemia"
+                            Name = "Chemia",
+                            WasAccepted = false
                         });
                 });
 
@@ -387,6 +408,9 @@ namespace Korepetynder.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -529,6 +553,21 @@ namespace Korepetynder.Data.Migrations
                         .HasForeignKey("TutorUserId");
                 });
 
+            modelBuilder.Entity("TutorLessonMultimediaFiles", b =>
+                {
+                    b.Property<int>("MultimediaFileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TutorLessonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MultimediaFileId", "TutorLessonId");
+
+                    b.HasIndex("TutorLessonId");
+
+                    b.ToTable("TutorLessonMultimediaFiles");
+                });
+
             modelBuilder.Entity("Korepetynder.Data.DbModels.Location", b =>
                 {
                     b.HasOne("Korepetynder.Data.DbModels.Location", "ParentLocation")
@@ -540,10 +579,6 @@ namespace Korepetynder.Data.Migrations
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.MultimediaFile", b =>
                 {
-                    b.HasOne("Korepetynder.Data.DbModels.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId");
-
                     b.HasOne("Korepetynder.Data.DbModels.Tutor", "Owner")
                         .WithMany("MultimediaFiles")
                         .HasForeignKey("TutorId")
@@ -551,8 +586,6 @@ namespace Korepetynder.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("Korepetynder.Data.DbModels.Student", b =>
@@ -708,6 +741,21 @@ namespace Korepetynder.Data.Migrations
                         .WithMany()
                         .HasForeignKey("TutorsUserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TutorLessonMultimediaFiles", b =>
+                {
+                    b.HasOne("Korepetynder.Data.DbModels.MultimediaFile", null)
+                        .WithMany()
+                        .HasForeignKey("MultimediaFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Korepetynder.Data.DbModels.TutorLesson", null)
+                        .WithMany()
+                        .HasForeignKey("TutorLessonId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 

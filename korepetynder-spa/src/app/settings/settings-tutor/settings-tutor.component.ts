@@ -10,6 +10,8 @@ import { Level } from '../models/responses/level';
 import { Location } from '../models/responses/location';
 import { Subject } from '../models/responses/subject';
 import { TutorSettingsService } from '../tutor-settings.service';
+import { TutorLesson } from '../models/responses/tutorLesson';
+import { PhotoComponent } from './photo/photo.component';
 
 @Component({
   selector: 'app-settings-tutor',
@@ -24,6 +26,8 @@ export class SettingsTutorComponent implements OnInit {
   @Input() locations: Location[] = [];
   @Input() subjects: Subject[] = [];
 
+  savedLessons: TutorLesson[] = [];
+
   @Output() statusChange = new EventEmitter<boolean>();
 
   isSaving = false;
@@ -32,7 +36,8 @@ export class SettingsTutorComponent implements OnInit {
   profileForm = this.fb.group({
     isTutor: [false],
     locations: [[], [Validators.required]],
-    lessons: this.fb.array([])
+    lessons: this.fb.array([]),
+    photos: this.fb.array([]),
   });
 
   constructor(
@@ -51,6 +56,13 @@ export class SettingsTutorComponent implements OnInit {
   }
   get lessonsControls() {
     return this.lessons.controls as FormGroup[];
+  }
+
+  get photos() {
+    return this.profileForm.get('photos') as FormArray;
+  }
+  get photosControls() {
+    return this.photos.controls as FormGroup[];
   }
 
   get isTutorCtrl() {
@@ -92,8 +104,26 @@ export class SettingsTutorComponent implements OnInit {
     }));
   }
 
+  addPhoto(): void { // TODO
+    this.photos.push(this.fb.group({
+      id: [null],
+      url: [{ value: null, disabled: true }],
+      lessons: [[], []],
+    }));
+  }
+
   removeLesson(id: number): void {
     this.lessons.removeAt(id);
+  }
+
+  removePhoto(id: number): void {
+    this.photos.removeAt(id);
+  }
+
+  updateSavedLessons(): void {
+    console.log("UPDATE", this.savedLessons);
+    this.tutorSettingsService.getLessons().subscribe(lessons => this.savedLessons = lessons);
+    this.savedLessons = this.savedLessons.slice();
   }
 
   ngOnInit() {
@@ -115,7 +145,15 @@ export class SettingsTutorComponent implements OnInit {
             frequency: lesson.frequency
           })));
           console.log(this.lessons);
+
+          this.savedLessons = lessons;
         });
+
+        this.tutorSettingsService.getPhotos().subscribe(photos => {
+          console.log(photos);
+          photos.forEach(() => this.addPhoto());
+          this.photos.patchValue(photos);
+        })
       }
     });
 

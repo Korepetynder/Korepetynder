@@ -86,7 +86,10 @@ namespace Korepetynder.Services.Tutors
             Guid currentId = GetCurrentUserId();
 
             var currentUser = await _korepetynderDbContext.Users.Where(user => user.Id == currentId).SingleAsync();
-            var lesson = await _korepetynderDbContext.TutorLessons.Where(lesson => lesson.Id == id).SingleAsync();
+            var lesson = await _korepetynderDbContext.TutorLessons
+                .Where(lesson => lesson.Id == id)
+                .Include(lesson => lesson.MultimediaFiles)
+                .SingleAsync();
             if (currentId != lesson.TutorId)
             {
                 throw new ArgumentException("Lesson does not belong to tutor");

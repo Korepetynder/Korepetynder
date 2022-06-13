@@ -9,6 +9,9 @@ namespace Korepetynder.Services.Subjects
     {
         Task<PagedData<SubjectResponse>> GetSubjects(SieveModel sieveModel);
         Task<SubjectResponse?> GetSubject(int id);
+        Task<PagedData<SubjectResponse>> GetNewSubjects(SieveModel sieveModel);
+        Task<SubjectResponse> AcceptSubject(int id);
+        Task DeleteSubject(int id);
         Task<SubjectResponse> AddSubject(SubjectRequest subjectRequest);
     }
 }

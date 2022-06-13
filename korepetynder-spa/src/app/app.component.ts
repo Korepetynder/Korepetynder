@@ -49,6 +49,10 @@ export class AppComponent implements OnInit {
     });
   }
 
+  navigateToSuggestions(): void {
+    this.router.navigate(['suggestions'], {});
+  }
+
   logout(): void {
     this.authService.logout();
   }

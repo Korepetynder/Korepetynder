@@ -82,5 +82,70 @@ namespace Korepetynder.Api.Controllers
                 return Conflict();
             }
         }
+        /// <summary>
+        /// Returns list of all subjects that are to be accepted.
+        /// </summary>
+        /// <param name="sieveModel">Sieve model containing data for sorting, filtering and pagination.</param>
+        /// <returns>List of subjects.</returns>
+        [HttpGet("manage")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult<IEnumerable<SubjectResponse>>> GetNewSubjects([FromQuery] SieveModel sieveModel)
+        {
+            try
+            {
+
+                var subjects = await _subjectsService.GetNewSubjects(sieveModel);
+
+                Response.Headers.Add("X-Total-Count", subjects.TotalCount.ToString());
+
+                return subjects.Entities.ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                return Conflict();
+            }
+        }
+        /// <summary>
+        /// Approves subject with given id
+        /// </summary>
+        /// <param name="id">ID of the subject to approve.</param>
+        /// <returns>Approved subject.</returns>
+        [HttpPost("manage/{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult<SubjectResponse>> PostAcceptedSubject([FromRoute] int id)
+        {
+            try
+            {
+                var subject = await _subjectsService.AcceptSubject(id);
+
+                return CreatedAtAction(nameof(GetSubject), new { id = subject.Id }, subject);
+            }
+            catch (InvalidOperationException)
+            {
+                return Conflict();
+            }
+        }
+        /// <summary>
+        /// Removes subject with given id
+        /// </summary>
+        /// <param name="id">ID of the subject to approve.</param>
+        [HttpDelete("manage/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteSubject([FromRoute] int id)
+        {
+            try
+            {
+                await _subjectsService.DeleteSubject(id);
+
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

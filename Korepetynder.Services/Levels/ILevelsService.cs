@@ -9,6 +9,9 @@ namespace Korepetynder.Services.Levels
     {
         Task<PagedData<LevelResponse>> GetLevels(SieveModel sieveModel);
         Task<LevelResponse?> GetLevel(int id);
+        Task<PagedData<LevelResponse>> GetNewLevels(SieveModel sieveModel);
+        Task<LevelResponse> AcceptLevel(int id, int newWeight);
+        Task DeleteLevel(int id);
         Task<LevelResponse> AddLevel(LevelRequest subjectRequest);
     }
 }
