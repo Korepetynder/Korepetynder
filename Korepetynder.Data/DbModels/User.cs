@@ -22,6 +22,8 @@ namespace Korepetynder.Data.DbModels
         public Tutor? Tutor { get; set; }
         public Student? Student { get; set; }
 
+        public bool IsAdmin { get; set; }
+
         public User(Guid id, string firstName, string lastName, DateTime birthDate, string email, string? phoneNumber)
         {
             Id = id;

@@ -2,19 +2,22 @@ using Korepetynder.Contracts.Requests.Subjects;
 using Korepetynder.Contracts.Responses.Subjects;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
+using Korepetynder.Services.Exceptions;
 using Korepetynder.Services.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 
 namespace Korepetynder.Services.Subjects
 {
-    internal class SubjectsService : ISubjectsService
+    internal class SubjectsService : AdBaseService, ISubjectsService
     {
         private readonly KorepetynderDbContext _korepetynderDbContext;
         private readonly ISieveProcessor _sieveProcessor;
 
-        public SubjectsService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor)
+        public SubjectsService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor, IHttpContextAccessor httpContextAccessor)
+            : base(httpContextAccessor)
         {
             _korepetynderDbContext = korepetynderDbContext;
             _sieveProcessor = sieveProcessor;
@@ -61,7 +64,11 @@ namespace Korepetynder.Services.Subjects
                 .SingleOrDefaultAsync();
         public async Task<PagedData<SubjectResponse>> GetNewSubjects(SieveModel sieveModel)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var subjects = _korepetynderDbContext.Subjects
                    .Where(subject => !subject.WasAccepted)
                    .OrderBy(subject => subject.Name)
@@ -79,7 +86,11 @@ namespace Korepetynder.Services.Subjects
         }
         public async Task<SubjectResponse> AcceptSubject(int id)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var subject = await _korepetynderDbContext.Subjects
                 .Where(subject => subject.Id == id).SingleAsync();
 
@@ -95,12 +106,26 @@ namespace Korepetynder.Services.Subjects
 
         public async Task DeleteSubject(int id)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var subject = await _korepetynderDbContext.Subjects
                 .Where(subject => subject.Id == id)
                 .SingleAsync();
             _korepetynderDbContext.Remove(subject);
             await _korepetynderDbContext.SaveChangesAsync();
+        }
+
+        private async Task<bool> IsAdmin()
+        {
+            var id = GetCurrentUserId();
+
+            return await _korepetynderDbContext.Users
+                .Where(user => user.Id == id)
+                .Select(user => user.IsAdmin)
+                .SingleAsync();
         }
     }
 }

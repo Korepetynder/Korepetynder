@@ -2,19 +2,22 @@ using Korepetynder.Contracts.Requests.Locations;
 using Korepetynder.Contracts.Responses.Locations;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
+using Korepetynder.Services.Exceptions;
 using Korepetynder.Services.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 
 namespace Korepetynder.Services.Locations
 {
-    internal class LocationsService : ILocationsService
+    internal class LocationsService : AdBaseService, ILocationsService
     {
         private readonly KorepetynderDbContext _korepetynderDbContext;
         private readonly ISieveProcessor _sieveProcessor;
 
-        public LocationsService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor)
+        public LocationsService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor, IHttpContextAccessor httpContextAccessor)
+            : base(httpContextAccessor)
         {
             _korepetynderDbContext = korepetynderDbContext;
             _sieveProcessor = sieveProcessor;
@@ -73,7 +76,11 @@ namespace Korepetynder.Services.Locations
                 .SingleOrDefaultAsync();
         public async Task<PagedData<LocationResponse>> GetNewLocations(SieveModel sieveModel)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var locations = _korepetynderDbContext.Locations
                    .Where(location => !location.WasAccepted)
                    .OrderBy(location => location.Name)
@@ -91,7 +98,11 @@ namespace Korepetynder.Services.Locations
         }
         public async Task<LocationResponse> AcceptLocation(int id)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var location = await _korepetynderDbContext.Locations
                 .Where(location => location.Id == id).SingleAsync();
 
@@ -107,12 +118,26 @@ namespace Korepetynder.Services.Locations
 
         public async Task DeleteLocation(int id)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var location = await _korepetynderDbContext.Locations
                 .Where(location => location.Id == id)
                 .SingleAsync();
             _korepetynderDbContext.Remove(location);
             await _korepetynderDbContext.SaveChangesAsync();
+        }
+
+        private async Task<bool> IsAdmin()
+        {
+            var id = GetCurrentUserId();
+
+            return await _korepetynderDbContext.Users
+                .Where(user => user.Id == id)
+                .Select(user => user.IsAdmin)
+                .SingleAsync();
         }
     }
 }

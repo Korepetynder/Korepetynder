@@ -8,6 +8,7 @@ import { SuggestionsService } from './suggestions.service';
 import { DictionariesService } from '../settings/dictionaries.service';
 import { Location } from './models/responses/location';
 import { LocationRequest } from './models/requests/locationRequest';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-suggestions',
@@ -49,7 +50,8 @@ export class SuggestionsComponent implements OnInit {
     private fb: FormBuilder,
     private suggestionsService: SuggestionsService,
     private snackBar: MatSnackBar,
-    private dictionariesService: DictionariesService) { }
+    private dictionariesService: DictionariesService,
+    public userService: UserService) { }
 
   ngOnInit(): void {
     this.dictionariesService.getLocations().subscribe(locations => this.locations = locations);

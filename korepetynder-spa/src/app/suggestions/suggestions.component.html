@@ -1,5 +1,5 @@
 <div class="main-div">
-  <div class="save-button-div">
+  <div class="save-button-div" *ngIf="userService.isAdmin() | async">
     <button mat-raised-button color="accent" [routerLink]="['manage']">Admin</button>
   </div>
 

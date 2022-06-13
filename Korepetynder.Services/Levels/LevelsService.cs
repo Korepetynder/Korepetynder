@@ -2,19 +2,22 @@ using Korepetynder.Contracts.Requests.Levels;
 using Korepetynder.Contracts.Responses.Levels;
 using Korepetynder.Data;
 using Korepetynder.Data.DbModels;
+using Korepetynder.Services.Exceptions;
 using Korepetynder.Services.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 
 namespace Korepetynder.Services.Levels
 {
-    internal class LevelsService : ILevelsService
+    internal class LevelsService : AdBaseService, ILevelsService
     {
         private readonly KorepetynderDbContext _korepetynderDbContext;
         private readonly ISieveProcessor _sieveProcessor;
 
-        public LevelsService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor)
+        public LevelsService(KorepetynderDbContext korepetynderDbContext, ISieveProcessor sieveProcessor, IHttpContextAccessor httpContextAccessor)
+            : base(httpContextAccessor)
         {
             _korepetynderDbContext = korepetynderDbContext;
             _sieveProcessor = sieveProcessor;
@@ -63,7 +66,11 @@ namespace Korepetynder.Services.Levels
 
         public async Task<PagedData<LevelResponse>> GetNewLevels(SieveModel sieveModel)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var levels = _korepetynderDbContext.Levels
                    .Where(level => !level.WasAccepted)
                    .OrderBy(level => level.Weight)
@@ -81,7 +88,11 @@ namespace Korepetynder.Services.Levels
         }
         public async Task<LevelResponse> AcceptLevel(int id, int newWeight)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var level = await _korepetynderDbContext.Levels
                 .Where(level => level.Id == id).SingleAsync();
 
@@ -98,12 +109,26 @@ namespace Korepetynder.Services.Levels
 
         public async Task DeleteLevel(int id)
         {
-            //TODO assert user is admin
+            if (!await IsAdmin())
+            {
+                throw new PermissionDeniedException();
+            }
+
             var level = await _korepetynderDbContext.Levels
                 .Where(level => level.Id == id)
                 .SingleAsync();
             _korepetynderDbContext.Remove(level);
             await _korepetynderDbContext.SaveChangesAsync();
+        }
+
+        private async Task<bool> IsAdmin()
+        {
+            var id = GetCurrentUserId();
+
+            return await _korepetynderDbContext.Users
+                .Where(user => user.Id == id)
+                .Select(user => user.IsAdmin)
+                .SingleAsync();
         }
     }
 }

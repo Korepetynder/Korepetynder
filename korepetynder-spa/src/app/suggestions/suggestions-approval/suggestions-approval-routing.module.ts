@@ -11,7 +11,7 @@ const routes: Routes = [
     component: SuggestionsApprovalComponent,
     canActivate: [MsalGuard, RoleGuard],
     data: {
-      expectedRole: UserType.Initialized
+      expectedRole: UserType.Admin
     }
   },
 ];
