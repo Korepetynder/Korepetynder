@@ -1,20 +1,21 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-$app-primary: mat.define-palette(mat.$indigo-palette);
+$app-primary-light: mat.define-palette(mat.$indigo-palette);
+$app-primary-dark: mat.define-palette(mat.$blue-palette);
 $app-accent: mat.define-palette(mat.$pink-palette);
 $app-warn: mat.define-palette(mat.$red-palette);
 
 $theme-dark: mat.define-dark-theme((
   color: (
-    primary: $app-primary,
+    primary: $app-primary-dark,
     accent: $app-accent,
     warn: $app-warn,
   )
  ));
 $theme-light: mat.define-light-theme((
   color: (
-    primary: $app-primary,
+    primary: $app-primary-light,
     accent: $app-accent,
     warn: $app-warn,
   )
