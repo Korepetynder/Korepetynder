@@ -10,25 +10,10 @@
     <mat-divider inset></mat-divider>
 
     <mat-card-content>
-      <p><b>Przedmiot:</b>
-        <span *ngFor="let lesson of tutor.lessons; let last = last">
-          {{lesson.subject.name}}<span *ngIf="!last"> ● </span>
-        </span>
-      </p>
-      <p><b>Poziom:</b>
-        <span *ngFor="let lesson of tutor.lessons; let last = last">
-          <span *ngFor="let level of lesson.levels; let lastLevel = last">
-            {{level.name}}<span *ngIf="!last && !lastLevel">, </span>
-            <span *ngIf="lastLevel && !last"> ● </span>
-          </span>
-        </span>
-      </p>
-      <p><b>Język:</b>
-        <span *ngFor="let lesson of tutor.lessons; let last = last">
-          <span *ngFor="let language of lesson.languages; let lastLanguage = last">
-            {{language.name}}<span *ngIf="!last && !lastLanguage">, </span>
-            <span *ngIf="lastLanguage && !last"> ● </span>
-          </span>
+      <p>
+        <span *ngFor="let lesson of tutor.lessons; let i = index; let last = last">
+          <span> ● </span>{{lessonDescription(lesson)}}
+          <br *ngIf="!last">
         </span>
       </p>
     </mat-card-content>
