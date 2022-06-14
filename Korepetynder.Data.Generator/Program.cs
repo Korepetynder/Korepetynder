@@ -4,7 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 Random random = new();
 
-ICollection<T> RandomValues<T>(IList<T> values)
+var images = new List<string>
+{
+    "https://elearningindustry.com/wp-content/uploads/2019/10/professional-development-tools-for-teachers.jpg",
+    "https://www.portaloswiatowy.pl/appFiles/site_8/images/doc/f4eW6xOBu8Ig2E7.jpeg",
+    "https://emp-scs-uat.img-osdw.pl/img-p/1/kipwn/d576082e/std/2bc-452/734349414o.jpg",
+    "https://media.geeksforgeeks.org/wp-content/uploads/00nfa.png"
+};
+
+IList<T> RandomValues<T>(IList<T> values)
 {
     int numberOfValues = random.Next(1, values.Count() + 1);
     var resultSet = new HashSet<int>(numberOfValues);
@@ -26,13 +34,15 @@ ICollection<T> RandomValues<T>(IList<T> values)
 ICollection<TutorLesson> GenerateLessons(int numberOfLessons, IList<Subject> subjects, IList<Level> levels, IList<Language> languages)
 {
     var result = new List<TutorLesson>();
-    for (int i = 0; i < numberOfLessons; i++)
+    var generatedNumberOfLessons = random.Next(1, numberOfLessons + 1);
+    var subjectsToUse = RandomValues(subjects);
+    for (int i = 0; i < Math.Min(generatedNumberOfLessons, subjectsToUse.Count); i++)
     {
         result.Add(new TutorLesson
         {
             Cost = random.Next(20, 101),
             Frequency = random.Next(1, 11),
-            Subject = subjects[random.Next(0, subjects.Count())],
+            Subject = subjectsToUse[i],
             Languages = RandomValues(languages),
             Levels = RandomValues(levels)
         });
@@ -70,7 +80,8 @@ for (int tutorNumber = 0; tutorNumber < numberOfTutors; tutorNumber++)
         Tutor = new Tutor(userId)
         {
             TeachingLocations = RandomValues(locations),
-            TutorLessons = GenerateLessons(numberOfLessonsPerTutor, subjects, levels, languages)
+            TutorLessons = GenerateLessons(numberOfLessonsPerTutor, subjects, levels, languages),
+            MultimediaFiles = RandomValues(images).Select(image => new MultimediaFile(image)).ToList()
         }
     };
     users.Add(user);
