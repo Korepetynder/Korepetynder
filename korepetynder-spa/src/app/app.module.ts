@@ -46,6 +46,7 @@ import { StaticStarRatingComponent } from './rating/static-star-rating/static-st
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatDialogModule,
     ReactiveFormsModule,
     MatSlideToggleModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatSnackBarModule
   ],
   providers: [
     {

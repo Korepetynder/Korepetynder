@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { RatingRequest } from 'src/app/shared/models/ratingRequest';
 import { RatingService } from 'src/app/shared/services/rating.service';
 import { TutorDetails } from "../../home/tutor-card/tutorDetails";
@@ -14,7 +15,10 @@ export class RatingCardComponent {
 
   @Output() ratingSent = new EventEmitter<void>();
 
-  constructor(private ratingService: RatingService, private formBuilder: FormBuilder) { }
+  constructor(
+    private ratingService: RatingService,
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar) { }
 
   ratingForm = this.formBuilder.group({
     score: [null, Validators.required],
@@ -28,6 +32,7 @@ export class RatingCardComponent {
     console.log(this.tutor);
     const ratingRequest = new RatingRequest(this.score.value, this.comment.value);
     this.ratingService.createRating(this.tutor.id, ratingRequest).subscribe(() => {
+      this.snackBar.open('Opinia została wysłana.', 'OK', { duration: 5000 });
       this.ratingSent.emit();
     });
   }
