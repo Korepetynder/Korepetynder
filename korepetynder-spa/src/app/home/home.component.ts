@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit {
 
   getTutors(): void {
     this.isLoading = true;
+    this.currentTutorIndex = 0;
     this.tutorFindService.getTutors().subscribe(tutors => {
       if (tutors.length > 0) {
         this.tutors = tutors;
