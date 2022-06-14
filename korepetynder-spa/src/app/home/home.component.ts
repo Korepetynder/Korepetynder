@@ -13,23 +13,36 @@ export class HomeComponent implements OnInit {
   currentTutorIndex = 0;
   currentTutor: TutorDetails | undefined;
   currentImages: ImageItem[] = [];
+  isLoading = true;
 
   constructor(private tutorFindService: TutorFindService) { }
 
   ngOnInit(): void {
+    this.getTutors();
+  }
+
+  nextTutor(): void {
+    this.currentTutorIndex += 1;
+    if (this.currentTutorIndex === this.tutors.length) {
+      this.getTutors();
+    } else {
+      this.currentTutor = this.tutors[this.currentTutorIndex];
+      this.setImages();
+    }
+  }
+
+  getTutors(): void {
+    this.isLoading = true;
     this.tutorFindService.getTutors().subscribe(tutors => {
       if (tutors.length > 0) {
         this.tutors = tutors;
         this.currentTutor = tutors[0];
         this.setImages();
+      } else {
+        this.currentTutor = undefined;
       }
+      this.isLoading = false;
     });
-  }
-
-  nextTutor(): void {
-    this.currentTutorIndex = (this.currentTutorIndex + 1) % this.tutors.length;
-    this.currentTutor = this.tutors[this.currentTutorIndex];
-    this.setImages();
   }
 
   setImages(): void {

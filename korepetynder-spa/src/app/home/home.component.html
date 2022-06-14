@@ -1,4 +1,11 @@
 <div class="main-div">
   <app-tutor-card *ngIf="currentTutor" [tutor]="currentTutor" [images]="currentImages" (nextTutor)="nextTutor()">
   </app-tutor-card>
+  <mat-card *ngIf="!currentTutor && !isLoading">
+    <mat-card-title>Brak wyników</mat-card-title>
+    <mat-card-content>
+      <p>Niestety, nie ma w naszej bazie korepetytorów spełniających Twoje oczekiwania.</p>
+      <p>Spróbuj ponownie za jakiś czas.</p>
+    </mat-card-content>
+  </mat-card>
 </div>
